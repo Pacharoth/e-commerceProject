@@ -24,7 +24,7 @@ app.use(session({
 app.get('/',async(req,res)=>{
     res.json({"hello":"World"})
 })
-mongoose.connect("mongodb://localhost:27017/ecommerce?readPreference=primary&appname=MongoDB%20Compass&ssl=false").then(result=>{
+mongoose.connect("mongodb://localhost:27017/Ecommerce?readPreference=primary&appname=MongoDB%20Compass&ssl=false").then(result=>{
     console.log("Connected DB");
 
 }).catch(err=>console.log(err))
