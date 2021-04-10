@@ -1,13 +1,14 @@
 <template>
-<div>
-  <input type="text" class="form-control" placeholder="Username">
-</div>
+<nav class="">
+  <AdminLayout></AdminLayout>
+</nav>
 </template>
 <script>
-
+import AdminLayout from './components/layout/AdminLayout';
 export default {
   name: 'App',
   components: {
+    AdminLayout,
   }
 }
 </script>
