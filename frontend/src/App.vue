@@ -14,5 +14,5 @@ export default {
 </script>
 
 <style>
-@import './assets/sass/customize.css';
+/* @import './assets/sass/customize.css'; */
 </style>
