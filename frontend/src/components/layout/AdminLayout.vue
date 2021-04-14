@@ -8,6 +8,7 @@
                 <li ><a href="" class="nav-link"><i class="bi bi-person me-2"></i>Seller</a></li>
                 <li ><a href="" class="nav-link"><i class="bi bi-people me-2"></i>Customer</a></li>
                 <li ><a href="" class="nav-link"><i class="bi bi-person-plus-fill me-2"></i> Add Seller</a></li>
+                <li><a href="" class="nav-link logout"><i class="bi bi-box-arrow-right me-2"></i>logout</a></li>
             </ul>
         </div>
         <main class="main">

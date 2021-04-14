@@ -8385,7 +8385,7 @@ fieldset:disabled .nav-bar .bar .burger,
   color: #0d6efd !important;
 }
 
-.text-secondary, .sidebar.active .link a {
+.text-secondary {
   color: #6c757d !important;
 }
 
@@ -11520,6 +11520,28 @@ fieldset:disabled .nav-bar .bar .burger,
   width: 100%;
 }
 
+button:active {
+  border: none;
+  background-color: #e3eefe;
+  color: #4691FF;
+  border-radius: 50px;
+}
+
+button:active i {
+  color: #4691FF;
+}
+
+button:focus {
+  border: none;
+  background-color: #e3eefe;
+  color: #4691FF;
+  border-radius: 50px;
+}
+
+button:focus i {
+  color: #4691FF;
+}
+
 .content {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -11635,6 +11657,7 @@ fieldset:disabled .nav-bar .bar .burger,
 }
 
 .sidebar.active .link a {
+  color: grey;
   margin-bottom: 10%;
   text-decoration: none;
   border: none;
@@ -11675,6 +11698,18 @@ fieldset:disabled .nav-bar .bar .burger,
   .sidebar.active .link a {
     font-size: 14px;
   }
+}
+
+.sidebar.active .link a.logout {
+  color: rgba(214, 59, 59, 0.89);
+}
+
+.sidebar.active .link a.logout:active {
+  background-color: #f3bebe;
+}
+
+.sidebar.active .link a.logout:focus {
+  background-color: #f3bebe;
 }
 
 @-webkit-keyframes slide-left {
@@ -11754,6 +11789,13 @@ fieldset:disabled .nav-bar .bar .burger,
 
 .nav-bar .avatar-chat button {
   color: grey;
+}
+
+.nav-bar .name:active {
+  background-color: #e3eefe;
+  color: #4691FF;
+  border-radius: 50px;
+  border: none;
 }
 
 @media (max-width: 39.9375em) {

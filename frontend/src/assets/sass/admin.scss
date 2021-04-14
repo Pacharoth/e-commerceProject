@@ -11,6 +11,26 @@
 .main{
     width: 100%;
 }
+button{
+    &:active{
+        border:none;
+        i{
+            color: $blue_color;
+        }
+        background-color: #e3eefe;
+        color: $blue_color;
+        border-radius: 50px;
+    }
+    &:focus{
+        border: none;
+        i{
+            color: $blue_color;
+        }
+        background-color: #e3eefe;
+        color: $blue_color;
+        border-radius: 50px;
+    }
+}
 .content{
     display: flex;
     width: 100%;
@@ -86,14 +106,13 @@
             @include breakpoint-down(medium){
                 margin-top: 2rem;
             }
+            
             a{
-                @extend .text-secondary;
+                color: grey;
                 margin-bottom: 10%;
                 text-decoration: none;
-                // @extend .btn;
                 border: none;
                 font-weight: bold;
-                // width: 80%;
 
                 &:focus{
                     background-color:  #e3eefe;
@@ -118,6 +137,15 @@
                 }
                 @include breakpoint-down(medium){
                     font-size: 14px;
+                }
+                &.logout{
+                    color: rgba(214, 59, 59, 0.89);
+                    &:active{
+                        background-color: rgb(243, 190, 190);
+                    }
+                    &:focus{
+                        background-color: rgb(243, 190, 190);
+                    }
                 }
                 
             }
@@ -153,6 +181,12 @@
        }
     }
     .name{
+        &:active{
+            background-color: #e3eefe;
+            color: $blue_color;
+            border-radius: 50px;
+            border: none;
+        }
         @include breakpoint-down(small){
             display: none;
         }
