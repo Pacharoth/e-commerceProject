@@ -4,7 +4,10 @@
 ```
 npm install
 ```
-
+### Cant setup or run project just use this
+```
+npm update --force
+```
 ### Compiles and hot-reloads for development
 ```
 npm run serve
