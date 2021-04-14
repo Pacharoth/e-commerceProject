@@ -13,6 +13,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(session({
+    name:"sid",
     secret:"This is secret",
     cookie:{
         maxAge: 1000 * 60 * 60 * 24 * 7,
@@ -24,7 +25,7 @@ app.use(session({
 app.get('/',async(req,res)=>{
     res.json({"hello":"World"})
 })
-mongoose.connect("mongodb://localhost:27017/Ecommerce?readPreference=primary&appname=MongoDB%20Compass&ssl=false").then(result=>{
+mongoose.connect("mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false").then(result=>{
     console.log("Connected DB");
 
 }).catch(err=>console.log(err))
