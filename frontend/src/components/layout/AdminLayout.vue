@@ -36,11 +36,11 @@
 
 </template>
 <script>
-// import Chat from './Chat'
+import Chat from './Chat'
 export default {
     name:"AdminLayout",
     components:{
-        // Chat,
+        Chat,
     },
     methods:{
         loadSideBar(){
