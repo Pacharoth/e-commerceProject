@@ -27,6 +27,11 @@
 .proImg {
   width: 150px;
 }
+.dropdown-menu{
+  left: auto;
+  right: 0;
+  width: 650px;
+}
 .dropdown-toggle::after {
   content: none;
 }
@@ -40,4 +45,13 @@
 }
 .productOrdered{
   color: black;
+}
+.btn.opt{
+  background-color: #d60265;
+  color: white;
+}
+.option{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
