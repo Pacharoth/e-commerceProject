@@ -1,0 +1,14 @@
+.productTable {
+  color: #d60265;
+  border: 1px black;
+  text-align: center;
+}
+.fa-pencil-square-o {
+  color: #4691ff;
+}
+.fa-trash {
+  color: red;
+}
+.productInfo {
+  color: black;
+}
