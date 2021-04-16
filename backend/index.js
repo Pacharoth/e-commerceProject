@@ -6,6 +6,7 @@ const cookieParser =require('cookie-parser');
 const app = express();
 const store = new MongoDBStore({uri:"mongodb://localhost:27017/connect_mongodb_session",collection:"Session"});
 const bodyParser = require("body-parser");
+const user = require('./routers/User');
 store.on('err',function(error){
     console.log(error);
 })
@@ -21,10 +22,11 @@ app.use(session({
     store:store,
     resave:true,
     saveUninitialized:true,
-}))
+}));
+app.use(user);
 app.get('/',async(req,res)=>{
     res.json({"hello":"World"})
-})
+});
 mongoose.connect("mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false").then(result=>{
     console.log("Connected DB");
 
