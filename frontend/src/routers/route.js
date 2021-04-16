@@ -3,7 +3,7 @@ import AdminLayout from '../components/layout/AdminLayout.vue';
 const routes = [
     {
         path:'/admin',
-        name:'Admin Dashboard',
+        name:'Admin',
         component:AdminLayout,
     }
 ]

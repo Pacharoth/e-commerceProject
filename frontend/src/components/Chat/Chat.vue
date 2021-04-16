@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </button>
-            <button class="btn close" @click="closeChat"><i class="fas fa-times"></i></button>
+            <button class="btn close" @click="closeChat"><em class="fas fa-times"></em></button>
         </div>
         <div class="content-all-chat">
             <div class="admin">
@@ -20,9 +20,9 @@
             
         </div>
         <div class="input-message">
-            <button class="btn"> <i class="bi bi-mic"></i></button>
+            <button class="btn"> <em class="bi bi-mic"></em></button>
             <input type="text" class="form-control send"  placeholder="Aa">
-            <button class="btn"><i class="bi bi-play"></i></button>
+            <button class="btn"><em class="bi bi-play"></em></button>
         </div>
     </div>
 </template>

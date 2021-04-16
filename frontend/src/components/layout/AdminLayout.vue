@@ -1,20 +1,20 @@
 <template>
     <div class="content" ref="content">
         <div class="sidebar " ref="sidebar">
-            <button class="btn close" @click="loadSideBar()"><i class="fas fa-times"></i></button>
+            <button class="btn close" @click="loadSideBar()"><em class="fas fa-times"></em></button>
             <h3 class="text-center"><a href="" class="logo">Admin Dashboard</a></h3>
             <ul class="link nav nav-pill flex-column mb-auto">
-                <li class=""><a class="nav-link" href=""><i class="bi bi-house-door me-2"></i>Dashboard</a></li>
-                <li ><a href="" class="nav-link"><i class="bi bi-person me-2"></i>Seller</a></li>
-                <li ><a href="" class="nav-link"><i class="bi bi-people me-2"></i>Customer</a></li>
-                <li ><a href="" class="nav-link"><i class="bi bi-person-plus-fill me-2"></i> Add Seller</a></li>
-                <li><a href="" class="nav-link logout"><i class="bi bi-box-arrow-right me-2"></i>logout</a></li>
+                <li class=""><a class="nav-link" href=""><em class="bi bi-house-door me-2"></em>Dashboard</a></li>
+                <li ><a href="" class="nav-link"><em class="bi bi-person me-2"></em>Seller</a></li>
+                <li ><a href="" class="nav-link"><em class="bi bi-people me-2"></em>Customer</a></li>
+                <li ><a href="" class="nav-link"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</a></li>
+                <li><a href="" class="nav-link logout"><em class="bi bi-box-arrow-right me-2"></em>logout</a></li>
             </ul>
         </div>
         <main class="main">
             <nav class="nav-bar" ref="nav">
                 <div class="bar">
-                    <button @click="loadSideBar()" class="btn burger" ><i class="fas fa-bars"></i></button>
+                    <button @click="loadSideBar()" class="btn burger" ><em class="fas fa-bars"></em></button>
                     <input type="text" class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
                 </div>
                 <div class="date">
@@ -24,9 +24,9 @@
 
                 </div>
                 <div class="avatar-chat">
-                    <button class="btn bell"><i class="bi bi-chat-dots"></i> <span class="">1</span></button>
-                    <button class="btn chat"><i class="bi bi-bell"></i><span>1</span></button>
-                    <button class="btn avatar"> <span class="name"> Pacharoth</span> <i class="fas fa-user-circle user"></i></button>
+                    <button class="btn bell"><em class="bi bi-chat-dots"></em> <span class="">1</span></button>
+                    <button class="btn chat"><em class="bi bi-bell"></em><span>1</span></button>
+                    <button class="btn avatar"> <span class="name"> Pacharoth</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
             <ChatList></ChatList>
@@ -49,8 +49,8 @@ export default {
             nav.contains('active')?nav.remove('active'):nav.add('active')
             const sidebar = this.$refs.sidebar.classList;
             sidebar.contains('active')?sidebar.remove('active'):sidebar.add('active');
-            const content = this.$ref.content.classList;
-            content.contains('active')?content.remove('active'):content.add('active');
+            // const content = this.$ref.content.classList;
+            // content.contains('active')?content.remove('active'):content.add('active');
         },
         loadChat(){
 
