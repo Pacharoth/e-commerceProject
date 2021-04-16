@@ -30,7 +30,7 @@
                </button>
            </div>
         </div>
-        <div class="chat-content">
+        <!-- <div class="chat-content">
             <div class="chat-header">
                 <button class="btn">
                         <img src="../../assets/logo.png" alt="">
@@ -46,13 +46,19 @@
             <div class="input-message">
 
             </div>
-        </div>
+        </div> -->
+        <Chat></Chat>
    </div>
 </template>
 <script>
+import Chat from './Chat';
 export default {
-    name:"Chat",
-    props:['']
+    name:"ChatList",
+    props:[''],
+    components:{
+        Chat,
+    }
+
 }
 </script>
 <style lang="scss" scoped>
@@ -140,39 +146,6 @@ export default {
 
             }
         }
-    }
-    .chat-content{
-        width: 30%;
-        height: 60%;
-        background-color: white;
-        box-shadow: $shadow_2;
-        border-radius: 5px;
-        position: absolute;
-        bottom: 0;
-        right: 7rem;
-        display: flex;
-        flex-direction: column;
-        .chat-header{
-            width: 100%;
-            padding: 8px;
-            box-shadow: $shadow_1;
-            display: flex;
-            img{
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                box-shadow: $shadow_1;
-                margin-right: 2%;
-            }
-            .chat-status{
-                display: flex;
-                justify-content: space-between;
-                .chat-text{
-                    
-                    display: flex;
-                    flex-direction: column;
-                }
-            }
-        }
+        
     }
 </style>

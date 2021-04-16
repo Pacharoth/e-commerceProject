@@ -1,4 +1,14 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
-createApp(App).mount('#app')
+import router from './routers/route';
+const app = createApp(App);
+app.mixin({
+    created(){
+        const {title}=this.$options
+        if(title){
+            document.title=title;
+        }
+    }
+});
+app.use(router);
+app.mount('#app');

@@ -29,18 +29,19 @@
                     <button class="btn avatar"> <span class="name"> Pacharoth</span> <i class="fas fa-user-circle user"></i></button>
                 </div>
             </nav>
-            <Chat></Chat>
+            <ChatList></ChatList>
         </main>
     </div>
 
 
 </template>
 <script>
-import Chat from './Chat'
+import ChatList from '../Chat/ChatList'
 export default {
+    title:'Admin Dashboard',
     name:"AdminLayout",
     components:{
-        Chat,
+        ChatList,
     },
     methods:{
         loadSideBar(){
