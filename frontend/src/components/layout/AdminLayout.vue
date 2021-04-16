@@ -38,7 +38,7 @@
 <script>
 import ChatList from '../Chat/ChatList'
 export default {
-    title:'Admin Dashboard',
+    title:'',
     name:"AdminLayout",
     components:{
         ChatList,
@@ -121,11 +121,7 @@ export default {
             position: absolute;
             color: grey;
             @include breakpoint-down(small){
-                // position: relative;
-                // margin:0 auto;
                 width: 60%;
-                // margin-top: 2%;
-                
             }
 
             .logo{

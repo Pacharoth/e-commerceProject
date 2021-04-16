@@ -8,17 +8,7 @@
                 <input type="text" class="form-control search-user" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'">
            </div>
            <div class="list-user">
-               <button class="users btn">
-                   <img src="../../assets/logo.png" alt="">
-                <div class="chat-time">
-                    <div class="chat">
-                         <span >Pizza (seller)</span>
-                        <span class="text-chat">hello world</span>
-                    </div>
-                    <div class="status"></div>
-                </div>
-               </button>
-               <button class="users btn">
+               <button class="users btn" @click="popChat">
                    <img src="../../assets/logo.png" alt="">
                 <div class="chat-time">
                     <div class="chat">
@@ -30,33 +20,26 @@
                </button>
            </div>
         </div>
-        <!-- <div class="chat-content">
-            <div class="chat-header">
-                <button class="btn">
-                        <img src="../../assets/logo.png" alt="">
-                    <div class="chat-status">
-                        <div class="chat-text">
-                            <span>Pizza (seller)</span>
-                            <span>active <div class="status"></div> </span>
-                        </div>
-                    </div>
-                </button>
-                <button class="btn"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="input-message">
-
-            </div>
-        </div> -->
-        <Chat></Chat>
+        <Chat :chat="active"></Chat>
    </div>
 </template>
 <script>
 import Chat from './Chat';
 export default {
     name:"ChatList",
-    props:[''],
+    data(){
+      return{
+          active:"",
+      }  
+    },
     components:{
         Chat,
+    },
+    methods:{
+        popChat(){
+            this.active="active";
+            
+        }
     }
 
 }
@@ -66,8 +49,9 @@ export default {
     @import '../../assets/sass/maxin';
     // @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     .list-chat{
+        display: none;
         width: 30%;
-        height: 85%;
+        max-height: 85%;
         background: white;
         position: absolute;
         box-shadow: $shadow_2;
@@ -75,8 +59,29 @@ export default {
         right:3rem;
         top:8%;
         color: grey;
+        overflow-y: scroll;
+        &::-webkit-scrollbar{
+            width: 5px;
+            &:hover{
+                background-color:rgb(250, 241, 241) ;
+            }
+        }
+        &::-webkit-scrollbar-thumb{
+            &:hover{
+            background-color: rgb(212, 209, 209);
+            height: 20px;
+            border-radius: 50px;
+            }
+        }
+        @include breakpoint-up(large){
+            top:4%;
+            // height: 70%;
+        }
+        @include breakpoint-down(medium){
+            top:5%;
+        }
+       
         .content-logo-chat{
-            // box-shadow: $shadow_1;
             padding: 3%;
         }
         .search-component{

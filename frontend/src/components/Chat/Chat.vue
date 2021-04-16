@@ -1,26 +1,57 @@
 <template>
-    <div class="chat-content">
+    <div class="chat-content" ref="chatting" :class="chat_status">
         <div class="chat-header">
-            <button class="btn">
+            <button class="btn chat-customize">
                     <img src="../../assets/logo.png" alt="">
                 <div class="chat-status">
                     <div class="chat-text">
-                        <span>Pizza (seller)</span>
-                        <span>active <div class="status"></div> </span>
+                        <span >Pizza (seller)</span>
+                        <span class="statususer"> <div class="status-user"></div> active</span>
                     </div>
                 </div>
             </button>
-            <button class="btn"><i class="fas fa-times"></i></button>
+            <button class="btn close" @click="closeChat"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="content-all-chat">
+            <div class="admin">
+                <img src="../../assets/logo.png" alt="">
+                <span>Hello world</span>
+            </div>
+            
         </div>
         <div class="input-message">
-
+            <button class="btn"> <i class="bi bi-mic"></i></button>
+            <input type="text" class="form-control send"  placeholder="Aa">
+            <button class="btn"><i class="bi bi-play"></i></button>
         </div>
     </div>
 </template>
 <script>
 export default {
     name:'Chat',
-    props:['id'],
+    props:['id','chat'],
+    data(){
+        return{
+            chat_status:"",
+        }
+    },
+
+    methods:{
+        getmethod(){
+            this.chat_status=this.chat
+            if(this.chat_status){
+                const chat = this.$refs.chatting.classList;
+                chat.add(this.chat_status)
+            }
+        },
+        closeChat(){
+            const chat = this.$refs.chatting.classList;
+            if(chat.contains('active')){
+                chat.remove('active');
+            }
+        }
+    }
+
 }
 </script>
 <style lang="scss">
@@ -28,35 +59,175 @@ export default {
     @import '../../assets/sass/maxin';
     
     .chat-content{
+        display: none;
         width: 30%;
-        height: 60%;
+        height: 70%;
         background-color: white;
         box-shadow: $shadow_2;
         border-radius: 5px;
         position: absolute;
         bottom: 0;
         right: 7rem;
-        display: flex;
         flex-direction: column;
+        &.active{
+            display: flex;
+
+        }
         .chat-header{
             width: 100%;
             padding: 8px;
             box-shadow: $shadow_1;
             display: flex;
-            img{
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                box-shadow: $shadow_1;
-                margin-right: 2%;
-            }
-            .chat-status{
+            justify-content: space-between;
+            .chat-customize{
                 display: flex;
+                width: 60%;
                 justify-content: space-between;
-                .chat-text{
-                    
+                border-radius: 5px ;
+                align-items: center;
+                &:focus{
+                    box-shadow: none;
+                    background-color: #eeeeee;
+                }
+                &:hover{
+                    box-shadow: none;
+                    background-color: #eeeeee;
+                }
+                img{
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    box-shadow: $shadow_1;
+                }
+                .chat-status{
+                    width: 80%;
                     display: flex;
-                    flex-direction: column;
+                    justify-content: space-between;
+                    .chat-text{
+                        margin-left: 4%;
+                        display: flex;
+                        flex-direction: column;
+                        text-align: left;
+                        .statususer{
+                            font-size: 12px;
+                            color: rgb(66, 207, 66);
+                            display: flex;
+                            align-items: center;
+                            .status-user{
+                                margin-right: 2%;
+                                border-radius: 50%;
+                                width: 10px;
+                                height: 10px;
+                                background-color: rgb(66, 207, 66);
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            .close{
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                &:focus{
+                    box-shadow: none;
+                    color: grey;
+                    background-color: #eee;
+                }
+                &:hover{
+                    box-shadow: none;
+                    color: grey;
+                    background-color: #eee;
+                }
+            }
+        }
+        .input-message{
+            display: flex;
+            padding: 2%;
+            width: 100%;
+            .send{
+                width: 80%;
+                border-radius: 50px ;
+                margin-left: 2%;
+                margin-right: 2%;
+                border: none;
+                background: #eeeeee;
+                &:focus{
+                    box-shadow: none;
+                
+                }
+            }
+            button{
+                border-radius: 50%;
+                color: $blue_color;
+                i{
+                    &:focus{
+                        color: grey;
+                    }
+                    
+                }
+                &:focus{
+                    box-shadow: none;
+                    background: #eeeeee;
+                    color: black;
+                }
+                &:hover{
+                    background: #eeeeee;
+                    color: black;
+                }
+            }
+        }
+        .content-all-chat{
+            height: 80%;
+            width: 100%;
+            overflow-y: scroll;
+            &::-webkit-scrollbar{   
+            width: 5px;
+                &:hover{
+                    background-color:rgb(250, 241, 241) ;
+                }
+            }
+            &::-webkit-scrollbar-thumb{
+                &:hover{
+                background-color: rgb(212, 209, 209);
+                height: 20px;
+                border-radius: 50px;
+                }
+            }
+            .admin{
+                width: 80%;
+                margin-top: 2%;
+                padding: 2%;
+                display: flex;
+                justify-items: center;
+                &.active{
+                    width: 100%;
+                    flex-direction: row-reverse;
+                    img{
+                        margin-left: 2%;
+                    }
+                    span{
+                        background-color: $color_background_btn;
+                        color:$blue_color;
+                    }
+                }
+                img{
+                    width: 15%;
+                    height: 15%;
+                    border-radius: 50%;
+                    box-shadow: $shadow_1;
+                }
+                span{
+                    display: flex;
+                    align-items: center;
+                    background-color: #eeeeee;
+                    border-radius: 50px;
+                    padding-left: 4%;
+                    padding-right:4% ;
+                    margin-left: 2%;
+                    box-shadow: $shadow_1;
+                    font-size: 14px;
+                    
                 }
             }
         }
