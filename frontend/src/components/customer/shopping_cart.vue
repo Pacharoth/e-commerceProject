@@ -1,125 +1,125 @@
 <template>
     <div>
-         <div class="container">
+        <div class="container">
         <h3>Shopping Card</h3>
 
-        <!--first part-->
-        <div class="row-one">
-            <p style="color: #D60265; margin-left: 15%;">
-                <i style="font-size:24px" class="fa">&#xf058;</i>
-                Clothy Shop
-            </p>
-            <div class="row">
-                 <!--left part-->
-                <div class="column1">
-                    <span>
-                        <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
-                    </span>
-                </div>
-
-                <!--right part-->
-                <div class="column2">
-                    Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-
-                    <p>Size: L <span>Color: Gray</span></p>
-                    <p style="font-weight: bold;">$10</p>
-                    <!--quantity part-->
-                    <div class="qty">
-                        x1
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--second part-->
-        <div class="row-two">
-            <div class="small-row1">
+            <!--first part-->
+            <div class="row-one">
                 <p style="color: #D60265; margin-left: 15%;">
                     <i style="font-size:24px" class="fa">&#xf058;</i>
                     Clothy Shop
                 </p>
                 <div class="row">
-                     <!--left part-->
+                    <!--left part-->
                     <div class="column1">
                         <span>
                             <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
                         </span>
                     </div>
-    
+
                     <!--right part-->
                     <div class="column2">
                         Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-    
+
                         <p>Size: L <span>Color: Gray</span></p>
                         <p style="font-weight: bold;">$10</p>
                         <!--quantity part-->
-                         <div class="qty">
+                        <div class="qty">
                             x1
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="small-row2">
+            <!--second part-->
+            <div class="row-two">
+                <div class="small-row1">
+                    <p style="color: #D60265; margin-left: 15%;">
+                        <i style="font-size:24px" class="fa">&#xf058;</i>
+                        Clothy Shop
+                    </p>
+                    <div class="row">
+                        <!--left part-->
+                        <div class="column1">
+                            <span>
+                                <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
+                            </span>
+                        </div>
+    
+                        <!--right part-->
+                        <div class="column2">
+                            Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
+    
+                            <p>Size: L <span>Color: Gray</span></p>
+                            <p style="font-weight: bold;">$10</p>
+                            <!--quantity part-->
+                            <div class="qty">
+                                x1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="small-row2">
+                    <div class="row">
+                         <!--left part-->
+                        <div class="column1">
+                            <span>
+                                <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
+                            </span>
+                        </div>
+    
+                        <!--right part-->
+                        <div class="column2">
+                            Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
+    
+                            <p>Size: L <span>Color: Gray</span></p>
+                            <p style="font-weight: bold;">$10</p>
+                            <!--quantity part-->
+                            <div class="qty">
+                                x1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--third part-->
+            <div class="row-third">
+                <p style="color: #D60265; margin-left: 15%;">
+                    <i style="font-size:24px" class="fa">&#xf058;</i>
+                    Clothy Shop
+                </p>
                 <div class="row">
-                     <!--left part-->
+                    <!--left part-->
                     <div class="column1">
                         <span>
                             <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
                         </span>
                     </div>
-    
+
                     <!--right part-->
                     <div class="column2">
                         Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-    
-                        <p>Size: L <span>Color: Gray</span></p>
+
+                        <p>Size: L <span>Color: Gray</span></p> 
                         <p style="font-weight: bold;">$10</p>
                         <!--quantity part-->
-                         <div class="qty">
+                        <div class="qty">
                             x1
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!--third part-->
-        <div class="row-third">
-            <p style="color: #D60265; margin-left: 15%;">
-                <i style="font-size:24px" class="fa">&#xf058;</i>
-                Clothy Shop
-            </p>
-            <div class="row">
-                 <!--left part-->
-                <div class="column1">
-                    <span>
-                        <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
-                    </span>
-                </div>
-
-                <!--right part-->
-                <div class="column2">
-                    Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-
-                    <p>Size: L <span>Color: Gray</span></p>
-                    <p style="font-weight: bold;">$10</p>
-                    <!--quantity part-->
-                     <div class="qty">
-                        x1
-                    </div>
-                </div>
+            <!--last part-->
+            <div class="last">
+                <p>Total: $10
+                    <span><button type="submit" class="btn">Check Out</button></span>
+                </p>
             </div>
-        </div>
 
-        <!--last part-->
-        <div class="last">
-            <p>Total: $10
-                <span><button type="submit" class="btn">Check Out</button></span>
-            </p>
         </div>
-
-    </div>
     </div>
 </template>
 
