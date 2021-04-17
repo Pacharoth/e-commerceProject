@@ -31,6 +31,7 @@
                 </div>
             </nav>
             <ChatList></ChatList>
+            <Dashboard></Dashboard>
             
         </main>
         <SellerRegister></SellerRegister>
@@ -42,12 +43,14 @@
 import ChatList from '../Chat/ChatList'
 import SellerRegister from '../Admin/SellerRegister'
 import {Modal} from 'bootstrap';
+import Dashboard from '../Admin/dashboard';
 export default {
-    title:'',
+    title:'Admin',
     name:"AdminLayout",
     components:{
         ChatList,
         SellerRegister,
+        Dashboard
     },
     data(){
         return{
@@ -81,7 +84,6 @@ export default {
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
 
     .body{
-        background-color: #F5F5F5;
         margin: 0;
         padding: 0;
         line-height: 1.5;
