@@ -55,21 +55,21 @@
         </div>
         <!-- endcard -->
         <div class="dashboard-graph">
-            <div class="dashboard-gmy row">
-                <span>Earning Statistics</span>
+            <div class="dashboard-gmy">
+                <span class="earning">Earning Statistics</span>
                 <div class="month-year">
-                    <button>Monthly</button>
-                    <button>Weekly</button>
+                    <button class="btn active">Monthly</button>
+                    <button class="btn active">Weekly</button>
                 </div>
             </div>
-            <div class="chart-contain">
+            <div class="chart-container ">
                 <canvas ref="chart"></canvas>
             </div>
         </div>
     </div>
 </template>
 <script>
-import {Chart,LineController, LineElement, PointElement, LinearScale, Title, BarController, BarElement, CategoryScale} from 'chart.js'
+import {Chart,LineController,LineElement,  LinearScale, Title, BarController, BarElement, CategoryScale, PointElement} from 'chart.js'
 export default {
     title:"Admin Dashboard",
     name:"Dashboard",
@@ -78,45 +78,47 @@ export default {
         return{
             chartdata:{
                 type: 'bar',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  datasets: [{
+      axis:'y',
+    label: 'My First Dataset',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    backgroundColor: [
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(255, 159, 64, 0.2)',
+      'rgba(255, 205, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(201, 203, 207, 0.2)'
+    ],
+    borderColor: [
+      'rgb(255, 99, 132)',
+      'rgb(255, 159, 64)',
+      'rgb(255, 205, 86)',
+      'rgb(75, 192, 192)',
+      'rgb(54, 162, 235)',
+      'rgb(153, 102, 255)',
+      'rgb(201, 203, 207)'
+    ],
+    borderWidth: 1},
+                    ]
+                },
+                options: {
+                    scales: {
+                    //    indexAxis: 'y',
+                    },
+                    // responsive:true,
+                    // maintainAspectRatio: true,  
+                },
+
             },
         }
     },
     mounted() {
-        Chart.register(LineController, LineElement, PointElement, LinearScale, Title,BarController,BarElement,CategoryScale);
-
+        Chart.register(LineController, LineElement,PointElement, LinearScale, Title,BarController,BarElement,CategoryScale);
         const chart= this.$refs.chart;
-        console.log(chart)
         new Chart(chart,this.chartdata);
     },
     methods:{
@@ -154,11 +156,19 @@ export default {
             width: 100%;
             display: flex;
             justify-content: space-between;
-            padding: 2%;
+            // padding: 2%;
+            padding-bottom:2% ;
             align-items: center;
+            @include breakpoint-up(large){
+                flex-wrap: wrap;
+            }   
+            @include breakpoint-down(medium){
+                flex-wrap: wrap;
+            }   
             @include breakpoint-down(small){
                 flex-direction: column;
             }
+            
             .card-one{
                 border-radius: 10px;
 
@@ -171,6 +181,14 @@ export default {
                 background-color: white;
                 box-shadow: $shadow_1;
                 justify-content: space-around;
+                @include breakpoint-up(large){
+                    width: 48%;
+                    margin-top: 3%;
+                }
+                @include breakpoint-down(medium){
+                    width: 48%;
+                    margin-top: 3%;
+                }
                 @include breakpoint-down(small){
                     width: 100%;
                     margin-top: 3%;
@@ -228,6 +246,60 @@ export default {
             }
         }
         //end card
+        .dashboard-graph{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 2% ;
+            border-radius: 5px;
+            // background-color: white;
+            box-shadow: $shadow_1;
+            .chart-container{
+                width: 100%;
+            }
+            .dashboard-gmy{
+                display: flex;
+                justify-content: space-between;
+                padding-right: 2%;
+                padding-left: 2%;
+                .earning{
+                    color: grey;
+                    font-size: 1.4rem;
+                    font-weight: bold;
+                    @include breakpoint-down(small){
+                        font-size: 1.2rem;
+                    }
+                }
+                .month-year{
+                    width: 16%;
+
+                    @include breakpoint-up(xlarge){
+                        width: 16.5%;
+                    }
+                    @include breakpoint-up(large){
+                        width: 20.5%;
+                    }
+                    @include breakpoint-down(medium){
+                        width: 28%;
+                    }
+                    .active{
+                        margin-left: 3%;
+                        border-radius: 5px;
+                        box-shadow: $shadow_1;
+                        font-weight: bold;
+                        color: grey;
+                        &:focus{
+                            box-shadow: $shadow_2;
+                            background-color: $blue;
+                            color: white;
+                        }
+                        @include breakpoint-down(small){
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
 
     }
 

@@ -82,6 +82,11 @@ export default {
     @import '../../assets/sass/colorpage';
     @import '../../assets/sass/maxin';
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
+    @import 'https://use.fontawesome.com/releases/v5.8.1/css/solid.css';
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.0/css/fontawesome.min.css';
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css';
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
+    @import 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css';
 
     .body{
         margin: 0;
@@ -92,27 +97,7 @@ export default {
     .main{
         width: 100%;
     }
-    button{
-        &:active{
-            border:none;
-            i{
-                color: $blue_color;
-            }
-            background-color: #e3eefe;
-            color: $blue_color;
-            border-radius: 50px;
-        }
-        &:focus{
-            border: none;
-            i{
-                color: $blue_color;
-            }
-            background-color: #e3eefe;
-            color: $blue_color;
-            border-radius: 50px;
-            box-shadow: none;
-        }
-    }
+   
     .content{
         display: flex;
         width: 100%;
@@ -256,6 +241,27 @@ export default {
         align-items: center;
         transition: 0.3s all;
         box-shadow: $shadow_1;
+        button{
+        &:active{
+            border:none;
+            i{
+                color: $blue_color;
+            }
+            background-color: #e3eefe;
+            color: $blue_color;
+            border-radius: 50px;
+        }
+        &:focus{
+            border: none;
+            i{
+                color: $blue_color;
+            }
+            background-color: #e3eefe;
+            color: $blue_color;
+            border-radius: 50px;
+            box-shadow: none;
+        }
+    }
         .avatar-chat{
         button{
             color: grey;
