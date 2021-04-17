@@ -37,6 +37,7 @@
 <script>
 
 export default {
+   title:'Admin Seller',
     props:['show'],
     name:"SellerRegister", 
        
@@ -99,6 +100,7 @@ export default {
     
   }
   .background{
+    @extend .modal-dialog;
     background-color: rgb(216, 214, 214);
     border-radius: 5px;
   }
