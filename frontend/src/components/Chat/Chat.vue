@@ -1,5 +1,5 @@
 <template>
-    <div class="chat-content" ref="chatting" :class="chat_status">
+    <div class="chat-content" :class="chatcontent">
         <div class="chat-header">
             <button class="btn chat-customize">
                     <img src="../../assets/logo.png" alt="">
@@ -35,20 +35,15 @@ export default {
             chat_status:"",
         }
     },
-
+    computed:{
+        chatcontent(){
+            console.log(this.$store.getters.getChatContent)
+            return this.$store.getters.getChatContent;
+        }
+    },
     methods:{
-        getmethod(){
-            this.chat_status=this.chat
-            if(this.chat_status){
-                const chat = this.$refs.chatting.classList;
-                chat.add(this.chat_status)
-            }
-        },
         closeChat(){
-            const chat = this.$refs.chatting.classList;
-            if(chat.contains('active')){
-                chat.remove('active');
-            }
+            this.$store.commit('changeContent',"");
         }
     }
 
@@ -71,7 +66,6 @@ export default {
         flex-direction: column;
         &.active{
             display: flex;
-
         }
         .chat-header{
             width: 100%;

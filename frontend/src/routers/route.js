@@ -5,7 +5,7 @@ const routes = [
         path:'/admin',
         name:'Admin',
         component:AdminLayout,
-    }
+    },
 ]
 const router = createRouter({
     history:createWebHistory(process.env.BASE_URL),

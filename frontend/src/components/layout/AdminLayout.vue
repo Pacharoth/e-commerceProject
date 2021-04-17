@@ -4,13 +4,14 @@
             <button class="btn close" @click="loadSideBar()"><em class="fas fa-times"></em></button>
             <h3 class="text-center"><a href="" class="logo">Admin Dashboard</a></h3>
             <ul class="link nav nav-pill flex-column mb-auto">
-                <li class=""><a class="nav-link" href=""><em class="bi bi-house-door me-2"></em>Dashboard</a></li>
-                <li ><a href="" class="nav-link"><em class="bi bi-person me-2"></em>Seller</a></li>
-                <li ><a href="" class="nav-link"><em class="bi bi-people me-2"></em>Customer</a></li>
-                <li ><a href="" class="nav-link"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</a></li>
-                <li><a href="" class="nav-link logout"><em class="bi bi-box-arrow-right me-2"></em>logout</a></li>
+                <li class=""><router-link to="" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
+                <li ><router-link to="/" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
+                <li ><router-link to="/" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
+                <li ><router-link to="/admin" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</router-link></li>
+                <li><router-link to="/" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
             </ul>
         </div>
+        <router-view></router-view>
         <main class="main">
             <nav class="nav-bar" ref="nav">
                 <div class="bar">
@@ -24,24 +25,37 @@
 
                 </div>
                 <div class="avatar-chat">
-                    <button class="btn bell"><em class="bi bi-chat-dots"></em> <span class="">1</span></button>
+                    <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> <span class="">1</span></button>
                     <button class="btn chat"><em class="bi bi-bell"></em><span>1</span></button>
                     <button class="btn avatar"> <span class="name"> Pacharoth</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
             <ChatList></ChatList>
+            
         </main>
+        <SellerRegister></SellerRegister>
     </div>
 
 
 </template>
 <script>
 import ChatList from '../Chat/ChatList'
+import SellerRegister from '../Admin/SellerRegister'
+import {Modal} from 'bootstrap';
 export default {
     title:'',
     name:"AdminLayout",
     components:{
         ChatList,
+        SellerRegister,
+    },
+    data(){
+        return{
+            modal:null,
+        }
+    },
+    mounted(){
+        this.modal=new Modal(this.$refs.modal)
     },
     methods:{
         loadSideBar(){
@@ -49,13 +63,16 @@ export default {
             nav.contains('active')?nav.remove('active'):nav.add('active')
             const sidebar = this.$refs.sidebar.classList;
             sidebar.contains('active')?sidebar.remove('active'):sidebar.add('active');
-            // const content = this.$ref.content.classList;
-            // content.contains('active')?content.remove('active'):content.add('active');
         },
-        loadChat(){
-
+        showChatList(){
+            if(!this.$store.getters.getChatList){
+                this.$store.commit('changeList','active');
+            }else{
+                this.$store.commit('changeList','');
+            }
         }
-    }
+    },
+
 }
 </script>
 <style lang="scss" scope>

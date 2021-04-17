@@ -1,11 +1,20 @@
 <template>
-<nav class="">
+<!-- <nav class="">
+</nav> -->
+<div class="app"> 
   <router-view></router-view>
-</nav>
+</div>
 </template>
 <script>
 export default {
+  data(){
+    return{
+      path:window.location.pathname,
+    }
+  },
   name: 'App',
+  components:{
+  }
 }
 </script>
 <style>

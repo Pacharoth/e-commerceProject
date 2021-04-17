@@ -1,6 +1,6 @@
 <template>
-   <div class="content-chat">
-        <div class="list-chat">
+   <div class="content-chat" >
+        <div class="list-chat" :class="chatlist">
            <div class="content-logo-chat">
                 <h4 >Chats</h4>
            </div>
@@ -20,7 +20,7 @@
                </button>
            </div>
         </div>
-        <Chat :chat="active"></Chat>
+        <Chat></Chat>
    </div>
 </template>
 <script>
@@ -35,10 +35,16 @@ export default {
     components:{
         Chat,
     },
+    computed:{
+        chatlist(){
+            console.log(this.$store.getters.getChatList)
+            return this.$store.getters.getChatList;
+        }
+    },
     methods:{
         popChat(){
-            this.active="active";
-            
+           this.$store.commit('changeContent','active');
+           this.$store.commit('changeList','');
         }
     }
 
@@ -60,6 +66,10 @@ export default {
         top:8%;
         color: grey;
         overflow-y: scroll;
+        transition: 0.4s ease;
+        &.active{
+            display: block;
+        }
         &::-webkit-scrollbar{
             width: 5px;
             &:hover{
