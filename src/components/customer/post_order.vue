@@ -5,13 +5,13 @@
         
         <div class="row1">
             <div class="column1">
-                <h6 class="title">Clothy Store</h6>
+                <h5 class="title">Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h6>10$</h6>
+                <h5>10$</h5>
                 <button class="btn2">Reorder</button>
             </div>
         </div>
@@ -19,13 +19,13 @@
 
         <div class="row1">
             <div class="column1">
-                <h6>Clothy Store</h6>
+                <h5>Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h6>10$</h6>
+                <h5>10$</h5>
                 <button class="btn2">Reorder</button>
             </div>
         </div>
@@ -33,13 +33,13 @@
 
         <div class="row1">
             <div class="column1">
-                <h6>Clothy Store</h6>
+                <h5>Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h6>10$</h6>
+                <h5>10$</h5>
                 <button class="btn2">Reorder</button>
             </div>
         </div>
@@ -47,13 +47,13 @@
 
         <div class="row1">
             <div class="column1">
-                <h6>Clothy Store</h6>
+                <h5>Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h6>10$</h6>
+                <h5>10$</h5>
                 <button class="btn2">Reorder</button>
             </div>
         </div>
