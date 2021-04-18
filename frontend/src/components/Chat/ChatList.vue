@@ -55,34 +55,7 @@ export default {
     @import '../../assets/sass/maxin';
     // @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     .list-chat{
-        display: none;
-        width: 30%;
-        max-height: 85%;
-        background: white;
-        position: absolute;
-        box-shadow: $shadow_2;
-        border-radius: 5px;
-        right:3rem;
-        top:8%;
-        color: grey;
-        overflow-y: scroll;
-        transition: 0.4s ease;
-        &.active{
-            display: block;
-        }
-        &::-webkit-scrollbar{
-            width: 5px;
-            &:hover{
-                background-color:rgb(250, 241, 241) ;
-            }
-        }
-        &::-webkit-scrollbar-thumb{
-            &:hover{
-            background-color: rgb(212, 209, 209);
-            height: 20px;
-            border-radius: 50px;
-            }
-        }
+        @include contentlist(30%);
         @include breakpoint-up(large){
             top:4%;
             // height: 70%;
@@ -112,54 +85,7 @@ export default {
             }
         }
         .list-user{
-            padding: 5% 2% 2% 2%;
-            display: flex;
-            flex-direction: column;
-            
-            .users{
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                &:active,&:hover{
-                    background-color: #eeeeee;
-                }
-                &:focus{
-                    box-shadow: none;
-                }
-                img{
-                    border-radius: 50%;
-                    background-color: white;
-                    width: 50px;
-                    height: 50px;
-                    margin-right: 4% ;
-                    &:hover{
-                    box-shadow: $shadow_1;
-
-                    }
-                }
-                .chat-time{
-                    width: 80%;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    .chat{
-                        display: flex;
-                        flex-direction: column;
-                        .text-chat{
-                            color: grey;
-                            font-size: 12px;
-                            text-align: left;
-                        }
-                    }
-                    .status{
-                        width: 10px;
-                        height: 10px;
-                        border-radius: 50%;
-                        background-color: rgb(78, 204, 78);
-                    }
-                }
-
-            }
+           @include contentpopup;
         }
         
     }

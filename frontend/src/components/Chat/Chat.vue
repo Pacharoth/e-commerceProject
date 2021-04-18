@@ -60,12 +60,24 @@ export default {
         background-color: white;
         box-shadow: $shadow_2;
         border-radius: 5px;
-        position: absolute;
+        position: fixed;
         bottom: 0;
         right: 7rem;
         flex-direction: column;
         &.active{
             display: flex;
+            @include breakpoint-up(large){
+                width: 49%;
+            }
+            @include breakpoint-down(medium){
+                width: 49%;
+                height: 60%;
+            }
+            @include breakpoint-down(small){
+                right: 2%;
+                width: 96%;
+                height: 90%;
+            }
         }
         .chat-header{
             width: 100%;

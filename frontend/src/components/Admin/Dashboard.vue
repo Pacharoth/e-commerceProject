@@ -94,11 +94,18 @@ export default {
     @import '../../assets/sass/maxin';
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     .dashboard-container {
+        margin-top:4% ;
         display: flex;
         flex-direction: column;
         width: 100%;
         padding: 2%;   
         transition: 0.3s all;
+        @include breakpoint-down(medium){
+            margin-top: 7%;
+        }
+        @include breakpoint-down(small){
+            margin-top: 10%;
+        }
         .dashtitle-gen{
             padding: 1%;
             display: flex;

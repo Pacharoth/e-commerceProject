@@ -1,17 +1,6 @@
 <template>
     <div class="content" ref="content">
-        <div class="sidebar " ref="sidebar">
-            <button class="btn close" @click="loadSideBar()"><em class="fas fa-times"></em></button>
-            <h3 class="text-center"><a href="" class="logo">Admin Dashboard</a></h3>
-            <ul class="link nav nav-pill flex-column mb-auto">
-                <li class=""><router-link to="/admin/dashboard" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
-                <li ><router-link to="/" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
-                <li ><router-link to="/" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
-                <li ><router-link to="/admin" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</router-link></li>
-                <li><router-link to="/" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
-            </ul>
-        </div>
-        <main class="main">
+                <main class="main">
             <nav class="nav-bar" ref="nav">
                 <div class="bar">
                     <button @click="loadSideBar()" class="btn burger" ><em class="fas fa-bars"></em></button>
@@ -25,15 +14,26 @@
                 </div>
                 <div class="avatar-chat">
                     <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> <span class="">1</span></button>
-                    <button class="btn chat"><em class="bi bi-bell"></em><span>1</span></button>
+                    <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em><span>1</span></button>
                     <button class="btn avatar"> <span class="name"> Pacharoth</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
             <ChatList></ChatList>
+            <Notification></Notification>
             <router-view></router-view>
-            
-            
         </main>
+        <div class="sidebar " ref="sidebar">
+            <button class="btn close" @click="loadSideBar()"><em class="fas fa-times"></em></button>
+            <h3 class="text-center"><router-link to="/admin" class="logo">Admin Dashboard</router-link></h3>
+            <ul class="link nav nav-pill flex-column mb-auto">
+                <li class=""><router-link to="/admin/dashboard" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
+                <li ><router-link to="/" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
+                <li ><router-link to="/" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
+                <li ><router-link to="/admin" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</router-link></li>
+                <li><router-link to="/" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
+            </ul>
+        </div>
+
         <SellerRegister></SellerRegister>
     </div>
 
@@ -43,13 +43,14 @@
 import ChatList from '../Chat/ChatList'
 import SellerRegister from '../Admin/SellerRegister'
 import {Modal} from 'bootstrap';
-// import Dashboard from '../Admin/dashboard';
+import Notification from '../Admin/Notification';
 export default {
     title:'Admin',
     name:"AdminLayout",
     components:{
         ChatList,
         SellerRegister,
+        Notification
         // Dashboard
     },
     data(){
@@ -68,11 +69,19 @@ export default {
             sidebar.contains('active')?sidebar.remove('active'):sidebar.add('active');
         },
         showChatList(){
-            console.log(this.$store.getters['chat/getChatList'])
-            if(!this.$store.getters['chat/getChatList']){
-                this.$store.dispatch('chat/changeList','active');
+            const store = this.$store
+            if(!store.getters['chat/getChatList']){
+                store.dispatch('chat/changeList','active');
             }else{
-                this.$store.dispatch('chat/changeList','');
+                store.dispatch('chat/changeList','');
+            }
+        },
+        showNotification(){
+            const store = this.$store;
+            if(!store.getters['notification/getContent']){
+                store.dispatch('notification/changeContent','active');
+            }else{
+                store.dispatch('notification/changeContent','')
             }
         }
     },
@@ -131,7 +140,8 @@ export default {
         &.active{
             width: 20%;
             display:block;
-            position: absolute;
+            // position: fixed;
+            position: fixed;
             color: grey;
             @include breakpoint-down(small){
                 width: 60%;
@@ -239,8 +249,10 @@ export default {
         100% { opacity: 1; transform: translateY(0); }
     }
 
-    .nav-bar{
-        order: 1;
+    .nav-bar:not([data-scroll='0']){
+
+        position: fixed;
+        order: 2;
         background-color: white;
         width: 100%;
         padding:1% 2% 1% 2%;
