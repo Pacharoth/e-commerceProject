@@ -19,3 +19,4 @@ export default {
 <style lang="scss">
   @import './assets/sass/colorpage';
 </style>
+
