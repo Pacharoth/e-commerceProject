@@ -241,6 +241,8 @@ export default {
         }
         //end card
         .dashboard-graph{
+            background-color: white;
+
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -281,17 +283,18 @@ export default {
                         width: 50%;
                     }
                     .active{
-                    
+                        background-color:#F5F5F5;
+                        
                         margin-left: 3%;
                         border-radius: 5px;
                         box-shadow: $shadow_1;
                         border:none;
                         font-weight: bold;
                         color: grey;
+                        box-shadow: $shadow_2;
                         &:focus{
                             background-color: $blue_color;
                             
-                            box-shadow: $shadow_2;  
                             color: white;
                         }
                         @include breakpoint-down(small){

@@ -291,10 +291,14 @@ export default {
             }
         }
         .date{
-            position: relative;
+            display: flex;
             button{
+                font-weight: bold;
+                margin-right: 2%;
                 color:grey;
                 border-radius: 5px;
+                background-color: #F5F5F5;
+                box-shadow: $shadow_2;
                 border: none;
                 &:active{
                     background-color: $blue_color;
