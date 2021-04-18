@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="container">
-            <div class="row">
+            <div class="row1">
                 <!--left part-->
                 <div class="column1">
-                    <h3>My Profile</h3>
-                    <hr style="color: gainsboro;">
+                    <h3 class="header">My Profile</h3>
+                    <hr class="hr-left">
 
                     <!--bottom part-->
-                    <div class="left">
+                    <div class="left1">
                         <label for="email">Email</label><br>
                         <input type="text" placeholder="" name="email" id="email" required><br>
                 
@@ -21,10 +21,10 @@
                 </div>
                 <!--right part-->
                 <div class="column2">
-                    <h3>Password</h3>
+                    <h3 class="header">Password</h3>
                     <hr class="hr-right">
 
-                    <div class="right">
+                    <div class="right1">
                         <label for="">Current Password</label>
                         <input type="password" placeholder="" name="current-password" id="" required><br>
 
@@ -35,7 +35,7 @@
                         <input type="password" name="confirm-password" id="" required>
                     </div>
 
-                    <input type="submit" name="" id="" value="Save" class="btn">
+                    <input type="submit" name="" id="" value="Save" class="btn1">
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@ export default {
         box-sizing: border-box;
     }
 
-    .row {
+    .row1 {
         display: flex;
     }
 
@@ -68,7 +68,7 @@ export default {
         padding: 10px;
         height: 300px; /* Should be removed. Only for demonstration */
     }    
-    h3{
+    .header{
         color: #D60265;
         font-weight: bold;
         text-align: center;
@@ -91,9 +91,9 @@ export default {
     }
 
     /* Overwrite default styles of hr */
-    hr {
-        border: 1px solid #f1f1f1;
-        margin-bottom: 25px;
+    .hr-left {
+        color: gainsboro;
+        margin-left: 10%;
         width: 80%;
     }
 
@@ -101,7 +101,7 @@ export default {
     a {
         color: dodgerblue;
     }
-    .left{
+    .left1{
         margin-left: 10%;
     }
     .hr-right{
@@ -109,7 +109,7 @@ export default {
         width: 90%;
         margin-left: 0;
     }
-    .btn{
+    .btn1{
         color: white;
         background-color: #D60265;
         font-size: 20px;

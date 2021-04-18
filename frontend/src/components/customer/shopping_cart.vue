@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="container">
-        <h3>Shopping Card</h3>
+        <h3 class="header">Shopping Card</h3>
 
             <!--first part-->
-            <div class="row-one">
-                <p style="color: #D60265; margin-left: 15%;">
+            <div class="row1-one">
+                <p style="color: #D60265;">
                     <i style="font-size:24px" class="fa">&#xf058;</i>
                     Clothy Shop
                 </p>
-                <div class="row">
+                <div class="row1">
                     <!--left part-->
                     <div class="column1">
                         <span>
@@ -24,21 +24,21 @@
                         <p>Size: L <span>Color: Gray</span></p>
                         <p style="font-weight: bold;">$10</p>
                         <!--quantity part-->
-                        <div class="qty">
-                            x1
+                        <div class="flex-container">
+                            <div>x1</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!--second part-->
-            <div class="row-two">
+            <div class="row1-two">
                 <div class="small-row1">
-                    <p style="color: #D60265; margin-left: 15%;">
+                    <p style="color: #D60265;">
                         <i style="font-size:24px" class="fa">&#xf058;</i>
                         Clothy Shop
                     </p>
-                    <div class="row">
+                    <div class="row1">
                         <!--left part-->
                         <div class="column1">
                             <span>
@@ -53,15 +53,15 @@
                             <p>Size: L <span>Color: Gray</span></p>
                             <p style="font-weight: bold;">$10</p>
                             <!--quantity part-->
-                            <div class="qty">
-                                x1
+                            <div class="flex-container">
+                                <div>x1</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="small-row2">
-                    <div class="row">
+                    <div class="row1">
                          <!--left part-->
                         <div class="column1">
                             <span>
@@ -76,8 +76,8 @@
                             <p>Size: L <span>Color: Gray</span></p>
                             <p style="font-weight: bold;">$10</p>
                             <!--quantity part-->
-                            <div class="qty">
-                                x1
+                           <div class="flex-container">
+                                <div>x1</div>
                             </div>
                         </div>
                     </div>
@@ -85,12 +85,12 @@
             </div>
 
             <!--third part-->
-            <div class="row-third">
-                <p style="color: #D60265; margin-left: 15%;">
+            <div class="row1-third">
+                <p style="color: #D60265;">
                     <i style="font-size:24px" class="fa">&#xf058;</i>
                     Clothy Shop
                 </p>
-                <div class="row">
+                <div class="row1">
                     <!--left part-->
                     <div class="column1">
                         <span>
@@ -105,8 +105,8 @@
                         <p>Size: L <span>Color: Gray</span></p> 
                         <p style="font-weight: bold;">$10</p>
                         <!--quantity part-->
-                        <div class="qty">
-                            x1
+                        <div class="flex-container">
+                            <div>x1</div>
                         </div>
                     </div>
                 </div>
@@ -114,8 +114,8 @@
 
             <!--last part-->
             <div class="last">
-                <p>Total: $10
-                    <span><button type="submit" class="btn">Check Out</button></span>
+                <p>Total: $10 
+                    <span><button type="submit" class="btn1">Check Out</button></span>
                 </p>
             </div>
 
@@ -135,7 +135,7 @@ export default {
     *{
         box-sizing: border-box;
     }
-    .row{
+    .row1{
         display: flex;
     }
     .column1{
@@ -147,46 +147,54 @@ export default {
         padding: 10px;
         margin: 0;
     }
-    h3{
+    .header{
         color: #D60265;
         margin-left: 15%;
+        margin-bottom: 3%;
     }
-    .row-one{
+    .row1-one{
         width: 80%;
         margin-left: 15%;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
         padding: 15px;
     }
-    .row-two{
+    .row1-two{
         margin-top: 5%;
         width: 80%;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
         padding: 15px;
         margin-left: 15%;
     }
-    .row-third{
+    .row1-third{
         margin-top: 5%;
         width: 80%;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
         padding: 15px;
         margin-left: 15%;
-    }
-    .qty{
-        width: 5%;
-        height: 15%;
-        border: solid gray 1px;
-        float: right;
-        margin: 0;
-        text-align: center;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     .last{
         float: right;
+        margin: 3%;
+        padding: 10px;
     }
-    .btn{
+    .btn1{
         background-color: #D60265;
         color: white;
         padding: 15px;
         box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .flex-container {
+        display: flex;
+        float: right;
+    }
+
+    .flex-container > div {
+        background-color: white;
+        color: black;
+        width: 40px;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid black;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 </style>

@@ -1,60 +1,60 @@
 <template>
     <div class="container">
-        <h3>Post Order</h3>
+        <h4 class="header">Post Order</h4>
         <div class="line"></div>
         
-        <div class="row">
+        <div class="row1">
             <div class="column1">
-                <h4>Clothy Store</h4>
+                <h5 class="title">Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h4>10$</h4>
-                <button class="btn">Reorder</button>
+                <h5>10$</h5>
+                <button class="btn2">Reorder</button>
             </div>
         </div>
         <div class="line"></div>
 
-        <div class="row">
+        <div class="row1">
             <div class="column1">
-                <h4>Clothy Store</h4>
+                <h5>Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h4>10$</h4>
-                <button class="btn">Reorder</button>
+                <h5>10$</h5>
+                <button class="btn2">Reorder</button>
             </div>
         </div>
         <div class="line"></div>
 
-        <div class="row">
+        <div class="row1">
             <div class="column1">
-                <h4>Clothy Store</h4>
+                <h5>Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h4>10$</h4>
-                <button class="btn">Reorder</button>
+                <h5>10$</h5>
+                <button class="btn2">Reorder</button>
             </div>
         </div>
         <div class="line"></div>
 
-        <div class="row">
+        <div class="row1">
             <div class="column1">
-                <h4>Clothy Store</h4>
+                <h5>Clothy Store</h5>
                 <p>Mar 2, 2021</p>
                 <p>Men Pants /L / Black x1</p>
             </div>
 
             <div class="column2">
-                <h4>10$</h4>
-                <button class="btn">Reorder</button>
+                <h5>10$</h5>
+                <button class="btn2">Reorder</button>
             </div>
         </div>
         <div class="line"></div>
@@ -73,7 +73,7 @@ export default {
         box-sizing: border-box;
     }
 
-    .row {
+    .row1 {
         display: flex;
     }
     .column1 {
@@ -86,16 +86,18 @@ export default {
         padding: 10px;
         text-align: center;
     }
-    h3{
+    .header{
         color: #D60265;
         margin-left: 10%;
+        margin-bottom: 3%;
+        margin-top: 3%;
     }
     .line{
         border: 1px solid #ddd;
         width: 80%;
         margin-left: 10%;
     }
-    .btn{
+    .btn2{
         background-color: white;
         color: #D60265;
         border: 2px solid #D60265;
