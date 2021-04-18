@@ -4,14 +4,13 @@
             <button class="btn close" @click="loadSideBar()"><em class="fas fa-times"></em></button>
             <h3 class="text-center"><a href="" class="logo">Admin Dashboard</a></h3>
             <ul class="link nav nav-pill flex-column mb-auto">
-                <li class=""><router-link to="" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
+                <li class=""><router-link to="/admin/dashboard" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
                 <li ><router-link to="/" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
                 <li ><router-link to="/" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
                 <li ><router-link to="/admin" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</router-link></li>
                 <li><router-link to="/" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
             </ul>
         </div>
-        <router-view></router-view>
         <main class="main">
             <nav class="nav-bar" ref="nav">
                 <div class="bar">
@@ -31,7 +30,8 @@
                 </div>
             </nav>
             <ChatList></ChatList>
-            <Dashboard></Dashboard>
+            <router-view></router-view>
+            
             
         </main>
         <SellerRegister></SellerRegister>
@@ -43,14 +43,14 @@
 import ChatList from '../Chat/ChatList'
 import SellerRegister from '../Admin/SellerRegister'
 import {Modal} from 'bootstrap';
-import Dashboard from '../Admin/dashboard';
+// import Dashboard from '../Admin/dashboard';
 export default {
     title:'Admin',
     name:"AdminLayout",
     components:{
         ChatList,
         SellerRegister,
-        Dashboard
+        // Dashboard
     },
     data(){
         return{
@@ -68,10 +68,11 @@ export default {
             sidebar.contains('active')?sidebar.remove('active'):sidebar.add('active');
         },
         showChatList(){
-            if(!this.$store.getters.getChatList){
-                this.$store.commit('changeList','active');
+            console.log(this.$store.getters['chat/getChatList'])
+            if(!this.$store.getters['chat/getChatList']){
+                this.$store.dispatch('chat/changeList','active');
             }else{
-                this.$store.commit('changeList','');
+                this.$store.dispatch('chat/changeList','');
             }
         }
     },
@@ -94,9 +95,7 @@ export default {
         line-height: 1.5;
         font-family: Arial, Helvetica, sans-serif;
     }
-    .main{
-        width: 100%;
-    }
+    
    
     .content{
         display: flex;
@@ -107,6 +106,16 @@ export default {
             flex-direction: column;
             &.active{
                 background-color: rgb(65, 63, 63);
+            }
+        }
+    }
+    .main{
+        width: 100%;
+        .content-main{
+            transition: 0.3s all;
+
+            &.active{
+                padding-left: 20%;
             }
         }
     }
@@ -285,16 +294,16 @@ export default {
             position: relative;
             button{
                 color:grey;
-                border-radius: 10px;
+                border-radius: 5px;
                 border: none;
                 &:active{
                     background-color: $blue_color;
                     color: white;
                 }
                 &:focus{
+                    box-shadow: $shadow_2;
                     background-color: $blue_color;
                     color: white;
-                    box-shadow: none;
                 }
             }
             @include breakpoint-down(small){

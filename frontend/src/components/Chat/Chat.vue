@@ -37,13 +37,13 @@ export default {
     },
     computed:{
         chatcontent(){
-            console.log(this.$store.getters.getChatContent)
-            return this.$store.getters.getChatContent;
+            
+            return this.$store.getters['chat/getChatContent'];
         }
     },
     methods:{
         closeChat(){
-            this.$store.commit('changeContent',"");
+            this.$store.dispatch('chat/changeContent',"");
         }
     }
 

@@ -37,14 +37,14 @@ export default {
     },
     computed:{
         chatlist(){
-            console.log(this.$store.getters.getChatList)
-            return this.$store.getters.getChatList;
+            console.log(this.$store.getters['chat/getChatList'])
+            return this.$store.getters['chat/getChatList'];
         }
     },
     methods:{
         popChat(){
-           this.$store.commit('changeContent','active');
-           this.$store.commit('changeList','');
+           this.$store.dispatch('chat/changeContent','active');
+           this.$store.dispatch('chat/changeList','');
         }
     }
 

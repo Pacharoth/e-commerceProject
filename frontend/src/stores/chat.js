@@ -1,6 +1,5 @@
-
 const chatStore={
-    namespace:true,
+    namespaced:true,
     state(){
         return{
             contentChat:"",
@@ -23,7 +22,7 @@ const chatStore={
             state.chatButton=text;
         }
     },
-    methods: {
+    actions: {
         changeContent(context,text){
             context.commit("changeContent",text);
         },

@@ -6,9 +6,9 @@
             <button class="btn btn-primary">Generate Report</button>
         </div>
         <!-- card -->
-        <div class="dashboard-card">
-            <div class="card-one">
-                <div class="logo">
+        <div class="dashboard-card" >
+            <div class="card-one" >
+                <div class="logo" >
                     <button class="user">
                     <em class="fas fa-user"></em>
                     </button>
@@ -69,55 +69,18 @@
     </div>
 </template>
 <script>
-import {Chart,LineController,LineElement,  LinearScale, Title, BarController, BarElement, CategoryScale, PointElement} from 'chart.js'
+import Chart from 'chart.js/auto';
+import linegraph from '../chart/chartline';
 export default {
     title:"Admin Dashboard",
     name:"Dashboard",
     // extends:Line,
     data(){
         return{
-            chartdata:{
-                type: 'bar',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-  datasets: [{
-      axis:'y',
-    label: 'My First Dataset',
-    data: [65, 59, 80, 81, 56, 55, 40],
-    backgroundColor: [
-      'rgba(255, 99, 132, 0.2)',
-      'rgba(255, 159, 64, 0.2)',
-      'rgba(255, 205, 86, 0.2)',
-      'rgba(75, 192, 192, 0.2)',
-      'rgba(54, 162, 235, 0.2)',
-      'rgba(153, 102, 255, 0.2)',
-      'rgba(201, 203, 207, 0.2)'
-    ],
-    borderColor: [
-      'rgb(255, 99, 132)',
-      'rgb(255, 159, 64)',
-      'rgb(255, 205, 86)',
-      'rgb(75, 192, 192)',
-      'rgb(54, 162, 235)',
-      'rgb(153, 102, 255)',
-      'rgb(201, 203, 207)'
-    ],
-    borderWidth: 1},
-                    ]
-                },
-                options: {
-                    scales: {
-                    //    indexAxis: 'y',
-                    },
-                    // responsive:true,
-                    // maintainAspectRatio: true,  
-                },
-
-            },
+            chartdata:linegraph,
         }
     },
     mounted() {
-        Chart.register(LineController, LineElement,PointElement, LinearScale, Title,BarController,BarElement,CategoryScale);
         const chart= this.$refs.chart;
         new Chart(chart,this.chartdata);
     },
@@ -134,10 +97,10 @@ export default {
         display: flex;
         flex-direction: column;
         width: 100%;
-        padding: 2%;    
+        padding: 2%;   
+        transition: 0.3s all;
         .dashtitle-gen{
             padding: 1%;
-
             display: flex;
             width: 100%;
             justify-content: space-between;
@@ -147,7 +110,22 @@ export default {
                 font-size: 2rem;
                 font-weight: bold;
                 @include breakpoint-down(small){
-                    font-size: 1.5rem;
+                    font-size: 1.4rem;
+                }
+            }
+            button{
+                
+                @include breakpoint-down(small){
+                    font-size: 12px;
+
+                }
+                box-shadow: $shadow_1;
+                font-weight: bold;
+                background-color: $blue_color;
+                border: none;
+                color: white;
+                &:focus{
+                    box-shadow: $shadow_2;
                 }
             }
         }
@@ -158,15 +136,15 @@ export default {
             justify-content: space-between;
             // padding: 2%;
             padding-bottom:2% ;
+            flex-wrap: wrap;
             align-items: center;
-            @include breakpoint-up(large){
-                flex-wrap: wrap;
-            }   
+    
             @include breakpoint-down(medium){
                 flex-wrap: wrap;
             }   
             @include breakpoint-down(small){
-                flex-direction: column;
+                // flex-direction: column;
+                justify-content: center;
             }
             
             .card-one{
@@ -181,6 +159,7 @@ export default {
                 background-color: white;
                 box-shadow: $shadow_1;
                 justify-content: space-around;
+                transition: 0.4s all;
                 @include breakpoint-up(large){
                     width: 48%;
                     margin-top: 3%;
@@ -190,18 +169,25 @@ export default {
                     margin-top: 3%;
                 }
                 @include breakpoint-down(small){
-                    width: 100%;
+                    width: 46%;
+                    margin-left:2%;
+                    margin-right: 2%;
+                    padding: 10px;
                     margin-top: 3%;
                 }
                 .logo{
                     width: 50%;
                     margin-left: 3%;
                     button{
-                    border: none;
-                    width: 70px;
-                    height: 70px;
-                    border-radius: 50%;
-                    box-shadow: $shadow_1;
+                        border: none;
+                        width: 70px;
+                        height: 70px;
+                        border-radius: 50%;
+                        box-shadow: $shadow_1;
+                        @include breakpoint-down(small){
+                            width: 50px;
+                            height: 50px;
+                        }
                     .money{
                         background-color: rgb(157, 218, 247);
                     }
@@ -242,6 +228,14 @@ export default {
                     .content-text{
                         color: grey;
                     }
+                    @include breakpoint-down(small){
+                        .title{
+                            font-size: 1.4rem;
+                        }
+                        .content-text{
+                            font-size:0.6rem;
+                        }
+                    }
                 }
             }
         }
@@ -256,6 +250,7 @@ export default {
             box-shadow: $shadow_1;
             .chart-container{
                 width: 100%;
+                
             }
             .dashboard-gmy{
                 display: flex;
@@ -267,7 +262,7 @@ export default {
                     font-size: 1.4rem;
                     font-weight: bold;
                     @include breakpoint-down(small){
-                        font-size: 1.2rem;
+                        font-size: 1.1rem;
                     }
                 }
                 .month-year{
@@ -282,19 +277,26 @@ export default {
                     @include breakpoint-down(medium){
                         width: 28%;
                     }
+                    @include breakpoint-down(small){
+                        width: 50%;
+                    }
                     .active{
+                    
                         margin-left: 3%;
                         border-radius: 5px;
                         box-shadow: $shadow_1;
+                        border:none;
                         font-weight: bold;
                         color: grey;
                         &:focus{
-                            box-shadow: $shadow_2;
-                            background-color: $blue;
+                            background-color: $blue_color;
+                            
+                            box-shadow: $shadow_2;  
                             color: white;
                         }
                         @include breakpoint-down(small){
                             font-size: 12px;
+                            // padding: 0;
                         }
                     }
                 }
