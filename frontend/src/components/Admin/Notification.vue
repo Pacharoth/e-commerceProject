@@ -33,7 +33,6 @@ export default {
     @import '../../assets/sass/maxin';
     .notification-content{
        @include contentlist(30%);
-       right: 2rem;
        .notification-title{
            padding: 2%;
        }

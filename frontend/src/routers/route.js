@@ -1,24 +1,11 @@
 import {createRouter,createWebHistory} from 'vue-router';
-import AdminLayout from '../components/layout/AdminLayout.vue';
 import edit_user from '../components/customer/edit_user.vue';
 import feedback from '../components/customer/feedback.vue';
 import shopping_cart from '../components/customer/shopping_cart.vue';
 import post_order from '../components/customer/post_order.vue';
-import Dashboard from '../components/Admin/Dashboard.vue';
+import routerAdmin from './admin';
 const routes = [
-    {
-        path:'/admin',
-        name:'Admin',
-        redirect:{name:'dashboard'},
-        component:AdminLayout,
-        children:[
-            {
-                name:'dashboard',
-                path:'dashboard',
-                component:Dashboard,
-            }
-        ]
-    },
+    routerAdmin,
     {
         path:'/edituser',
         name:'Edit User',

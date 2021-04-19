@@ -2,7 +2,8 @@
     <div class="dashboard-container" >
         
         <div class="dashtitle-gen">
-            <h4 >Dashboard</h4>
+            <h4 v-if="title=='Admin'">Dashboard</h4>
+            <h4 v-if="title=='Seller'">Seller</h4>
             <button class="btn btn-primary">Generate Report</button>
         </div>
         <!-- card -->
@@ -10,12 +11,14 @@
             <div class="card-one" >
                 <div class="logo" >
                     <button class="user">
-                    <em class="fas fa-user"></em>
+                    <em v-if="title=='Admin'" class="fas fa-user"></em>
+                    <em v-if="title=='Seller'" class="bi bi-box"></em>
                     </button>
                 </div>
                 <div class="text">
                     <span class="title">2830</span>
-                    <span class="content-text">Total Register</span>
+                    <span v-if="title=='Admin'" class="content-text">Total Register</span>
+                    <span v-if="title=='Seller'" class="content-text">Total sale unit</span>
                 </div>
             </div>
             <div class="card-one">
@@ -25,7 +28,7 @@
                     </button>
                 </div>
                 <div class="text">
-                    <span class="title">2830</span>
+                    <span class="title">$2830</span>
                     <span class="content-text">Total Earning</span>
                 </div>
             </div>
@@ -36,7 +39,7 @@
                     </button>
                 </div>
                 <div class="text">
-                    <span class="title">2830</span>
+                    <span class="title">$2830</span>
                     <span class="content-text">Total Profit</span>
                 </div>
             </div>
@@ -47,7 +50,7 @@
                     </button>
                 </div>
                 <div class="text">
-                    <span class="title">2830</span>
+                    <span class="title">$2830</span>
                     <span class="content-text">This year profit</span>
                 </div>
             </div>
@@ -72,17 +75,19 @@
 import Chart from 'chart.js/auto';
 import linegraph from '../chart/chartline';
 export default {
-    title:"Admin Dashboard",
     name:"Dashboard",
-    // extends:Line,
+    props:['title'],
+    title:'Dashboard',
     data(){
         return{
             chartdata:linegraph,
+            title_dashboard:this.title,
         }
     },
     mounted() {
         const chart= this.$refs.chart;
         new Chart(chart,this.chartdata);
+        
     },
     methods:{
         
