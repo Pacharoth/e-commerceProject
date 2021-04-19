@@ -35,11 +35,15 @@ export default {
        @include contentlist(30%);
        .notification-title{
            padding: 2%;
+           h4{
+               font-weight: bold;
+           }
        }
        .notification-header{
            padding-left: 2%;
            h3{
                font-size: 1.2rem;
+               font-weight: bold;
            }
        }
        .list-notification{

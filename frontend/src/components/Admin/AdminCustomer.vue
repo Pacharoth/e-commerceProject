@@ -13,19 +13,41 @@
             <th scope="">Adress</th>
             <th scope="">Action</th>
         </thead>
-        <CustomerAdminList v-for="postItem in postList" :key="postItem.id" :postItem="postItem"></CustomerAdminList>
+        <AdminCustomers v-for="customer in customerList" :key="customer.id" :customer="customer"></AdminCustomers>
     </table>
     </div>
     
   </div>
 </template>
 <script>
+import AdminCustomers from './AdminCustomers';
 export default {
-    
+  title:'Customer',
+  name:'AdminCustomer',
+  components:{
+    AdminCustomers,
+  },
+  computed:{
+    customerList(){
+      return this.$store.getters['customer/getAdminCustomers'];
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
     @import '../../assets/sass/colorpage';
     @import '../../assets/sass/maxin';
-    @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
+    @import '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';
+
+    .container{
+      margin-top:7% ;
+      padding: 2%;
+      height: 88%;
+      font-family: Avenir, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: white;
+      box-shadow: $shadow_1;
+      border-radius: 5px;
+    }
 </style>
