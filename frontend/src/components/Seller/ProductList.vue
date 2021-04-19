@@ -114,7 +114,7 @@
 </template>
 <script>
 export default {
-    
+    name:'ProductList',
 }
 </script>
 <style lang="scss" scope>

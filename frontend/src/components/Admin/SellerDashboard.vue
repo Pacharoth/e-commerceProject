@@ -4,6 +4,7 @@
 <script>
 import Dashboard from './Dashboard'
 export default {
+    title:'Seller Detail',
     name:'SellerDashboard',   
     components:{
         Dashboard,

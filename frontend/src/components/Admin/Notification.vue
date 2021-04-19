@@ -28,7 +28,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
     @import '../../assets/sass/colorpage';
     @import '../../assets/sass/maxin';
     .notification-content{

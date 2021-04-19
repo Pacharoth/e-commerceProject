@@ -27,7 +27,7 @@
             <h3 class="text-center"><router-link to="/admin" class="logo">Admin Dashboard</router-link></h3>
             <ul class="link nav nav-pill flex-column mb-auto">
                 <li class=""><router-link to="/admin" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
-                <li ><router-link to="/" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
+                <li ><router-link to="/admin/seller" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
                 <li ><router-link to="/admin/customer" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
                 <li ><router-link to="/admin" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</router-link></li>
                 <li><router-link to="/" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>

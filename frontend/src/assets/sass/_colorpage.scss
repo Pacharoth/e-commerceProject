@@ -9,6 +9,7 @@ $shadow_2: 0 2px 4px rgba(0, 0, 0, .1),0 8px 16px rgba(0, 0, 0, .1);
 }
 body{
     background-color: $background_color;
+    height: 100%;
     overflow: auto;
     &::-webkit-scrollbar{
         width: 5px;

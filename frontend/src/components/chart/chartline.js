@@ -3,7 +3,6 @@ const linegraph={
     data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
     datasets: [{
-        axis:'y',
         label: 'My First Dataset',
         data: [65, 59, 80, 81, 56, 55, 40],
         backgroundColor: '#e3eefe',

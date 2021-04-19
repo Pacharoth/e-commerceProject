@@ -75,9 +75,10 @@
 import Chart from 'chart.js/auto';
 import linegraph from '../chart/chartline';
 export default {
+    // title:'Dashboard',
+
     name:"Dashboard",
     props:['title'],
-    title:'Dashboard',
     data(){
         return{
             chartdata:linegraph,
