@@ -1,7 +1,7 @@
 <template>
     <tbody>
      <tr>
-        <td><input type="checkbox" ></td>
+        <td>1</td>
         <th scope=""> {{customer.name}}</th>
         <td>{{customer.phone}}</td>
         <td>{{customer.email}}</td>

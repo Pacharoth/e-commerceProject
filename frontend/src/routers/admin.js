@@ -16,13 +16,13 @@ const routerAdmin =     {
             component:AdminDashboard,
         },
         {
-            name:'seller',
+            name:'adminseller',
             path:'seller',
             component:SellerList,
         },
         {
             name:'sellerdetial',
-            path:'sellerdetail',
+            path:'seller/sellerdetail',
             component:SellerDashboard,
         },
         {

@@ -6,6 +6,7 @@ const roleModel = new Schema({
         unique:true,
     }
 },{collection:"roles"});
+
 const role = mongoose.model("roles",roleModel);
 const arrRole = [{name:'admin'},{name:'customer'},{name:'seller'}]
 role.insertMany(arrRole).then(result=>console.log(result)).catch(err=>console.log(err));

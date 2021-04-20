@@ -4,8 +4,10 @@ import feedback from '../components/customer/feedback.vue';
 import shopping_cart from '../components/customer/shopping_cart.vue';
 import post_order from '../components/customer/post_order.vue';
 import routerAdmin from './admin';
+import routeSeller from './seller';
 const routes = [
     routerAdmin,
+    routeSeller,
     {
         path:'/edituser',
         name:'Edit User',

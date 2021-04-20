@@ -1,38 +1,38 @@
 <template>
     <div class="seller-container">
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/sellerdetail" class="seller">
+        <router-link to="/admin/seller/sellerdetail" class="seller">
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>

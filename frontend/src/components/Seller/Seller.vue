@@ -1,7 +1,7 @@
 <template>
-    <div class="product-list">
+    <div class="dashboard-container">
             <nav class="navbar shadow p-3 mb-5 bg-body rounded ">
-        <a class="navbar-brand"><h4 class="header">AmazingShop</h4></a>
+        <router-link to="/seller" class="navbar-brand"><h4 class="header">AmazingShop</h4></router-link>
         <form class="form-inline">
           <input class="form-control mr-sm-2 rounded-pill search" type="search" placeholder="&#xF002; Search"/>
         </form>
@@ -21,11 +21,11 @@
         
         <ul class="nav ">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
-              <i class="fa fa-shopping-bag header" ></i>
+            <a class="nav-link dropdown-toggle header" @click="showDropdown" ref="drop" data-toggle="dropdown" href="#" role="button" >
+              <em class="fa fa-shopping-bag header" ></em>
               <span class="badge rounded-pill badge-notification bg-danger">1</span>
             </a>
-            <div class="dropdown-menu customerOrder">
+            <div class="dropdown-menu customerOrder" ref="drop">
                 <h3 class="dropdown-header">Customers Orders</h3>
                 <a class="dropdown-item header" href="#">
                     <div class="row">
@@ -41,7 +41,7 @@
                       </div>
                     </div> 
                 </a>
-                <a class="dropdown-item header" href="#">
+                <a class="dropdown-item header" href="#"> 
                     <div class="row">
                       <div class="col-md-9">
                         <span class="customer">CustomerName</span>
@@ -55,69 +55,66 @@
                       </div>
                     </div> 
                 </a>
-
+            </div>
             </li>
           <li class="nav-item"> 
             <a href="#" class="nav-link">
-              <i class='far fa-comment-dots header'></i>
+              <em class='fas fa-comment-dots header'></em>
               <span class="badge rounded-pill badge-notification bg-danger">1</span>
             </a>          
           </li>
           <li class="nav-item">  
             <a href="" class="nav-link">
-              <i class="fas fa-bell header"></i>
+              <em class="fas fa-bell header"></em>
               <span class="badge rounded-pill badge-notification bg-danger">1</span>
             </a>          
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" @click="showProfile">
             <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
-              <i class="fas fa-user-circle user" style="margin-right: 8%;
-              font-size: 1.5vw;"></i>Ginzy
+              <em class="fas fa-user-circle user" style="margin-right: 8%;
+              font-size: 1.5vw;"></em>Ginzy
             </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item header" href="#">My profile</a>
+            <div class="dropdown-menu profile" ref="profile">
+                <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
                 <a class="dropdown-item header" href="#">Setting</a>
                 <a class="dropdown-item header" href="#">Log out</a>
             </div>
             </li>
         </ul>
     </nav>
-
-    <table class="table productTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Product</th>
-            <th>Category</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="productInfo">1</td>
-            <td class="productInfo">Productname</td>
-            <td class="productInfo">category1</td>
-            <td class="productInfo">10</td>
-            <td class="productInfo">$100</td>
-
-            <td>
-                <button class="btn btn-light"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></button>
-                <button class="btn btn-light"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
-            </td>
-          </tr>
-          
-        </tbody>
-      </table>
+    <router-view></router-view>
     </div>
+
 </template>
 <script>
 export default {
-    name:'ProductList',
+    name:'Seller',
+    components:{
+    },
+    methods: {
+      showDropdown(){
+        const dropdown = this.$refs.drop.classList;
+        dropdown.contains('show')?dropdown.remove('show'):dropdown.add('show');
+      },
+      showProfile(){
+        const dropdownProfile = this.$refs.profile.classList;
+        dropdownProfile.contains('show')?dropdownProfile.remove('show'):dropdownProfile.add('show');
+      }
+    },
 }
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
+    @import '../../assets/sass/colorpage';
+    @import '../../assets/sass/maxin';
+    @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
+    // .dashboard-container{
+    //   .card-seller{
+    //     padding-left:2% ;
+    //     padding-right:2% ;
+    //   }
+      
+    // }
     .header {
   color: #d60265;
 }
@@ -147,6 +144,9 @@ export default {
 .btn.opt {
   background-color: #d60265;
   color: white;
+}
+.profile{
+  left: 0;
 }
 .customerOrder {
   left: auto;

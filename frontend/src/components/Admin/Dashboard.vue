@@ -7,55 +7,7 @@
             <button class="btn btn-primary">Generate Report</button>
         </div>
         <!-- card -->
-        <div class="dashboard-card" >
-            <div class="card-one" >
-                <div class="logo" >
-                    <button class="user">
-                    <em v-if="title=='Admin'" class="fas fa-user"></em>
-                    <em v-if="title=='Seller'" class="bi bi-box"></em>
-                    </button>
-                </div>
-                <div class="text">
-                    <span class="title">2830</span>
-                    <span v-if="title=='Admin'" class="content-text">Total Register</span>
-                    <span v-if="title=='Seller'" class="content-text">Total sale unit</span>
-                </div>
-            </div>
-            <div class="card-one">
-                <div class="logo">
-                    <button class="chart">
-                    <em class="fas fa-chart-bar icon"></em>
-                    </button>
-                </div>
-                <div class="text">
-                    <span class="title">$2830</span>
-                    <span class="content-text">Total Earning</span>
-                </div>
-            </div>
-            <div class="card-one">
-                <div class="logo">
-                    <button class="money">
-                    <em class="fas fa-dollar-sign icon"></em>
-                    </button>
-                </div>
-                <div class="text">
-                    <span class="title">$2830</span>
-                    <span class="content-text">Total Profit</span>
-                </div>
-            </div>
-            <div class="card-one">
-                <div class="logo">
-                    <button class="wallet">
-                    <em class="fas fa-wallet icon"></em>
-                    </button>
-                </div>
-                <div class="text">
-                    <span class="title">$2830</span>
-                    <span class="content-text">This year profit</span>
-                </div>
-            </div>
-            
-        </div>
+        <CardDashboard :title="title"></CardDashboard>
         <!-- endcard -->
         <div class="dashboard-graph">
             <div class="dashboard-gmy">
@@ -74,11 +26,15 @@
 <script>
 import Chart from 'chart.js/auto';
 import linegraph from '../chart/chartline';
+import CardDashboard from './CardDashboard';
 export default {
     // title:'Dashboard',
 
     name:"Dashboard",
     props:['title'],
+    components:{
+        CardDashboard,
+    },
     data(){
         return{
             chartdata:linegraph,
@@ -98,6 +54,7 @@ export default {
 <style lang="scss" scoped>
     @import '../../assets/sass/colorpage';
     @import '../../assets/sass/maxin';
+    @import '../../assets/sass/carddasboard';
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     .dashboard-container {
         margin-top:4% ;
@@ -143,115 +100,7 @@ export default {
             }
         }
         //card
-        .dashboard-card{
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            // padding: 2%;
-            padding-bottom:2% ;
-            flex-wrap: wrap;
-            align-items: center;
-    
-            @include breakpoint-down(medium){
-                flex-wrap: wrap;
-            }   
-            @include breakpoint-down(small){
-                // flex-direction: column;
-                justify-content: center;
-            }
-            
-            .card-one{
-                border-radius: 10px;
 
-                display: flex;
-                align-items: center;
-                width: 24%;
-                padding: 20px;
-                padding-top: 30px;
-                padding-bottom: 30px;
-                background-color: white;
-                box-shadow: $shadow_1;
-                justify-content: space-around;
-                transition: 0.4s all;
-                @include breakpoint-up(large){
-                    width: 48%;
-                    margin-top: 3%;
-                }
-                @include breakpoint-down(medium){
-                    width: 48%;
-                    margin-top: 3%;
-                }
-                @include breakpoint-down(small){
-                    width: 46%;
-                    margin-left:2%;
-                    margin-right: 2%;
-                    padding: 10px;
-                    margin-top: 3%;
-                }
-                .logo{
-                    width: 50%;
-                    margin-left: 3%;
-                    button{
-                        border: none;
-                        width: 70px;
-                        height: 70px;
-                        border-radius: 50%;
-                        box-shadow: $shadow_1;
-                        @include breakpoint-down(small){
-                            width: 50px;
-                            height: 50px;
-                        }
-                    .money{
-                        background-color: rgb(157, 218, 247);
-                    }
-                    &.user{
-                        background-color: #e3eefe ;
-                        em{
-                            color: $blue_color  ;
-                        }
-                    }
-                    &.chart{
-                        background-color: rgba(75, 192, 192, 0.2);
-                        em{
-                            color: rgb(92, 209, 170);
-                        }
-                    }
-                    &.money{
-                        background-color:rgba(153, 102, 255, 0.2) ;
-                        em{
-                            color: rgba(156, 124, 219, 0.726) ;
-                        }
-                    }
-                    &.wallet{
-                        background-color: rgba(255, 207, 86, 0.349);
-                        em{
-                            color:  rgba(255, 206, 86, 1);
-                        }
-                    }
-                }
-                }
-                .text{
-                    width: 50%;
-                    display: flex;
-                    flex-direction: column;
-                    .title{
-                        font-size: 2rem;
-                        font-weight: bold;
-                    }
-                    .content-text{
-                        color: grey;
-                    }
-                    @include breakpoint-down(small){
-                        .title{
-                            font-size: 1.4rem;
-                        }
-                        .content-text{
-                            font-size:0.6rem;
-                        }
-                    }
-                }
-            }
-        }
         //end card
         .dashboard-graph{
             background-color: white;
