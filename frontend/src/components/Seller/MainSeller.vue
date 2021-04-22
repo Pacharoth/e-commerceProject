@@ -1,6 +1,6 @@
 <template>
     <div class="seller-dashpage">
-        <CardDashboard title="Seller"></CardDashboard>
+        <card-dashboard title="Seller"/>
         <div class="option">
 
           <router-link to="/seller/productlist" class="btn opt me-2" role="button">List Product</router-link>
@@ -117,7 +117,6 @@ export default {
     data(){
         return {
             modal:null,
-            
         }
     },
     components:{

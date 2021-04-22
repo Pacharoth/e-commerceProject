@@ -125,8 +125,19 @@
     
 </template>
 <script>
+import {Modal,Carousel} from 'bootstrap';
 export default {
-    
+    name:"customer",
+    data(){
+        return{
+            modal:null,
+            carousel:null
+        }
+    },
+    mounted(){
+        this.modal=new Modal(this.$refs)
+        this.carousel = new Carousel(this.$refs)
+    }
 }
 </script>
 <style scoped>

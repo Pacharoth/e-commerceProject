@@ -1,5 +1,5 @@
 <template>
-    <Dashboard title="Seller"></Dashboard>
+    <dashboard title="Seller"/>
 </template>
 <script>
 import Dashboard from './Dashboard'

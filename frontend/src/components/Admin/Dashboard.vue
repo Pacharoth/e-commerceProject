@@ -7,7 +7,7 @@
             <button class="btn btn-primary">Generate Report</button>
         </div>
         <!-- card -->
-        <CardDashboard :title="title"></CardDashboard>
+            <card-dashboard :title="title"/>
         <!-- endcard -->
         <div class="dashboard-graph">
             <div class="dashboard-gmy">
@@ -29,14 +29,14 @@ import linegraph from '../chart/chartline';
 import CardDashboard from './CardDashboard';
 export default {
     // title:'Dashboard',
-
     name:"Dashboard",
     props:['title'],
     components:{
         CardDashboard,
     },
     data(){
-        return{
+    
+         return{
             chartdata:linegraph,
             title_dashboard:this.title,
         }

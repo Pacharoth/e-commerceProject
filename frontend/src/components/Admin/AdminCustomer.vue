@@ -13,7 +13,7 @@
             <th scope="">Adress</th>
             <th scope="">Action</th>
         </thead>
-        <AdminCustomers v-for="customer in customerList" :key="customer.id" :customer="customer"></AdminCustomers>
+        <admin-customers v-for="customer in customerList" :key="customer.id" :customer="customer"/>
     </table>
     </div>
     

@@ -18,8 +18,8 @@
                     <button class="btn avatar"> <span class="name"> Pacharoth</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
-            <ChatList></ChatList>
-            <Notification></Notification>
+            <chat-list/>
+            <notification/>
             <router-view></router-view>
         </main>
         <div class="sidebar " ref="sidebar">
@@ -34,7 +34,7 @@
             </ul>
         </div>
 
-        <SellerRegister></SellerRegister>
+        <seller-register/>
     </div>
 
 
@@ -51,7 +51,6 @@ export default {
         ChatList,
         SellerRegister,
         Notification
-        // Dashboard
     },
     data(){
         return{
