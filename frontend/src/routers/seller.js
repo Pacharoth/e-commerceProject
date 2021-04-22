@@ -2,7 +2,7 @@ import Seller from '../components/Seller/Seller.vue';
 import ProductionList from '../components/Seller/ProductionList.vue';
 import MainSeller from '../components/Seller/MainSeller.vue';
 import SellerProfile from '../components/Seller/SellerProfile.vue'
-const routeSeller = {
+const sellerRouter = {
     name:'seller',
     path:'/seller',
     redirect:{name:'sellerpage'},
@@ -26,4 +26,4 @@ const routeSeller = {
         }
     ]
 }
-export default routeSeller;
+export default sellerRouter;

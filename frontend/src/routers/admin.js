@@ -4,7 +4,7 @@ import SellerList from '../components/Admin/SellerList.vue';
 import AdminLayout from '../components/layout/AdminLayout.vue';
 import AdminCustomer from '../components/Admin/AdminCustomer.vue';
 
-const routerAdmin =     {
+const adminRouter =     {
     path:'/admin',
     name:'Admin',
     redirect:{name:'admindashboard'},
@@ -32,4 +32,4 @@ const routerAdmin =     {
         }
     ]
 };
-export default routerAdmin;
+export default adminRouter;

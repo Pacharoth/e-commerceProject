@@ -1,34 +1,11 @@
 import {createRouter,createWebHistory} from 'vue-router';
-import edit_user from '../components/customer/edit_user.vue';
-import feedback from '../components/customer/feedback.vue';
-import shopping_cart from '../components/customer/shopping_cart.vue';
-import post_order from '../components/customer/post_order.vue';
-import routerAdmin from './admin';
-import routeSeller from './seller';
+import adminRouter from './admin';
+import sellerRouter from './seller';
+import customerRouter from './customer';
 const routes = [
-    routerAdmin,
-    routeSeller,
-    {
-        path:'/edituser',
-        name:'Edit User',
-        component:edit_user,
-    },
-    {
-        path:'/feedback',
-        name:'FeedBack',
-        component:feedback,
-    },
-    {
-        path:'/postorder',
-        name:"PostOrder",
-        component:post_order,
-    },
-    {
-        path:'/shoppingcart',
-        name:'shopping cart',
-        component:shopping_cart,
-    },
-    
+    adminRouter,
+    sellerRouter,
+    customerRouter,
 
 ]
 const router = createRouter({
