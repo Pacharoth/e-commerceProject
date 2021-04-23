@@ -92,9 +92,7 @@ export default {
     @import '../../assets/sass/maxin';
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     @import 'https://use.fontawesome.com/releases/v5.8.1/css/solid.css';
-    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.0/css/fontawesome.min.css';
     @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css';
-    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
     @import 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css';
 
     .body{
@@ -355,6 +353,9 @@ export default {
                     color: rgb(66, 66, 66);
                     box-shadow: $shadow_2;
                     background-color: #F5F5F5;
+                }
+                &.active{
+                    display: block;
                 }
                 @include breakpoint-down(small){
                     font-size: 12px;

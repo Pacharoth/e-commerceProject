@@ -1,39 +1,47 @@
 <template>
-
+    
     <div class="customer-dashboard">
-            <div class="nav_bar shadow p-2  bg-body rounded">
 
-            <div class="d-flex bd-highlight ">
-                <div class="me-auto p-1 bd-highlight"><h4 class="name">AmazingShop</h4></div>
-                <div class="p-2 bd-highlight">
-                    <div class=" chat"><em class="far fa-comment-dots"></em></div>
-                </div>
-                <div class="p-2 bd-highlight">
-                    <div class=" search"><em class="fas fa-search"></em></div>
-                </div>
-                
-                <div class="p-2 bd-highlight">
-                    <div class="dropdown">
-                        <button class="btn dropdown-toggle p-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" @click="slideDown">
-                            <em class="fas fa-user-circle user"></em>Ginzy
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" ref="dropdown">
-                        <li><router-link to='/postorder' class="dropdown-item" href="#">My Ordered</router-link></li>
-                        <li><router-link to="/edituser" class="dropdown-item" href="#">Profile</router-link></li>
-                        <li><router-link to="/" class="dropdown-item" href="#">Log Out</router-link></li>
-                        </ul>
+        <div class="nav_bar shadow p-2 mb-2 bg-body rounded">
+
+                <div class="d-flex bd-highlight ">
+                    <router-link to="/" class="me-auto p-1 bd-highlight text-decoration-none"><h4 class="name">AmazingShop</h4></router-link>
+                    <div class="p-2 bd-highlight">
+                        <button class="btn chat p-0" @click="showChatList"><em class="fas fa-comment-dots"></em></button>
+                    </div>
+                    <div class="p-2 bd-highlight d-flex justify-content-between">
+
+                         <input type="text" ref="search"  class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
+                        <button class="btn search p-0" @click="showSearch" ><em class="fas fa-search" ></em></button>
+
+                    </div>
+                    
+                    <div class="p-2 bd-highlight">
+                        <div class="dropdown">
+                            <button v-if="user!='customer'" class="btn dropdown-toggle p-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <em class="fas fa-user-circle user"></em>Ginzy
+                            </button>
+                            <button v-else class="btn p-0 signin" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setStatus('signin')">Sign in</button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><router-link to="/postorder" class="dropdown-item" href="#">My Ordered</router-link></li>
+                            <li><router-link to="/edituser" class="dropdown-item" href="#">Profile</router-link></li>
+                            <li><router-link to="/" class="dropdown-item" href="#">Log Out</router-link></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <login-signup/>
+                    <div class="p-2 bd-highlight">
+                        <router-link to="/shoppingcart" class=" cart">
+                            <em class="fas fa-shopping-cart"></em>
+                        </router-link>
                     </div>
                 </div>
-            
-                <div class="p-2 bd-highlight">
-                    <router-link to="/shoppingcart" class=" cart">
-                        <em class="fas fa-shopping-cart"></em>
-                    </router-link>
-                </div>
+                
             </div>
-            
-        </div>
         <router-view></router-view>
+        <div class="clas">
+            <chat-list/>
+        </div>
     </div>
     
 
@@ -41,30 +49,63 @@
 
 <script>
 // import {Modal,Carousel} from 'bootstrap';
+import ChatList from '../Chat/ChatList.vue'
+import LoginSignup from '../customer/LoginSignup.vue'
 export default {
     name:"CustomerLayout",
     data() {
         return {
             modal:null,
-            carousel:null
+            carousel:null,
+            user:'customer'
         }
+    },
+    components:{
+        ChatList,
+        LoginSignup,
     },
     methods: {
         slideDown(){
             const slidedown = this.$refs.dropdown.classList
             slidedown.contains("show")?slidedown.remove('show'):slidedown.add('show');
+        },
+        showChatList(){
+            const store = this.$store
+            if(!store.getters['chat/getChatList']){
+                store.dispatch('chat/changeList','active');
+            }else{
+                store.dispatch('chat/changeList','');
+            }
+        },
+        setStatus(status){
+            const store = this.$store
+            store.dispatch('auth/setStatus',status);
+        },
+        showNotification(){
+            const store = this.$store;
+            if(!store.getters['notification/getContent']){
+                store.dispatch('notification/changeContent','active');
+            }else{
+                store.dispatch('notification/changeContent','')
+            }
+        },
+        showSearch(){
+            const search = this.$refs.search.classList
+            search.contains('active')?search.remove('active'):search.add('active')
         }
     },
     mounted() {
-        // this.modal=new Modal(this.$refs)
-        // this.carousel = new Carousel(this.$refs)
+    
     },
     
 }
 </script>
-<style scoped>
-    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css';
-    @import 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css';
+<style lang="scss" scoped>
+    @import '../../assets/sass/colorpage';
+    @import '../../assets/sass/maxin';
+    @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css';
+    @import 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css';
     .name{
         color: #D60265;
     }
@@ -90,11 +131,38 @@ export default {
         color: #D60265;
         text-align: right;
         /* font-size: 1.5vw; */
+    
     }
     .chat{
         /* font-size: 1.5vw; */
         color: #D60265;
         text-align: right;
+    }
+    .signin{
+        color: #D60265;
+        font-weight: bold;
+    }
+    .form-search{
+        @extend .form-control;
+        display: none;
+        width: 90%;
+        border: none;
+        color: grey;
+        border-radius: 50px;
+        background-color: #F5F5F5;
+        box-shadow: $shadow_1;
+        transition: 0.4 ease;
+        &.active{
+            display: block;
+        }
+        &:focus{
+            color: rgb(66, 66, 66);
+            box-shadow: $shadow_2;
+            background-color: #F5F5F5;
+        }
+        @include breakpoint-down(small){
+            font-size: 12px;
+        }
     }
 
 </style>

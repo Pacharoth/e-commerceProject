@@ -20,7 +20,7 @@
                </button>
            </div>
         </div>
-        <Chat></Chat>
+        <chat/>
    </div>
 </template>
 <script>
@@ -33,7 +33,7 @@ export default {
       }  
     },
     components:{
-        Chat,
+        Chat
     },
     computed:{
         chatlist(){

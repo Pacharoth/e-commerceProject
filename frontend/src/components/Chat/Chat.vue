@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </button>
-            <button class="btn close" @click="closeChat"><em class="fas fa-times"></em></button>
+            <button  @click="closeChat" class="btn close"><em class="fas fa-times"></em></button>
         </div>
         <div class="content-all-chat">
             <div class="admin">
@@ -37,13 +37,12 @@ export default {
     },
     computed:{
         chatcontent(){
-            
             return this.$store.getters['chat/getChatContent'];
         }
     },
     methods:{
         closeChat(){
-            this.$store.dispatch('chat/changeContent',"");
+            this.$store.dispatch('chat/changeContent','');
         }
     }
 
