@@ -64,7 +64,7 @@
             </a>          
           </li>
           <li class="nav-item">  
-            <a href="" class="nav-link">
+            <a href="#" class="nav-link" @click="showNotification">
               <em class="fas fa-bell header"></em>
               <span class="badge rounded-pill badge-notification bg-danger">1</span>
             </a>          
@@ -84,10 +84,12 @@
     </nav>
     <router-view></router-view>
     <chat-list/>
+    <notification/>
     </div>
 
 </template>
 <script>
+import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
 export default {
     name:'Seller',
@@ -97,7 +99,8 @@ export default {
       }
     },
     components:{
-        ChatList
+        ChatList,
+        Notification
     },
     methods: {
       showDropdown(){
@@ -108,6 +111,14 @@ export default {
         const dropdownProfile = this.$refs.profile.classList;
         dropdownProfile.contains('show')?dropdownProfile.remove('show'):dropdownProfile.add('show');
       },
+      showNotification(){
+            const store = this.$store;
+            if(!store.getters['notification/getContent']){
+                store.dispatch('notification/changeContent','active');
+            }else{
+                store.dispatch('notification/changeContent','')
+            }
+        },
       showChatList(){
         const store = this.$store
             if(!store.getters['chat/getChatList']){
