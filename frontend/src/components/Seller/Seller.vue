@@ -58,7 +58,7 @@
             </div>
             </li>
           <li class="nav-item"> 
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link" @click="showChatList">
               <em class='fas fa-comment-dots header'></em>
               <span class="badge rounded-pill badge-notification bg-danger">1</span>
             </a>          
@@ -83,13 +83,21 @@
         </ul>
     </nav>
     <router-view></router-view>
+    <chat-list/>
     </div>
 
 </template>
 <script>
+import ChatList from '../Chat/ChatList.vue';
 export default {
     name:'Seller',
+    data() {
+      return {
+        
+      }
+    },
     components:{
+        ChatList
     },
     methods: {
       showDropdown(){
@@ -99,7 +107,15 @@ export default {
       showProfile(){
         const dropdownProfile = this.$refs.profile.classList;
         dropdownProfile.contains('show')?dropdownProfile.remove('show'):dropdownProfile.add('show');
-      }
+      },
+      showChatList(){
+        const store = this.$store
+            if(!store.getters['chat/getChatList']){
+                store.dispatch('chat/changeList','active');
+            }else{
+                store.dispatch('chat/changeList','');
+            }
+        },
     },
 }
 </script>
@@ -108,13 +124,6 @@ export default {
     @import '../../assets/sass/maxin';
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
-    // .dashboard-container{
-    //   .card-seller{
-    //     padding-left:2% ;
-    //     padding-right:2% ;
-    //   }
-      
-    // }
     .header {
   color: #d60265;
 }
