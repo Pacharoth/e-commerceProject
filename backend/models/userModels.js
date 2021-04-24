@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const User = new mongoose.Schema({
+const Schema = mongoose.Schema
+const userSchema =new Schema({
     username:{
         required:true,
         type:String,
@@ -18,9 +19,9 @@ const User = new mongoose.Schema({
         required:true,
     },
     roles:{
-        type:String,
-        required:true,
+        type:Schema.Types.ObjectId,
+        ref:'roles',
     }
-},{collection:'user'});
-const user = mongoose.model("user",User);
+},{collection:'users'});
+const user = mongoose.model("users",userSchema);
 module.exports = user

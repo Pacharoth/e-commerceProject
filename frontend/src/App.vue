@@ -1,22 +1,26 @@
 <template>
-<nav class="">
-  <AdminLayout></AdminLayout>
-  <!-- <Navigation></Navigation> -->
-</nav>
+<div class="app" style=""> 
+  <router-view></router-view>
+</div>
 </template>
 <script>
-// import Navigation from './components/navigation/Navigation';
-import AdminLayout from './components/layout/AdminLayout';
 export default {
+  data(){
+    return{
+      path:window.location.pathname,
+    }
+  },
   name: 'App',
-  components: {
-    AdminLayout,
-    // Navigation,
+  components:{
   }
 }
 </script>
-
-<style>
-
-/* @import './assets/sass/customize.css'; */
+<style lang="scss">
+  @import '../node_modules/bootstrap/scss/bootstrap.scss';
+  @import './assets/sass/colorpage';
+    body{
+    @extend body;
+    background: #F5F5F5 !important;
+  }
 </style>
+
