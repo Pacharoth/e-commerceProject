@@ -12,10 +12,6 @@
         <div class="dashboard-graph">
             <div class="dashboard-gmy">
                 <span class="earning">Earning Statistics</span>
-                <!-- <div class="month-year">
-                    <button class="btn active">Monthly</button>
-                    <button class="btn active">Weekly</button>
-                </div> -->
             </div>
             <div class="chart-container ">
                 <canvas ref="chart"></canvas>

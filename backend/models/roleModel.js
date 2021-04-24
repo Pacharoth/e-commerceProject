@@ -9,5 +9,5 @@ const roleModel = new Schema({
 
 const role = mongoose.model("roles",roleModel);
 const arrRole = [{name:'admin'},{name:'customer'},{name:'seller'}]
-role.insertMany(arrRole).then(result=>console.log(result)).catch(err=>console.log(err));
+role.insertMany(arrRole).then(result=>console.log(result)).catch(err=>console.log("existed"));
 module.exports = role;
