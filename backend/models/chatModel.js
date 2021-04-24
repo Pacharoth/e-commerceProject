@@ -11,7 +11,11 @@ const chatModel = new Schema({
     },
     content:{
         type:String,
-    }
+    },
+    status:{
+        type:String,
+        default:'unread',
+    },
 });
 const chat = mongoose.model('chat',chatModel)
 module.exports = chat;

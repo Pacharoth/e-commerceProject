@@ -16,6 +16,9 @@ const sellerModel = new Schema({
     address:{
         type:String,
         required:true,
+    },
+    img:{
+        type:String,
     }
 });
 const seller = mongoose.model('sellers',sellerModel);
