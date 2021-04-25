@@ -2,6 +2,7 @@ import edit_user from '../components/customer/edit_user.vue';
 import feedback from '../components/customer/feedback.vue';
 import shopping_cart from '../components/customer/shopping_cart.vue';
 import post_order from '../components/customer/post_order.vue';
+import ProductDetail from '../components/customer/ProductDetail.vue';
 import CustomerLayout from '../components/layout/CustomerLayout.vue'
 import Customer from '../components/customer/Customer.vue';
 
@@ -38,6 +39,11 @@ const customerRouter = {
             name:'shopping cart',
             component:shopping_cart,
         },
+        {
+            path:'productdetail',
+            name:'productdetail',
+            component:ProductDetail,
+        }
     ]
 
 }
