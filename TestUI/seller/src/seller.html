@@ -91,8 +91,9 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
-              <i class="fas fa-user-circle user" style="margin-right: 8%;
-              font-size: 1.5vw;"></i>Ginzy
+              <!-- <i class="fas fa-user-circle user" style="margin-right: 8%; font-size: 1.5vw;"></i> -->
+              <img  class="rounded-circle proImg" style="width:40px;" src="../assets/img/profileSeller.jpg"  alt="">
+              Ginzy
             </a>
                 <div class="dropdown-menu">
                   <a class="dropdown-item header" href="./sellerProfile.html">My profile</a>
@@ -104,6 +105,55 @@
         </ul>
      
     </nav>
+    <div class="dashboard-card" >
+      <div class="card-one" >
+          <div class="logo" >
+              <button class="user">
+              <em v-if="title=='Admin'" class="fas fa-user"></em>
+              <em v-if="title=='Seller'" class="bi bi-box"></em>
+              </button>
+          </div>
+          <div class="text">
+              <span class="title">2830</span>
+              <span v-if="title=='Admin'" class="content-text">Total Register</span>
+              <span v-if="title=='Seller'" class="content-text">Total sale unit</span>
+          </div>
+      </div>
+      <div class="card-one">
+          <div class="logo">
+              <button class="chart">
+              <em class="fas fa-chart-bar icon"></em>
+              </button>
+          </div>
+          <div class="text">
+              <span class="title">$2830</span>
+              <span class="content-text">Total Earning</span>
+          </div>
+      </div>
+      <div class="card-one">
+          <div class="logo">
+              <button class="money">
+              <em class="fas fa-dollar-sign icon"></em>
+              </button>
+          </div>
+          <div class="text">
+              <span class="title">$2830</span>
+              <span class="content-text">Total Profit</span>
+          </div>
+      </div>
+      <div class="card-one">
+          <div class="logo">
+              <button class="wallet">
+              <em class="fas fa-wallet icon"></em>
+              </button>
+          </div>
+          <div class="text">
+              <span class="title">$2830</span>
+              <span class="content-text">This year profit</span>
+          </div>
+      </div>
+      
+  </div>
   
             <div class="dashboard-card" >
         <div class="card-one" >
