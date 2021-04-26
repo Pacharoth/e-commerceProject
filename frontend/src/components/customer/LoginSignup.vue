@@ -44,10 +44,6 @@
                         <input type="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
                     </div>
                     <div class="mb-2">
-                        <label for="exampleInputEmail1" class="form-label">Address</label>
-                        <input type="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    </div>
-                    <div class="mb-2">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
                         <input type="password" class="input" id="exampleInputPassword1">
                     </div>

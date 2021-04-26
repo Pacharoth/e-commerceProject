@@ -12,7 +12,6 @@ const customerStore={
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
                     
                 },
                 {
@@ -20,79 +19,74 @@ const customerStore={
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
                 },
                 {
                     name: 'Van Belgie',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh',
                 },
                 {
                     name: 'Alexander',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
+                    
                 },
                 {
                     name: 'Marie-Christine',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
                 },
                 {
                     name: 'Marie-Esmeralda',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
                 },
                 {
                     name: 'Alexander',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
+                    
                 },
                 {
                     name: 'Marie-Christine',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
+                    
                 },
                 {
                     name: 'Marie-Esmeralda',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
+                    
                 },
                 {
                     name: 'Alexander',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
+                    
                 },
                 {
                     name: 'Marie-Christine',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
+                    
                 },
                 {
                     name: 'Marie-Esmeralda',
                     phone: '0883726042',
                     email: 'josephine@gmail.com',
                     register: '16/April/2021',
-                    address: 'Phnom Penh'
+                    
                 },
-    
             ]
         }
     },
@@ -104,7 +98,7 @@ const customerStore={
     },
     getters:{
         getAdminCustomers(state){
-            return state.adminCustomer
+            return state.adminCustomer;
         }
     }
 }

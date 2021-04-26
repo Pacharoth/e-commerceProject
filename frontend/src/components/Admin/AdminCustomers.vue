@@ -6,7 +6,6 @@
         <td>{{customer.phone}}</td>
         <td>{{customer.email}}</td>
         <td>{{customer.register}}</td>
-        <td>{{customer.address}}</td>
         <td><span data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn text-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><em class="fas fa-edit"></em></button></span>
             <span data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn text-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><em class="fas fa-trash-alt"></em></button></span>
         </td>

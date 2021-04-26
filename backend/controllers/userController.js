@@ -11,7 +11,7 @@ exports.login = async(req,res)=>{
                     if(passwordMatch){
                         res.cookie('username',result.username,{expire:3600*24*1000})
                         res.cookie('logged-time',new Date().toISOString(),{expire:3600*1000*24});
-                        req.session={email:result.email,userRole:result.roles,userId:result._id}
+                        req.session={email:result.email,userRole:result.roles,userId:result._id,username:result.username}
                         return req.status(200).json(result);
                     }else{
                         res.json({passwordMatch:false});
@@ -47,5 +47,13 @@ exports.logout = async(req,res)=>{
         return res.status(200).json({success:true});
     }else{
         return res.status(400).json({success:false});
+    }
+}
+exports.getSession = async(req,res)=>{
+    if(req.session){
+        return res.status(200).json(req.session);
+    }else{
+        console.log(req.session)
+        return res.status(400).json({"error":true});
     }
 }

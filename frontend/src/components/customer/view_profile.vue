@@ -8,14 +8,14 @@
                <p class="info">Username:</p>
                <p class="info">Email:</p>
                <p class="info">Phone Number:</p>
-               <p class="info">Address:</p>
+               
             </div>
             
             <div class="column2">
                <p class="info1">Amazing</p>
                <p class="info1">Amazing@gmail.com</p>
                <p class="info1">+855112211</p>
-               <p class="info1">Amazing, Phnom Penh, Cambodia</p>
+              
             </div>
         </div>
         <router-link to="/edituser" class="btn1">Edit Profile</router-link>
