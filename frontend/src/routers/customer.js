@@ -5,6 +5,7 @@ import post_order from '../components/customer/post_order.vue';
 import ProductDetail from '../components/customer/ProductDetail.vue';
 import CustomerLayout from '../components/layout/CustomerLayout.vue'
 import Customer from '../components/customer/Customer.vue';
+import view_profile from '../components/customer/view_profile.vue';
 
 
 const customerRouter = {
@@ -43,6 +44,11 @@ const customerRouter = {
             path:'productdetail',
             name:'productdetail',
             component:ProductDetail,
+        },
+        {
+            path:'profile',
+            name:'profile',
+            component:view_profile,
         }
     ]
 
