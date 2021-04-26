@@ -23,9 +23,9 @@
             </div>
 
             <div class="column3">
-                <button class="btn2">Reply</button>
+                <!-- <button class="btn2">Reply</button>
                 <br><br><br><br>
-                <button class="btn2">Reply</button>
+                <button class="btn2">Reply</button> -->
                 
             </div>
         </div>
@@ -40,7 +40,7 @@
             </div>
 
             <div class="column3">
-                <button class="btn2">Reply</button>
+                <!-- <button class="btn2">Reply</button> -->
             </div>
         </div>
 
@@ -54,7 +54,7 @@
             </div>
 
             <div class="column3">
-               <button class="btn2">Reply</button>
+               <!-- <button class="btn2">Reply</button> -->
             </div>
         </div>
 
@@ -68,7 +68,7 @@
             </div>
 
             <div class="column3">
-                <button class="btn2">Reply</button>
+                <!-- <button class="btn2">Reply</button> -->
             </div>
         </div>
         <button class="btn1">see more</button>

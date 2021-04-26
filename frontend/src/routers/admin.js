@@ -30,6 +30,13 @@ const adminRouter =     {
             path:'customer',
             component:AdminCustomer,
         }
-    ]
+    ],
+    // beforeEnter: (to, from, next) => {
+    //     // const store = this.$store;
+    //     // store.dispatch('auth/setSession');
+    //     // //check authentication
+    //     // if(to.name==="admin" && store.getters['auth/getSession'].isRole==="seller")next({name:'admin'});
+    //     // else next({name:'homepage'});
+    // }
 };
 export default adminRouter;

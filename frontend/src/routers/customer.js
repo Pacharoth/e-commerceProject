@@ -17,7 +17,6 @@ const customerRouter = {
         {
             name:'customerlistproduct',
             path:'homepage',
-
             component:Customer,
         },
         {
@@ -50,7 +49,8 @@ const customerRouter = {
             name:'profile',
             component:view_profile,
         }
-    ]
-
+    ],
+    // beforeEnter: (to, from, next) => {
+    // }
 }
 export default customerRouter;

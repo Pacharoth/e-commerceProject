@@ -10,7 +10,6 @@
             <th scope="">Phone</th>
             <th scope="">Email</th>
             <th scope="">Register Date</th>
-            <th scope="">Adress</th>
             <th scope="">Action</th>
         </thead>
         <admin-customers v-for="customer in customerList" :key="customer.id" :customer="customer"/>

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h4 class="header">Post Order</h4>
+        <h4 class="header">Past Order</h4>
         <div class="line"></div>
         
         <div class="row1">
@@ -64,6 +64,7 @@
 
 <script>
 export default {
+    title:'Past Order',
     name: 'postOrder',
 }
 </script>
