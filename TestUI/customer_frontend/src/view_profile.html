@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .row1 {
+        display: flex;
+    }
+
+    /* Create two equal columns that sits next to each other */
+    .column1 {
+        flex: 50%;
+        padding: 10px;
+        margin-left: 30%;
+    }
+    .column2 {
+        flex: 50%;
+        padding: 10px;
+    }
+    .info{
+        font-weight: bold;
+    }
+    h2{
+        color:#D60265;
+        text-align: center;
+    }
+    .line{
+        color: #ddd;
+        border: 1px solid #ddd;
+    }
+    .btn1{
+        background-color: #D60265;
+        color: white;
+        padding: 10px;
+        border: none;
+        margin-left: 50%;
+    }
+</style>
+<body>
+    <div class="container">
+        <h2>Customer Profile</h2>
+        <div class="line"></div>
+       
+        <div class="row1">
+            <div class="column1">
+               <p class="info">Username:</p>
+               <p class="info">Email:</p>
+               <p class="info">Phone Number:</p>
+               <p class="info">Address:</p>
+            </div>
+            
+            <div class="column2">
+               <p class="info1">Amazing</p>
+               <p class="info1">Amazing@gmail.com</p>
+               <p class="info1">+855112211</p>
+               <p class="info1">Amazing, Phnom Penh, Cambodia</p>
+            </div>
+        </div>
+        <button class="btn1">Edit Profile</button>
+    </div>
+</body>
+</html>

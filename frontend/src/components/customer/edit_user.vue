@@ -31,8 +31,8 @@
                         <label for="">New Password</label>
                         <input type="password" placeholder="" name="new-password" id="" required>
 
-                        <label for="">Confirm Password</label>
-                        <input type="password" name="confirm-password" id="" required>
+                        <label for="">Address</label>
+                        <input type="text" name="address" id="" required>
                     </div>
 
                     <input type="submit" name="" id="" value="Save" class="btn1">

@@ -1,5 +1,5 @@
-const user = require('../models/userModels')
-const role =require('../models/roleModel')
+const user = require('../models/userModel');
+const role =require('../models/roleModel');
 const bcrypt = require('bcrypt')
 
 exports.login = async(req,res)=>{
@@ -30,7 +30,7 @@ exports.registerCustomer = async(req,res)=>{
         username:request.username,
         email:request.email,
         password:bcrypt.hashSync(request.password,salt),
-        createAt:new Date,
+        registerAt:new Date,
         roles:role.findOne({name:'customer'}).then(result=>result.id).catch(err=>err),
     });
     await customerAccount.save().then(result=>{
