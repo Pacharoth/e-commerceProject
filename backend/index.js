@@ -9,6 +9,8 @@ const app = express();
 const store = new MongoDBStore({uri:"mongodb://localhost:27017/connect_mongodb_session",collection:"Session"});
 const bodyParser = require("body-parser");
 const user = require('./routers/User');
+const feedbackRoutes = require('./routers/feedbackRouter');
+
 store.on('err',function(error){
     console.log(error);
 })
@@ -33,11 +35,14 @@ app.use(session({
     saveUninitialized:true,
 }));
 app.use(user);
-app.get('/',async(req,res)=>{
-    res.json({"hello":"World"})
-});
-mongoose.connect("mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false").then(result=>{
-    console.log("Connected DB");
+app.use(feedbackRoutes);
+const port = 3000;
 
-}).catch(err=>console.log(err))
-app.listen(3000)
+mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false')
+.then(result => {
+  console.log("Db is connected");
+  console.log("server is running on port 3000")
+}).catch(err => {
+  console.log(err);
+})
+app.listen(port);

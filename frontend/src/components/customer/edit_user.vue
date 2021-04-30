@@ -32,7 +32,7 @@
                         <input type="password" placeholder="" name="new-password" id="" required>
 
                         <label for="">Confirm Password</label>
-                        <input type="password" name="confirm-password" id="" required>
+                        <input type="text" name="confirmpassword" id="" required>
                     </div>
 
                     <input type="submit" name="" id="" value="Save" class="btn1">
@@ -48,7 +48,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import '../../assets/sass/colorpage';
+    @import '../../assets/sass/maxin';
+    @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
  * {
         box-sizing: border-box;
     }
@@ -110,10 +113,16 @@ export default {
         margin-left: 0;
     }
     .btn1{
+        @extend .btn;
         color: white;
         background-color: #D60265;
         font-size: 20px;
-        padding: 8px;
+        box-shadow: $shadow_1;
+        &:hover,&:focus{
+            box-shadow: $shadow_2;
+            color:white;
+            background-color:  #e4267f;
+        }
     }
 
 </style>

@@ -31,7 +31,7 @@
                     </div>
                     <login-signup/>
                     <div class="p-2 bd-highlight">
-                        <router-link to="/shoppingcart" class=" cart">
+                        <router-link v-if="user!='customer'" to="/shoppingcart" class=" cart">
                             <em class="fas fa-shopping-cart"></em>
                         </router-link>
                     </div>

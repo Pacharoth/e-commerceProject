@@ -12,20 +12,10 @@
 
             <div class="column2">
                 <p>1 month ago <br>this pants is pretty cool more than i expected</p>
-                <div class="row1">
-                    <div class="column1">
-                        <p style="font-weight: bold; font-size: 15px;">Jenny</p>
-                    </div>
-                    <div class="column22">
-                        <p>3 week ago <br>Yeah i brought it too, it is fit my size</p>
-                    </div>
-                </div>
+
             </div>
 
             <div class="column3">
-                <button class="btn2">Reply</button>
-                <br><br><br><br>
-                <button class="btn2">Reply</button>
                 
             </div>
         </div>
@@ -40,7 +30,7 @@
             </div>
 
             <div class="column3">
-                <button class="btn2">Reply</button>
+                <!-- <button class="btn2">Reply</button> -->
             </div>
         </div>
 
@@ -54,7 +44,7 @@
             </div>
 
             <div class="column3">
-               <button class="btn2">Reply</button>
+               <!-- <button class="btn2">Reply</button> -->
             </div>
         </div>
 
@@ -68,7 +58,7 @@
             </div>
 
             <div class="column3">
-                <button class="btn2">Reply</button>
+                <!-- <button class="btn2">Reply</button> -->
             </div>
         </div>
         <button class="btn1">see more</button>

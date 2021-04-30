@@ -1,5 +1,5 @@
-const user = require('../models/userModels')
-const role =require('../models/roleModel')
+const user = require('../models/userModel');
+const role =require('../models/roleModel');
 const bcrypt = require('bcrypt')
 
 exports.login = async(req,res)=>{
@@ -11,7 +11,7 @@ exports.login = async(req,res)=>{
                     if(passwordMatch){
                         res.cookie('username',result.username,{expire:3600*24*1000})
                         res.cookie('logged-time',new Date().toISOString(),{expire:3600*1000*24});
-                        req.session={email:result.email,userRole:result.roles,userId:result._id}
+                        req.session={email:result.email,userRole:result.roles,userId:result._id,username:result.username}
                         return req.status(200).json(result);
                     }else{
                         res.json({passwordMatch:false});
@@ -30,7 +30,7 @@ exports.registerCustomer = async(req,res)=>{
         username:request.username,
         email:request.email,
         password:bcrypt.hashSync(request.password,salt),
-        createAt:new Date,
+        registerAt:new Date,
         roles:role.findOne({name:'customer'}).then(result=>result.id).catch(err=>err),
     });
     await customerAccount.save().then(result=>{
@@ -47,5 +47,13 @@ exports.logout = async(req,res)=>{
         return res.status(200).json({success:true});
     }else{
         return res.status(400).json({success:false});
+    }
+}
+exports.getSession = async(req,res)=>{
+    if(req.session){
+        return res.status(200).json(req.session);
+    }else{
+        console.log(req.session)
+        return res.status(400).json({"error":true});
     }
 }

@@ -21,7 +21,7 @@
                     <div class="d-flex flex-column">
                         <button class=" mt-2 mb-2 forgetpassword m-auto" @click="setStatus('forgetpassword')">forget password</button>
                        <div class="m-auto">
-                            <span class="text-secondary">Don't have account? </span><span><button class="forgetpassword" @click="setStatus('signup')">Sign up</button></span>
+                            <span class="">Don't have account? </span><span><button class="forgetpassword" @click="setStatus('signup')">Sign up</button></span>
                        </div>
                     </div>
                 </form>
@@ -103,11 +103,11 @@ export default {
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     .modal-title{
         
-        color: #D60265;
+        color: rgb(68, 68, 68);
         font-weight: bold ;
     }
     .all-contain{
-        color: #D60265;
+        color: rgb(68, 68, 68);
         form{
             display: flex;
             flex-direction: column;

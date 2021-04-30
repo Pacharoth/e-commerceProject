@@ -9,10 +9,6 @@ const customerModel = new Schema({
         type:String,
         required:true,
     },
-    address:{
-        type:String,
-        required:true
-    }
 });
 const customer = mongoose.model('customers',customerModel);
 module.exports = customer;

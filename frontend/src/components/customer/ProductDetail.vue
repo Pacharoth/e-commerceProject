@@ -1,15 +1,15 @@
 <template>
-    <div class="container-fluid ">
+<div class=" all-container">
         <div class="row mt-2">
             <div class="col-md-6">
                 <div class="row">
-                    <img class="img" src="../assets/image/pants.jpg" alt="">
+                    <img class="img" src="../../assets/img/pants.jpg" alt="">
                 </div>
                 <div class="flex mt-3 mb-3">
-                    <div><img class="small-product" src="../assets/image/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../assets/image/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../assets/image/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../assets/image/pants.jpg" alt=""></div>
+                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
+                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
+                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
+                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
                 </div>
 
             </div>
@@ -27,8 +27,8 @@
                 </div>
                 <p>Color:</p>
                 <div class="color mb-3"> 
-                    <img class="color-img" src="../assets/image/pants.jpg" alt="">
-                    <img class="color-img" src="../assets/image/pants.jpg" alt="">
+                    <img class="color-img" src="../../assets/img/pants.jpg" alt="">
+                    <img class="color-img" src="../../assets/img/pants.jpg" alt="">
                 </div>
                 <p>Quantity:</p>
                 
@@ -37,26 +37,38 @@
                 <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
                 <span> 6297 pieces available</span>
                 <div>
-                    <button class="btn buynow mt-3 ">Buy Now</button>
-                    <button class="btn addtocart mt-3 ml-3">Add to Cart</button>
+                    <button class="buynow mt-3 ">Buy Now</button>
+                    <button class=" addtocart mt-3 ml-3">Add to Cart</button>
                 </div>
-                <h5 class="mt-3"><a href="" style="text-decoration: none; color: black;">View Feedback</a></h5>
-                <div class=" comment mt-4">
-                    <span class="profile">M</span>
-                    <input class="cmt" name="" id="" placeholder="Add a public comment......." ></input> 
+                <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
+                <div class=" comment mt-4 d-flex align-items-center">
+                    <span class="profile d-flex align-items-center justify-content-center">M</span>
+                    <input class="cmt" name="" id="" placeholder="Add a public comment......." >
                 </div>
             </div>
         </div>
     </div>
-    
 </template>
 <script>
 export default {
-    
+    title:'Product Detail',
+    name:'ProductDetail',
 }
 </script>
-<style scoped>
-    .img{
+<style lang="scss" scoped>
+    @import '../../assets/sass/colorpage';
+    @import '../../assets/sass/maxin';
+    @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
+    .all-container{
+        @extend .container-fluid;
+        padding: 2%;
+        margin-top: 2%;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: $shadow_1;
+        width: 90%; 
+    }
+     .img{
         width: 80%;
         margin: auto;
     }
@@ -96,36 +108,60 @@ export default {
         background-color: white;
     }
     .buynow{
-        /* padding: 5%; */
+        @extend .btn;
         color: white;
         font-weight: bold;
         background-color: #D60265;
+        box-shadow: $shadow_1;
+        border-radius: 5px;
+        &:focus,&:hover{
+            color:white;
+            background-color: #e2257d;
+            box-shadow: $shadow_2;
+        }
         
     }
     .addtocart{
+        @extend .btn;
         color: white;
         font-weight: bold;
         background-color: #4691FF;
+        box-shadow: $shadow_1;
+        border-radius: 5px;
+        &:focus,&:hover{
+            background-color: #3183ff;
+            color: white;
+            box-shadow: $shadow_2;
+        }
     }
     .profile{
-        border-radius: 50%;
         color: white;
+        width: 30px;
+        height: 30px;
         background-color: #D60265;
         font-weight: bold;
-        padding-left: 3%;
-        padding-right: 3%;
-        padding-top: 2%;
-        padding-bottom: 2%;
+        border-radius: 50%;
+
+        // padding-left: 3%;
+        // padding-right: 3%;
+        // padding-top: 2%;
+        // padding-bottom: 2%;
     }
     .cmt{
+        @extend .form-control;
         border: none;
         margin-left: 5%;
-        /* height: 4rem; */
         width: 80%;
+        color: rgb(58, 57, 57);
+        background-color: #eee;
+        border-radius: 5px;
+        &:focus{
+            color: rgb(59, 58, 58);
+            background-color: rgb(223, 223, 223);
+            box-shadow: $shadow_2;
+        }
     }
-    /* .comment{
-        display: block;
-    } */
+
     .color{
         display: flex;
 
