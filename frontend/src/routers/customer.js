@@ -30,7 +30,7 @@ const customerRouter = {
             component:feedback,
         },
         {
-            path:'postorder',
+            path:'pastorder',
             name:"PostOrder",
             component:post_order,
         },
