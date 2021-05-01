@@ -35,10 +35,11 @@ app.use(session({
     resave:true,
     saveUninitialized:true,
 }));
+const port = 3000;
+exports.portlisten=port;
 app.use(user);
 app.use(feedbackRoutes);
 app.use(categoryRoutes);
-const port = 3000;
 
 mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
@@ -47,4 +48,4 @@ mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=prim
 }).catch(err => {
   console.log(err);
 })
-app.listen(port);
+const portlisten=app.listen(port);

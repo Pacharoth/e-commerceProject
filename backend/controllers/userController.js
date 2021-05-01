@@ -1,6 +1,14 @@
 const user = require('../models/userModel');
 const bcrypt = require('bcrypt');
-
+const nodemailer = require('nodemailer');
+const myemail = "narutonaraku01@gmail.com"
+exports.transport = nodemailer.createTransport({
+    service:"gmail",
+    auth:{
+        user:myemail,
+        pass:"narutonaraku01@P",
+    }
+});
 const { registerUser } = require('../utils/registerUser');
 const role = require('../models/roleModel');
 exports.login = async(req,res)=>{
@@ -45,6 +53,9 @@ exports.logout = async(req,res)=>{
     }
 }
 exports.getSession = async(req,res)=>{
+    console.log(req.hostname)
+    console.log(req.protocol)
+
     if(req.session){
         return res.status(200).json(req.session);
     }
@@ -58,5 +69,39 @@ exports.getUser=async(req,res)=>{
 }
 exports.registerAnyRole = async(req,res)=>{
     await registerUser(req,res,req.body.role);
-
+}
+exports.forgetPassword = async(req,res)=>{
+    const header = req.hostname
+    const protocol = req.protocol
+    await user.findOne({email:req.body.email}).then(
+        result=>{
+            this.transport.sendMail({
+                from:myemail,
+                to:req.body.email,
+                subject:"Reset Password",
+                html:`<h1>Welcome to Awesome</h1>
+                    <p>Please click link below to reset password<br></p>
+                    <a href="${protocol}://${header}:8080/resetpassword/${result._id}">here</a>`
+            }).then(result=>{
+                console.log(result);
+            }).catch(err=>{
+                console.log(error);
+            })
+            res.status(200).json({send:"failed"})
+                
+        }
+    ).catch(err=>res.status(400).json({Account:"Not found"}))
+}
+exports.resetPassword = async(req,res)=>{
+    const salt = bcrypt.genSalt(10);
+    await user.findOne({_id:req.params.id}).then(
+        result=>{
+            result.password = bcrypt.hashSync(req.body.password,salt);
+            result.save().then(
+                result=>{
+                    res.status(200).json({passwordChange:"success"});
+                }
+            )
+        }
+    ).catch(err=>res.status(400).json(err));
 }
