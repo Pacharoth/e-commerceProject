@@ -5,7 +5,7 @@ const Role = new Schema({
     name: {
         type: String,
         uniqure: true,
-    }
+    },
 }, {collection: "roles"});
 
 const role = mongoose.model("roles", Role);

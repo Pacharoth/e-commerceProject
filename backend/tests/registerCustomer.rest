@@ -1,0 +1,8 @@
+POST  http://localhost:3000/register 
+content-type: application/json
+
+{
+    "username":"Helloworld",
+    "password":"123456789",
+    "email":"naruto@gmail.com"
+}

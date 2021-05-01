@@ -38,7 +38,7 @@ app.use(user);
 app.use(feedbackRoutes);
 const port = 3000;
 
-mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false')
+mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
   console.log("Db is connected");
   console.log("server is running on port 3000")
