@@ -5,7 +5,7 @@ const customerModel = new Schema({
         type:Schema.Types.ObjectId,
         ref:'users'
     },
-    contact:{
+    phoneNumber:{
         type:String,
         required:true,
     },

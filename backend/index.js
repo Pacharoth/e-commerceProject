@@ -10,6 +10,7 @@ const store = new MongoDBStore({uri:"mongodb://localhost:27017/connect_mongodb_s
 const bodyParser = require("body-parser");
 const user = require('./routers/User');
 const feedbackRoutes = require('./routers/feedbackRouter');
+const categoryRoutes =require('./routers/category');
 
 store.on('err',function(error){
     console.log(error);
@@ -36,9 +37,10 @@ app.use(session({
 }));
 app.use(user);
 app.use(feedbackRoutes);
+app.use(categoryRoutes);
 const port = 3000;
 
-mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false')
+mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
   console.log("Db is connected");
   console.log("server is running on port 3000")

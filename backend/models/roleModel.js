@@ -4,8 +4,8 @@ const Schema = mongoose.Schema
 const Role = new Schema({
     name: {
         type: String,
-        uniqure: true,
-    }
+        unique: true
+    },
 }, {collection: "roles"});
 
 const role = mongoose.model("roles", Role);
