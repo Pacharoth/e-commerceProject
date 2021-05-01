@@ -29,7 +29,19 @@ content-type: application/json
 {
     "username":"admin",
     "password":"admin",
-    "email":"naruto@gmail.com",
+    "email":"drgero042@gmail.com",
     "role":"admin",
+    "__v":0
+}
+
+#getSession
+POST  http://localhost:3000/getsession
+
+#forgetpassword
+POST  http://localhost:3000/forgetpassword
+Content-Type: application/json
+
+{
+    "email":"drgero042@gmail.com",
     "__v":0
 }
