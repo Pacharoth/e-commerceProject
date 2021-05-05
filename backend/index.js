@@ -11,7 +11,8 @@ const bodyParser = require("body-parser");
 const user = require('./routers/User');
 const feedbackRoutes = require('./routers/feedbackRouter');
 const categoryRoutes =require('./routers/category');
-
+const customerRoutes = require('./routers/customer');
+const sellerRoutes = require('./routers/seller');
 store.on('err',function(error){
     console.log(error);
 })
@@ -40,7 +41,8 @@ exports.portlisten=port;
 app.use(user);
 app.use(feedbackRoutes);
 app.use(categoryRoutes);
-
+app.use(customerRoutes);
+app.use(sellerRoutes);
 mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
   console.log("Db is connected");
@@ -48,4 +50,4 @@ mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=prim
 }).catch(err => {
   console.log(err);
 })
-const portlisten=app.listen(port);
+app.listen(port);

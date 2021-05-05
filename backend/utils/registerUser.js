@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const customer = require('../models/customerModel');
 const role =require('../models/roleModel');
 const user = require('../models/userModel');
 exports.registerUser=async(req,res,names)=>{
@@ -14,7 +15,15 @@ exports.registerUser=async(req,res,names)=>{
     })
     await userAccount.save().then(async(result)=>{
         await user.findById(result._id).populate('roles').exec().then(
-            resultone=>res.status(200).json(resultone)
+            resultone=>{
+                if(names=="customer"){
+                    const aCustomer = new customer({
+                        users:result._id,   
+                    })
+                    aCustomer.save().then(result=>console.log(result)).catch(err=>console.log(err));
+                }       
+                res.status(200).json(resultone)
+            }
         ).catch(err=>res.status(500).json(err));
     }).catch(err=>{
         console.log(err)
