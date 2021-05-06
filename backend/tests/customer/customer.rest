@@ -1,1 +1,12 @@
 GET http://localhost:3000/admin/customer?page=1&limit=14
+
+PUT http://localhost:3000/admin/customer/6092b2b083cd66b75278ccf8
+Content-Type: application/json
+
+{
+    "phoneNumber":"0963005527",
+    "username":"Naruto",
+    "__v":0
+}
+
+DELETE http://localhost:3000/admin/customer/6092b2b083cd66b75278ccf8

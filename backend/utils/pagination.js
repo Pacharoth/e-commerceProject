@@ -7,7 +7,7 @@ function pagination(model){
         const startPoint = (page-1)*limit;
         const endPoint =page*limit;
         const results={};
-        if(endPoint<await model.count()){
+        if(endPoint<await model.countDocuments()){
             results.next={
                 page:page+1,
                 limit:limit,

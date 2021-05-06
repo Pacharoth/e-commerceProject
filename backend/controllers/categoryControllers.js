@@ -1,23 +1,21 @@
 const category = require('../models/categoryModel');
-const CheckAuth = require('../utils/checkauth');
+const checkauth = require('../utils/checkauth');
+var admin=false
+
 exports.getCategories = async(req,res)=>{
-    const check = new CheckAuth(req);
-    check.admin().then(
-        async(result)=>{
-            const categories = await category.find();
-            try{
-                return res.status(200).json(categories);
-            }
-            catch(err){
-                return res.status(500).json(err);
-            }
+    if(checkauth(req)){
+        const categories = await category.find();
+        try{
+            return res.status(200).json(categories);
         }
-    ).catch(err=>res.status(403).json({Permission:"denied"}));
+        catch(err){
+            return res.status(500).json(err);
+        }
+    }else res.status(403).json({PermissionRequest:"denied"})
 }
 
 exports.postCategory  =async(req,res)=>{
-    const checkauth = new CheckAuth(req);
-    checkauth.admin().then(async(result)=>{
+    if(checkauth(req)){
         const category = new category(
             {
                 name:req.body.name,
@@ -26,12 +24,11 @@ exports.postCategory  =async(req,res)=>{
         await category.save().then(
             resCategory=>res.status(200).json(resCategory)
         ).catch(err=>res.status(500).json(err));
-    })
-    .catch(err=>res.status(403).json({Permission:"denied"}));
+    }
+    else res.status(403).json({PermissionRequest:"denied"});
 }
 exports.editCategory = async(req,res)=>{
-    const checkauth = new CheckAuth(req);
-    checkauth.admin().then(async(result)=>{
+    if(checkauth(req)){
         await category.findById(req.params.id).then(
             result=>{
                 result.name = req.body.name;
@@ -39,6 +36,5 @@ exports.editCategory = async(req,res)=>{
                 .catch(err=>res.status(400).json(err));
             }
         )
-    })
-    .catch(err=>res.status(403).json({Permission:"Denied"}));
+    }else res.status(403).json({PermissionRequest:"Denied"});
 }
