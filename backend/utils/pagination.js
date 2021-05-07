@@ -1,4 +1,3 @@
-
 function pagination(model){
     return async(req,res,next)=>{
         const page = parseInt(req.query.page);

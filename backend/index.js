@@ -19,21 +19,13 @@ const io = require('socket.io')(server);
 store.on('err',function(error){
     console.log(error);
 })
-const allowlist =['http://localhost:8080','http://localhost:3000']
-const corsOptionDelegate=(req,callback)=>{
-  var corsOption;
-  if(allowlist.indexOf(req.header('Origin'))!==-1){
-    corsOption={
-      origin:true,
-    }
-  }else{
-    corsOption={
-      origin:false
-    }
-  }
-  callback(null,corsOption);
-}
-app.use(cors(corsOptionDelegate));
+app.use(cors({
+  origin:[
+    'http://localhost:8080'
+  ],
+  credentials:true,
+  exposedHeaders:['set-cookie']
+}));
 app.use(fileUpload({
     limits: { fileSize: 50* 1024 * 1024}
   }));
@@ -42,6 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static('./public/'))
 app.use(session({
+    
     name:"sid",
     secret:"This is secret",
     cookie:{
@@ -49,9 +42,12 @@ app.use(session({
         httpOnly:true,
         secure:false,
     },
-    store:store,
-    resave:true,
-    saveUninitialized:true,
+    store: store,
+    // Boilerplate options, see:
+    // * https://www.npmjs.com/package/express-session#resave
+    // * https://www.npmjs.com/package/express-session#saveuninitialized
+    resave: true,
+    saveUninitialized: true
 }));
 const port = 3000;
 exports.portlisten=port;

@@ -7,14 +7,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body all-contain">
-                <form>
+                <form @submit.prevent="Login">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="input" id="exampleInputPassword1">
+                        <input type="password" v-model="password" class="input" id="exampleInputPassword1">
                     </div>
                     
                     <button type="submit" class="button">Login</button>
@@ -67,11 +67,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body all-contain">
-                <form>
+                <form @submit.prevent="forgetPassword">
                     <h6 class="text-secondary text-center fs-6 fw-bold">Please enter your email to send a reset password link</h6>
                     <div class="mb-2">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
                     </div>
                     <button type="submit" class="button">Send</button>
                 </form>
@@ -82,14 +82,43 @@
 </div>
 </template>
 <script>
+import axios from 'axios';
+import {mapGetters} from 'vuex';
 export default {
     name:'LoginSignup',
-    computed:{
-        status(){
-            return this.$store.getters['auth/getStatus']
+    data() {
+        return {
+            username:"",
+            password:"",
+            email:"",
         }
     },
+    computed:{
+        ...mapGetters({
+            status:'auth/getStatus'
+        })
+        
+    },
     methods: {
+        async Login(){
+            
+            await axios.post('http://localhost:3000/login',{email:this.email,password:this.password}).then(
+                async result=>{
+                    this.$store.dispatch('auth/setSession',result)
+                    localStorage.username=result.data.username;
+                    localStorage.userid=result.data.userId;
+                    localStorage.userrole=result.data.userRole;
+                    localStorage.useremail = result.data.email;
+                }
+            )
+        },
+        async forgetPassword(){
+            await axios.post('http://localhost:3000/forgetpassword',{email:this.email}).then(
+                async result=>{
+                    await localStorage.setItem('data',result.data)
+                }
+            )
+        },
         setStatus(status){
             const store = this.$store
             store.dispatch('auth/setStatus',status);
