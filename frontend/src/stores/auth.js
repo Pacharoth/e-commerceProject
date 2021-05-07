@@ -9,7 +9,7 @@ const authStore = {
                 user:"",
                 isRole:"",
                 email:"",
-            }
+            },
         }
     },
     mutations:{
@@ -31,6 +31,7 @@ const authStore = {
         },
         async setSession({commit},result){
             const response = result.data
+            
             if(response){
                 commit('setSession',{
                     userid:response.userId,
