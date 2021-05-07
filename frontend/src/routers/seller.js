@@ -25,13 +25,5 @@ const sellerRouter = {
             component:SellerProfile,
         }
     ],
-    // beforeEnter: (to, from, next) => {
-    //     // const store = this.$store;
-    //     // store.dispatch('auth/setSession');
-    //     // //check authentication
-    //     // if(to.name==="seller" && store.getters['auth/getSession'].isRole==="seller")next({name:'seller'});
-    //     // else next({name:'homepage'});
-        
-    // }
 }
 export default sellerRouter;

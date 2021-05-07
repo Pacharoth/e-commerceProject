@@ -29,7 +29,7 @@ exports.login = async(req,res)=>{
                         req.session.userId =userId
                         req.session.username =username
                         console.log(req.session)
-                        return res.status(200).json(result);
+                        return res.status(200).json(req.session);
                     }else{
                         res.json({passwordMatch:false});
                     }

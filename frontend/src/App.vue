@@ -1,7 +1,8 @@
 <template>
-<div class="app" style=""> 
-  <router-view></router-view>
-</div>
+  <div class="app" style=""> 
+    <router-view></router-view>
+  </div>
+    
 </template>
 <script>
 export default {
@@ -12,6 +13,7 @@ export default {
   },
   name: 'App',
   components:{
+  
   }
 }
 </script>

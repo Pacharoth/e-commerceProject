@@ -1,30 +1,38 @@
 <template>
-   <div class="content-chat" >
-        <div class="list-chat" :class="chatlist">
-           <div class="content-logo-chat">
-                <h4 >Chats</h4>
-           </div>
-           <div class="search-component">
-                <input type="text" class="form-control search-user" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'">
-           </div>
-           <div class="list-user">
-               <button class="users btn" @click="popChat">
-                   <img src="../../assets/logo.png" alt="">
-                <div class="chat-time">
-                    <div class="chat">
-                         <span >Pizza (seller)</span>
-                        <span class="text-chat">hello world</span>
+    <Suspense>
+        <template #default>
+                <div class="content-chat" >
+            <div class="list-chat" :class="chatlist">
+            <div class="content-logo-chat">
+                    <h4 >Chats</h4>
+            </div>
+            <div class="search-component">
+                    <input type="text" class="form-control search-user" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'">
+            </div>
+            <div class="list-user">
+                <button class="users btn" @click="popChat">
+                    <img src="../../assets/logo.png" alt="">
+                    <div class="chat-time">
+                        <div class="chat">
+                            <span >Pizza (seller)</span>
+                            <span class="text-chat">hello world</span>
+                        </div>
+                        <div class="status"></div>
                     </div>
-                    <div class="status"></div>
-                </div>
-               </button>
-           </div>
-        </div>
-        <chat/>
+                </button>
+            </div>
+            </div>
+            <chat/>
    </div>
+        </template>
+        <template #fallback>
+            <chat-loading/>
+        </template>
+    </Suspense>
 </template>
 <script>
 import Chat from './Chat';
+import ChatLoading from './ChatLoading.vue';
 export default {
     name:"ChatList",
     data(){
@@ -33,7 +41,9 @@ export default {
       }  
     },
     components:{
-        Chat
+        Chat,   
+        ChatLoading,
+
     },
     computed:{
         chatlist(){
