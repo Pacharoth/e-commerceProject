@@ -43,9 +43,6 @@ app.use(session({
         secure:false,
     },
     store: store,
-    // Boilerplate options, see:
-    // * https://www.npmjs.com/package/express-session#resave
-    // * https://www.npmjs.com/package/express-session#saveuninitialized
     resave: true,
     saveUninitialized: true
 }));
