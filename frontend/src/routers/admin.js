@@ -3,6 +3,7 @@ import SellerDashboard from '../components/Admin/SellerDashboard.vue';
 import SellerList from '../components/Admin/SellerList.vue';
 import AdminLayout from '../components/layout/AdminLayout.vue';
 import AdminCustomer from '../components/Admin/AdminCustomer.vue';
+import AdminCategory from '../components/Admin/AdminCategory.vue';
 import store from '../stores/store';
 
 const adminRouter =     {
@@ -11,6 +12,11 @@ const adminRouter =     {
     redirect:{name:'admindashboard'},
     component:AdminLayout,
     children:[
+        {
+            name:'admincategory',
+            path:'category',
+            component:AdminCategory,
+        },
         {
             name:'admindashboard',
             path:'admindashboard',

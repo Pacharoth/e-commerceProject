@@ -12,13 +12,12 @@ exports.getCategories = async(req,res)=>{
 }
 
 exports.postCategory  =async(req,res)=>{
-    
-    const category = new category(
+    const acategory = new category(
         {
             name:req.body.name,
         }
     )
-    await category.save().then(
+    await acategory.save().then(
         resCategory=>res.status(200).json(resCategory)
     ).catch(err=>res.status(500).json(err));
     
@@ -32,4 +31,14 @@ exports.editCategory = async(req,res)=>{
             .catch(err=>res.status(400).json(err));
         }
     )
+}
+exports.deleteCategory = async(req,res)=>{
+    await category.findOneAndDelete({_id:req.params.id}).then(result=>{
+        res.json({delete:true})
+    }).catch(err=>res.json({delete:false}));
+}
+exports.searchCategory = async(req,res)=>{
+    const regex = req.query.name;
+    
+    await category.find({name:new RegExp(regex)}).then(result=>res.json(result)).catch(err=>res.json(err))
 }
