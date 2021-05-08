@@ -27,12 +27,7 @@ router.beforeEach(async(to,from,next)=>{
     if(result.data.userRole!==undefined){
         store.dispatch('auth/setSession',result);
     }
-    var role=''
-    store.getters['auth/getSession'].then(result=>{
-        role=result.role;
-    })
-    if(to.name=='seller'&&role=='seller'|role=='admin')next({name:'seller'})
-    else if(to.name=='admin'&&role=='admin')next({name:'admin'})
-    else next();
+    console.log(store.getters['auth/getSession'])
+    console.log(to,next());
 })
 export default router;

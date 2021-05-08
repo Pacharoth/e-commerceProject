@@ -29,17 +29,22 @@ const authStore = {
         setStatus({commit},text){
             commit('setStatus',text);
         },
-        async setSession({commit},result){
-            const response = result.data
+        setSession({commit},result){
+            try{
+                var responses = result.data!==null;
+                if(responses){
+                    let response=result.data
+                    commit('setSession',{
+                        userid:response.userId,
+                        user:response.username,
+                        role:response.userRole,
+                        email:response.email,
+                    }); 
+                }
+            }catch(err){
+                commit('setSession',{user:'',role:'',email:'',userid:''});
+            }
             
-            if(response){
-                commit('setSession',{
-                    userid:response.userId,
-                    user:response.username,
-                    role:response.userRole,
-                    email:response.email,
-                });
-            }else return 
         }
     },
     getters:{
@@ -47,7 +52,7 @@ const authStore = {
             return state.status;
         },
         
-        async getSession(state){
+        getSession(state){
             return state.isAuthenticate;
         },
         

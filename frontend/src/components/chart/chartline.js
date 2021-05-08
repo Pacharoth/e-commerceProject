@@ -43,7 +43,7 @@ const linegraph={
             // }
         },
         responsive:true,
-        maintainAspectRatio: true,  
+        maintainAspectRatio: false,  
     },
 
 };

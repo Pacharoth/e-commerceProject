@@ -1,1 +1,4 @@
 GET http://localhost:3000/category
+PUT http://localhost:3000/category/608ced4dd9a3066caa682c83
+
+GET http://localhost:3000/category/search?name=

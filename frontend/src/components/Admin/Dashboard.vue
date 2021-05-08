@@ -6,9 +6,7 @@
             <h4 v-if="title=='Seller'">Seller</h4>
             <button class="btn btn-primary">Generate Report</button>
         </div>
-        <!-- card -->
             <card-dashboard :title="title"/>
-        <!-- endcard -->
         <div class="dashboard-graph">
             <div class="dashboard-gmy">
                 <span class="earning">Earning Statistics</span>
@@ -24,7 +22,6 @@ import Chart from 'chart.js/auto';
 import linegraph from '../chart/chartline';
 import CardDashboard from './CardDashboard';
 export default {
-    // title:'Dashboard',
     name:"Dashboard",
     props:['title'],
     components:{
@@ -110,6 +107,14 @@ export default {
             box-shadow: $shadow_1;
             .chart-container{
                 width: 100%;
+                height: 60vh;
+                @include breakpoint-down(medium){
+                    height: 60vh;
+                }
+                @include breakpoint-down(small){
+                    height: 50vh;
+                }
+
                 
             }
             .dashboard-gmy{

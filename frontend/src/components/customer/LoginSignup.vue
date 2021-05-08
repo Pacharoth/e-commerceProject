@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade"  id="exampleModal" ref="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" v-if="status=='signin'">
             <div class="modal-header">
@@ -88,6 +88,7 @@ export default {
     name:'LoginSignup',
     data() {
         return {
+            modal:'open',
             username:"",
             password:"",
             email:"",
@@ -97,6 +98,9 @@ export default {
         ...mapGetters({
             status:'auth/getStatus'
         })
+        
+    },
+    mounted() {
         
     },
     methods: {
@@ -109,6 +113,8 @@ export default {
                     localStorage.userid=result.data.userId;
                     localStorage.userrole=result.data.userRole;
                     localStorage.useremail = result.data.email;
+                    this.email=''
+                    this.password=''
                 }
             )
         },
@@ -116,6 +122,7 @@ export default {
             await axios.post('http://localhost:3000/forgetpassword',{email:this.email}).then(
                 async result=>{
                     await localStorage.setItem('data',result.data)
+                    
                 }
             )
         },
