@@ -55,7 +55,7 @@
 
 <script>
 
-import {Modal,Carousel} from 'bootstrap';
+// import {Carousel} from 'bootstrap';
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
 export default {
@@ -64,7 +64,6 @@ export default {
         return {
             modal:null,
             carousel:null,
-
         }
     },
     components:{
@@ -112,8 +111,7 @@ export default {
         }
     },
     mounted() {
-        this.modal=new Modal(this.$refs.modal)
-        this.carousel=new Carousel(this.$refs.carousel)
+        // this.carousel = new Carousel(this.$refs.Carousel);
     },
     
 }

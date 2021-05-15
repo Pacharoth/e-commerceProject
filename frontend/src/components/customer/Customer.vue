@@ -1,5 +1,4 @@
 <template>
-
     <div>
         <categorydropdown/>
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -125,7 +124,7 @@
     
 </template>
 <script>
-import {Modal,Carousel} from 'bootstrap';
+// import {Modal} from 'bootstrap';
 import Categorydropdown from './Categorydropdown'
 export default {
     title:'Homepage ',
@@ -140,8 +139,7 @@ export default {
         Categorydropdown
     },
     mounted(){
-        this.modal=new Modal(this.$refs.modal)
-        this.carousel = new Carousel(this.$refs.carousel)
+
     }
 }
 </script>

@@ -1,6 +1,9 @@
 const chatLoading =(io,socket)=>{ 
-    socket.on('chat',msg=>{
-        io.emit('chat',msg);
+    socket.on('chat',(msg,id)=>{
+        console.log(msg)
+        socket.join(id);
+        socket.emit('recieve',msg);
+        
     });
 }
 module.exports={chatLoading}

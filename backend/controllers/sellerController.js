@@ -1,15 +1,16 @@
 const seller = require('../models/sellerModel');
 const userModel = require('../models/userModel');
 exports.registerSeller = async(req,res)=>{
+    const {email,company,contact,address,img}=req.body;
     if(req.session.roles=="admin"){
-        await userModel.findOne({email:req.body.email}).then(async(result)=>{
+        await userModel.findOne({email:email}).then(async(result)=>{
             if(result){
                 const aSeller = new seller({
                     users:result._id,
-                    company:req.body.company,
-                    contact:req.body.contact,
-                    address:req.body.address,
-                    img:req.body.img,
+                    company,
+                    contact,
+                    address,
+                    img,
                 })
                 await aSeller.save().then(result=>res.status(200).json({register:"successful"}))
                 .catch(err=>res.status(500).json(err));
