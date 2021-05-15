@@ -10,11 +10,11 @@
                 <form @submit.prevent="Login">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="youremail@website.com">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" v-model="password" class="input" id="exampleInputPassword1">
+                        <input type="password" v-model="password" class="input" id="exampleInputPassword1" placeholder="********fA">
                     </div>
                     
                     <button type="submit" class="button">Login</button>
@@ -67,11 +67,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body all-contain">
-                <form @submit.prevent="forgetPassword">
+                <form @submit.prevent="forgetPasswords">
                     <h6 class="text-secondary text-center fs-6 fw-bold">Please enter your email to send a reset password link</h6>
                     <div class="mb-2">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" v-model="email" class="input" id="exampleInputEmail1" placeholder="youremail@website.com" aria-describedby="emailHelp">
                     </div>
                     <button type="submit" class="button">Send</button>
                 </form>
@@ -82,55 +82,38 @@
 </div>
 </template>
 <script>
-import axios from 'axios';
-import {mapGetters} from 'vuex';
+import {loginForm,forgetPassword} from '../../utils/FormValidation';
+import { ref } from '@vue/reactivity';
+import { computed, onMounted } from '@vue/runtime-core';
+import {useStore} from 'vuex';
 export default {
     name:'LoginSignup',
-    data() {
-        return {
-            modal:'open',
-            username:"",
-            password:"",
-            email:"",
-        }
-    },
-    computed:{
-        ...mapGetters({
-            status:'auth/getStatus'
+    setup() {
+        const store = useStore();
+        const modal = ref("open");
+        const username=ref("");  
+        const password=ref(""); 
+        const email = ref("");
+        const status = computed(()=>store.getters['auth/getStatus']);
+        function forgetPasswords(){forgetPassword(email.value,password.value)}
+        function Login(){loginForm(email.value,password.value,store)}
+        onMounted(()=>{
         })
-        
+        return{
+            email,
+            modal,
+            username,
+            password,
+            //compute
+            status,
+
+            //method
+            Login,
+            forgetPasswords,
+            setStatus:(status)=>store.dispatch('auth/setStatus',status),
+        } 
     },
-    mounted() {
-        
-    },
-    methods: {
-        async Login(){
-            
-            await axios.post('http://localhost:3000/login',{email:this.email,password:this.password}).then(
-                async result=>{
-                    this.$store.dispatch('auth/setSession',result)
-                    localStorage.username=result.data.username;
-                    localStorage.userid=result.data.userId;
-                    localStorage.userrole=result.data.userRole;
-                    localStorage.useremail = result.data.email;
-                    this.email=''
-                    this.password=''
-                }
-            )
-        },
-        async forgetPassword(){
-            await axios.post('http://localhost:3000/forgetpassword',{email:this.email}).then(
-                async result=>{
-                    await localStorage.setItem('data',result.data)
-                    
-                }
-            )
-        },
-        setStatus(status){
-            const store = this.$store
-            store.dispatch('auth/setStatus',status);
-        }
-    },
+
 }
 </script>
 <style lang="scss" scope>

@@ -15,7 +15,7 @@
                 <div class="avatar-chat">
                     <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> <span class="">1</span></button>
                     <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em><span>1</span></button>
-                    <button class="btn avatar"> <span class="name"> Pacharoth</span> <em class="fas fa-user-circle user"></em></button>
+                    <button class="btn avatar"> <span class="name">{{user.user}}</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
             <chat-list/>
@@ -56,6 +56,11 @@ export default {
     data(){
         return{
             modal:null,
+        }
+    },
+    computed:{
+        user(){
+           return this.$store.getters['auth/getSession']
         }
     },
     mounted(){

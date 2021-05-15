@@ -15,13 +15,28 @@ const customerRoutes = require('./routers/customer');
 const sellerRoutes = require('./routers/seller');
 const { chatLoading } = require('./sockets/chatSocket');
 const server=require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server,{
+  cors:{
+    origin:[
+      "http://localhost:8080",
+      "http://localhost:3001"
+    ],
+    methods:['GET','POST','PUT','DELETE'],
+  }
+});
 store.on('err',function(error){
     console.log(error);
 })
 app.use(cors({
+  allowedHeaders:[
+    "*"
+  ],
   origin:[
-    'http://localhost:8080'
+    'http://localhost:8080',
+    'note.awesomeshop.com',
+    'https://3fb14ebaa81959.localhost.run',
+    'http://localhost:3001',
+    
   ],
   credentials:true,
   exposedHeaders:['set-cookie']
@@ -41,8 +56,8 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly:true,
         secure:false,
+        domain:"http://localhost:3001"
     },
-    store: store,
     resave: true,
     saveUninitialized: true
 }));
@@ -53,6 +68,7 @@ app.use(feedbackRoutes);
 app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
+
 mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
   console.log("Db is connected");
@@ -60,8 +76,7 @@ mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=prim
 }).catch(err => {
   console.log(err);
 })
-const onConnection=(socket)=>{
-  chatLoading(io,socket);
-}
-io.on('connection',onConnection);
+io.on('connection',(socket)=>{
+    chatLoading(io,socket)
+});
 server.listen(port);

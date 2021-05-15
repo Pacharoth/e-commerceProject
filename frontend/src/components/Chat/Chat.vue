@@ -4,45 +4,84 @@
             <button class="btn chat-customize">
                     <img src="../../assets/logo.png" alt="">
                 <div class="chat-status">
-                    <div class="chat-text">
+                    <div class="chat-text" >
                         <span >Pizza (seller)</span>
-                        <span class="statususer"> <div class="status-user"></div> active</span>
+                        <span v-if="status=='online'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> active</span>
+                        <span v-else-if="status=='offline'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> offline</span>
                     </div>
                 </div>
             </button>
             <button  @click="closeChat" class="btn close"><em class="fas fa-times"></em></button>
         </div>
         <div class="content-all-chat">
-            <div class="admin">
+            <div class="admin acive" v-for="msgs in msg" :key="msgs">
                 <img src="../../assets/logo.png" alt="">
-                <span>Hello world</span>
+                <span>{{msgs}}</span>
             </div>
             
         </div>
         <div class="input-message">
             <button class="btn"> <em class="bi bi-mic"></em></button>
-            <input type="text" class="form-control send"  placeholder="Aa">
-            <button class="btn"><em class="bi bi-play"></em></button>
+            <input v-model="mess" type="text" class="form-control send"  placeholder="Aa">
+            <button @click="message()" class="btn"><em class="bi bi-play"></em></button>
         </div>
     </div>
 </template>
 <script>
+// import {io} from 'socket.io-client';
+// var localhost = 'http://localhost:3000'
+// const socket = io(localhost);
+
 export default {
     name:'Chat',
     props:['id','chat'],
     data(){
         return{
             chat_status:"",
+            msg:[],
+            mess:'',
+            color:'',
+        }
+    },
+    mounted() {
+        if(navigator.online){
+            console.log('online')
+            this.color= "rgb(66, 207, 66)";
+            this.chat_status="online";
+        }else{
+            this.color="rgba(112, 112, 112, 0.664)";
+            this.chat_status="offline";
+        }
+        // socket.on('recieve',msg=>this.msg.push(msg));
+        window.onload=()=>{
+            console.log('onload')
+            window.addEventListener('online',()=>{
+                this.color= "rgb(66, 207, 66)";
+                this.chat_status="online";
+            })
+            window.addEventListener('offline',()=>{
+                console.log('offline')
+                this.color="rgba(112, 112, 112, 0.664)";
+                this.chat_status="offline";
+            })
         }
     },
     computed:{
         chatcontent(){
             return this.$store.getters['chat/getChatContent'];
-        }
+        },
+        status(){
+            return this.chat_status;
+        },
     },
     methods:{
         closeChat(){
             this.$store.dispatch('chat/changeContent','');
+        },
+        message(){
+            // socket.emit('chat',this.mess,"hi");
+        },
+        loadStatus(){
         }
     }
 
@@ -51,7 +90,9 @@ export default {
 <style lang="scss">
     @import '../../assets/sass/colorpage';
     @import '../../assets/sass/maxin';
-    
+    :root{
+        --color:'rgba(112, 112, 112, 0.664)';
+    }
     .chat-content{
         display: none;
         width: 30%;
@@ -115,7 +156,7 @@ export default {
                         text-align: left;
                         .statususer{
                             font-size: 12px;
-                            color: rgb(66, 207, 66);
+                            color: var(--color);
                             display: flex;
                             align-items: center;
                             .status-user{
@@ -123,7 +164,7 @@ export default {
                                 border-radius: 50%;
                                 width: 10px;
                                 height: 10px;
-                                background-color: rgb(66, 207, 66);
+                                background-color: var(--color);
                             }
                         }
                         
