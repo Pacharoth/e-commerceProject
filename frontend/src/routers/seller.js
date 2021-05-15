@@ -28,8 +28,9 @@ const sellerRouter = {
     ],
     beforeEnter: (to, from, next) => {
         var role = store.getters['auth/getSession'].role
-        const isAuthenticate=role=='admin'||role=='seller';
-        if(to.name=='sellerpage'&&isAuthenticate)next()
+        const isAuthenticate=/((admin)|(seller))/;
+        const regex = /((sellerprofile)|(sellerpage)|(sellerproductlist)|(seller))/
+        if(regex.test(to.name)&&isAuthenticate.test(role))next()
         else next({name:'customerlistproduct'})
     }
 }

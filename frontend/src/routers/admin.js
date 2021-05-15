@@ -42,9 +42,8 @@ const adminRouter =     {
     beforeEnter: (to, from, next) => {
         var role = store.getters['auth/getSession'].role
         const isAuthenticate=role=='admin'
-        console.log(role,isAuthenticate)
-        console.log(to.name)
-        if(to.name==="admindashboard"&&isAuthenticate){
+        const name= /((admindashboard)|(admincategory)|(customer)|(sellerdetial)|(adminseller)|(admin))/
+        if(name.test(to.name)&&isAuthenticate){
             next()
         }
         else next({name:'customerlistproduct'})
