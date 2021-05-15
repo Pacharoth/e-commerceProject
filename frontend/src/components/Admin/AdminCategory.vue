@@ -29,102 +29,71 @@
 <script>
 import axios from 'axios'
 import router from '../../routers/route'
+import { ref } from '@vue/reactivity'
+import { onMounted } from '@vue/runtime-core'
+import {searchCategories,addACategory,updateACategory,getACategory,deleteACategory} from'../../hook/category'
 let localhost= 'http://localhost:3000'
 export default {
     name:'AdminCategory',
-    data() {
-        return {
-            display:'none',
-            status:'search',
-            category:[],
-            name:'',
-            id:'',
-            err:''
-        }
-    },
-    mounted() {
-        this.display = 'block';
-        const getCategory=async()=>{
-            try {
-                const response=await axios.get(localhost+'/category')
-                this.category = response.data;
-                console.log(this.category)
-            } catch (error) {
-                console.log(error);
+    setup() {
+        const model = ref(null)
+        const display = ref('none');
+        const status = ref('search');
+        const category = ref([]);
+        const name = ref("");
+        const err = ref("");
+        const id = ref("");
+        onMounted(()=>{
+            display.value="block";
+            const getCategory=async()=>{
+                try {
+                    const response=await axios.get(localhost+'/category')
+                    category.value = response.data;
+                } catch (error) {
+                    console.log(error);
+                }
             }
-        }
-        getCategory();
-    },
-    methods: {
-        redirectAdmin(event){
-            if(event.target ==this.$refs.model){
-                this.status ='search'
+            getCategory();
+        })
+
+        //method
+        function redirectAdmin(event){
+            if(event.target ==model.value){
+                status.value ='search'
                 router.push({name:'Admin'})
             }
-        },
-        changeStatus(){
-            if(this.status=='add'){
-                this.status='search';
+        }
+        function changeStatus(){
+            if(status.value=='add'){
+                status.value='search';
             }else{
-                this.status='add'
+                status.value='add'
             }
-        },
-        async deleteCategory(id){
-            await axios.delete(localhost+'/category/'+id).then(
-                result=>{
-                    if(result.data.delete){
-                        console.log(result.data.delete)
-                        this.category=this.category.filter(element=>element._id!==id);
-                    }else{
-                        this.err="Can't delete";
-                        setTimeout(()=>{this.err=""},2000)
-                    }
-                }
-            ).catch(err=>console.log(err));
-        },
-        getCategory(id){
-            const acategory=this.category.filter(element=>element._id===id)[0];
-            this.name=acategory.name;
-            this.id = acategory._id;
-            this.status="update"
-        },
-        async updateCategory(id){
-            await axios.put(localhost+'/category/'+id,{name:this.name}).then(
-                result=>{
-                    this.category.filter(element=>{
-                            if(element._id===id){
-                                element.name = result.data.name
-                            }
-                        }
-                    )
-                    this.id="";
-                    this.name="";
-                    this.status="search";
-                }
-            ).catch(err=>console.log(err));
-        },
-        async searchCategory(){
-            await axios.get(localhost+'/category/search?name='+this.name).then(
-                result=>{
-                    console.log(result.data)
-                    if(result.data.length>0){
-                        this.err="";
-                        this.category=result.data;
-                    }else{
-                        this.err="No result"
-                        this.category=""
-                    }
-            }).catch(()=>this.err="No result")
-        },
-        async addCategory(){
-            await axios.post(localhost+'/category',{name:this.name}).then(
-                result=>{
-                    var response =result.data
-                    this.category.push({id:response._id,name:response.name});
-                    this.name="";
-                }
-            ).catch(err=>console.log(err));
-        },
+        }
+        async function deleteCategory(ids){await deleteACategory(ids,category,err);}
+        function getCategory(ids){getACategory(ids,category,id,status,name);}
+        async function updateCategory(ids){await updateACategory(ids,name,category,id,status,err);}
+        async function searchCategory(){await searchCategories(name,category,err)}
+        async function addCategory(){await addACategory(name,category,err)}
+
+        return{
+            //data
+            err,
+            category,
+            status,
+            name,
+            display,
+            model,
+            id,
+            //method
+            redirectAdmin,
+            updateCategory,
+            changeStatus,
+            deleteCategory,
+            getCategory,
+            addCategory,
+            searchCategory,
+        }
     },
 }
 </script>
