@@ -21,27 +21,30 @@
 import Chart from 'chart.js/auto';
 import linegraph from '../chart/chartline';
 import CardDashboard from './CardDashboard';
+import { ref, toRefs } from '@vue/reactivity';
+import { onMounted } from '@vue/runtime-core';
 export default {
     name:"Dashboard",
     props:['title'],
     components:{
         CardDashboard,
     },
-    data(){
-    
-         return{
-            chartdata:linegraph,
-            title_dashboard:this.title,
+    setup(props) {
+        const chart =ref(null)
+        const chartdata=ref(linegraph);
+        const {title} = toRefs(props);
+        const title_dashboard = title.value;
+        onMounted(()=>{
+            console.log(title.value)
+            new Chart(chart.value,chartdata.value);
+        })  
+        return{
+            //data
+            title_dashboard,
+            chartdata,
+            chart,
         }
     },
-    mounted() {
-        const chart= this.$refs.chart;
-        new Chart(chart,this.chartdata);
-        
-    },
-    methods:{
-        
-    }
 }
 </script>
 <style lang="scss" scoped>
