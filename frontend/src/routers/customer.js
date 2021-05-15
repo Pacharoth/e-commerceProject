@@ -22,11 +22,12 @@ const customerRouter = {
         },
         {
             path:'edituser',
-            name:'Edit User',
+            name:'edituser',
             component:edit_user,
             beforeEnter: (to, from, next) => {
                 var role = store.getters['auth/getSession'].role
-                if(to.name=='edituser'&&role=='customer'|role=='admin')next()
+                var regex = /((admin)|(seller)|(customer))/
+                if(to.name=='edituser'&&role=='customer'||regex.test(role))next()
                 else next({name:'customerlistproduct'})
             }
         },

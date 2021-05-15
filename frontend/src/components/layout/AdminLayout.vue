@@ -45,6 +45,10 @@ import ChatList from '../Chat/ChatList'
 import SellerRegister from '../Admin/SellerRegister'
 import {Modal} from 'bootstrap';
 import Notification from '../Admin/Notification';
+import { ref } from '@vue/reactivity';
+import { computed, onMounted } from '@vue/runtime-core';
+import { useStore } from 'vuex';
+import {showChatLists,showNotifications} from '../../hook/effect'
 export default {
     title:'Admin',
     name:"AdminLayout",
@@ -53,44 +57,35 @@ export default {
         SellerRegister,
         Notification
     },
-    data(){
+    setup() {
+        const store= useStore()
+        const modal = ref(null);
+        const nav =ref(null);
+        const sidebar = ref(null);
+        const user = computed(()=>store.getters['auth/getSession'])
+        onMounted(()=>{
+            var modal=new Modal(modal)
+        })
+        function loadSideBar(){
+            let nes  =nav.value.classList;
+            nes.contains('active')?nes.remove('active'):nes.add('active');
+            let side = sidebar.value.classList;
+            side.contains('active')?side.remove('active'):side.add('active');
+        }
+        function showChatList(){showChatLists(store)}
+        function showNotification(){showNotifications(store)}
         return{
-            modal:null,
+            nav,
+            sidebar,
+            modal,
+            //computed
+            user,
+            //method
+            showNotification,
+            showChatList,
+            loadSideBar,
         }
     },
-    computed:{
-        user(){
-           return this.$store.getters['auth/getSession']
-        }
-    },
-    mounted(){
-        this.modal=new Modal(this.$refs.modal)
-    },
-    methods:{
-        loadSideBar(){
-            const nav = this.$refs.nav.classList;
-            nav.contains('active')?nav.remove('active'):nav.add('active')
-            const sidebar = this.$refs.sidebar.classList;
-            sidebar.contains('active')?sidebar.remove('active'):sidebar.add('active');
-        },
-        showChatList(){
-            const store = this.$store
-            if(!store.getters['chat/getChatList']){
-                store.dispatch('chat/changeList','active');
-            }else{
-                store.dispatch('chat/changeList','');
-            }
-        },
-        showNotification(){
-            const store = this.$store;
-            if(!store.getters['notification/getContent']){
-                store.dispatch('notification/changeContent','active');
-            }else{
-                store.dispatch('notification/changeContent','')
-            }
-        }
-    },
-
 }
 </script>
 <style lang="scss" scope>
