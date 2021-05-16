@@ -53,9 +53,6 @@ exports.logout = async(req,res)=>{
     }
 }
 exports.getSession = async(req,res)=>{
-    console.log(req.hostname)
-    console.log(req.protocol)
-
     if(req.session){
         return res.status(200).json(req.session);
     }

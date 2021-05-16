@@ -17,7 +17,7 @@
                             <span >Pizza (seller)</span>
                             <span class="text-chat">hello world</span>
                         </div>
-                        <div class="status"></div>
+                        <div class="status" :style="{'background-color':color}"></div>
                     </div>
                 </button>
             </div>
@@ -31,10 +31,36 @@
     </Suspense>
 </template>
 <script>
+import { computed, ref, watchEffect } from '@vue/runtime-core';
 import Chat from './Chat';
 import ChatLoading from './ChatLoading.vue';
+import { useStore } from 'vuex';
 export default {
     name:"ChatList",
+    setup() {
+        const store =useStore()
+        const color = ref("");
+        
+        const chatlist= computed(()=>store.getters['chat/getChatList']);
+        const popChat = ()=>{
+            store.dispatch('chat/changeContent','active');
+            store.dispatch('chat/changeList','');
+        }
+        watchEffect(()=>{
+            window.ononline=()=>{
+                color.value = 'green';
+            }
+            window.onoffline=()=>{
+                
+                color.value = 'grey';
+            }
+        })
+        return{
+            color,
+            chatlist,
+            popChat,
+        }
+    },
     data(){
       return{
           active:"",
@@ -43,20 +69,7 @@ export default {
     components:{
         Chat,   
         ChatLoading,
-
     },
-    computed:{
-        chatlist(){
-            console.log(this.$store.getters['chat/getChatList'])
-            return this.$store.getters['chat/getChatList'];
-        }
-    },
-    methods:{
-        popChat(){
-           this.$store.dispatch('chat/changeContent','active');
-           this.$store.dispatch('chat/changeList','');
-        }
-    }
 
 }
 </script>

@@ -28,6 +28,8 @@
     </div>
 </template>
 <script>
+import { computed, onMounted, ref, watchEffect } from '@vue/runtime-core'
+import { useStore } from 'vuex'
 // import {io} from 'socket.io-client';
 // var localhost = 'http://localhost:3000'
 // const socket = io(localhost);
@@ -35,55 +37,53 @@
 export default {
     name:'Chat',
     props:['id','chat'],
-    data(){
+    setup() {
+        //data
+        const store = useStore();
+        const data = ref();
+        const chat_status = ref("");
+        const msg = ref([]);
+        const color = ref("");
+        const mess = ref("");
+        //computed
+        const chatcontent=computed(()=>store.getters['chat/getChatContent'])
+        //method
+        const message =()=>{}
+        const closeChat = ()=>store.dispatch('chat/changeContent','');
+        const loadStatus=()=>{}
+
+        onMounted(()=>{
+            color.value="rgb(66, 207, 66)";
+            chat_status.value="online"
+        })
+        watchEffect(()=>{  
+            window.ononline=()=>{
+                color.value="rgb(66, 207, 66)";
+                chat_status.value="online";
+            }
+            window.onoffline=()=>{
+                color.value = "rgba(112, 112, 112, 0.664)";
+                chat_status.value="offline";
+            }
+        });
+        const status = computed(()=>chat_status.value);
+
         return{
-            chat_status:"",
-            msg:[],
-            mess:'',
-            color:'',
+            data,
+            chat_status,
+            msg,
+            color,
+            mess,
+            //computed
+            status,
+            chatcontent,
+            //method,
+            message,
+            closeChat,
+            loadStatus,
+
         }
     },
-    mounted() {
-        if(navigator.online){
-            console.log('online')
-            this.color= "rgb(66, 207, 66)";
-            this.chat_status="online";
-        }else{
-            this.color="rgba(112, 112, 112, 0.664)";
-            this.chat_status="offline";
-        }
-        // socket.on('recieve',msg=>this.msg.push(msg));
-        window.onload=()=>{
-            console.log('onload')
-            window.addEventListener('online',()=>{
-                this.color= "rgb(66, 207, 66)";
-                this.chat_status="online";
-            })
-            window.addEventListener('offline',()=>{
-                console.log('offline')
-                this.color="rgba(112, 112, 112, 0.664)";
-                this.chat_status="offline";
-            })
-        }
-    },
-    computed:{
-        chatcontent(){
-            return this.$store.getters['chat/getChatContent'];
-        },
-        status(){
-            return this.chat_status;
-        },
-    },
-    methods:{
-        closeChat(){
-            this.$store.dispatch('chat/changeContent','');
-        },
-        message(){
-            // socket.emit('chat',this.mess,"hi");
-        },
-        loadStatus(){
-        }
-    }
 
 }
 </script>

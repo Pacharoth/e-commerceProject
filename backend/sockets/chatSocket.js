@@ -6,4 +6,12 @@ const chatLoading =(io,socket)=>{
         
     });
 }
-module.exports={chatLoading}
+const statusChat = (io,socket)=>{
+    socket.on('status',(msg,id)=>{
+        socket.join(id);
+    })
+}
+module.exports={
+    chatLoading,
+    statusChat,
+}
