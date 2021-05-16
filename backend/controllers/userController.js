@@ -72,22 +72,28 @@ exports.forgetPassword = async(req,res)=>{
     const protocol = req.protocol
     await user.findOne({email:req.body.email}).then(
         result=>{
-            this.transport.sendMail({
-                from:myemail,
-                to:req.body.email,
-                subject:"Reset Password",
-                html:`<h1>Welcome to Awesome</h1>
-                    <p>Please click link below to reset password<br></p>
-                    <a href="${protocol}://${header}:8080/resetpassword/${result._id}">here</a>`
-            }).then(result=>{
-                console.log(result);
-            }).catch(err=>{
-                console.log(error);
-            })
-            res.status(200).json({send:"failed"})
+            console.log(result)
+            if(result.email){
+                this.transport.sendMail({
+                    from:myemail,
+                    to:req.body.email,
+                    subject:"Reset Password",
+                    html:`<h1>Welcome to Awesome</h1>
+                        <p>Please click link below to reset password<br></p>
+                        <a href="${protocol}://${header}:8080/resetpassword/${result._id}">here</a>`
+                }).then(result=>{
+                    console.log(result);
+                }).catch(err=>{
+                    console.log(error);
+                })
+                
+                res.status(200).json({send:true})
+            }else{
+                res.json({account:false})
+            }
                 
         }
-    ).catch(err=>res.status(400).json({Account:"Not found"}))
+    ).catch(err=>res.json({account:false}))
 }
 exports.resetPassword = async(req,res)=>{
     const salt = bcrypt.genSalt(10);

@@ -55,7 +55,6 @@
 
 <script>
 
-// import {Carousel} from 'bootstrap';
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
 export default {
@@ -106,7 +105,6 @@ export default {
         },
         logout(){
             localStorage.clear();
-
             this.$store.dispatch('auth/setSession',null)
         }
     },

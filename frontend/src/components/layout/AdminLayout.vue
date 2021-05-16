@@ -31,7 +31,7 @@
                 <li><router-link to="/admin/category" class="nav-link"><em class="fas fa-list-alt me-2"></em>Category</router-link></li>
                 <li ><router-link to="/admin/customer" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
                 <li ><router-link to="/admin" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</router-link></li>
-                <li><router-link to="/" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
+                <li><router-link to="/" @click="logout" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
             </ul>
         </div>
 
@@ -48,7 +48,8 @@ import Notification from '../Admin/Notification';
 import { ref } from '@vue/reactivity';
 import { computed, onMounted } from '@vue/runtime-core';
 import { useStore } from 'vuex';
-import {showChatLists,showNotifications} from '../../hook/effect'
+import {showChatLists,showNotifications} from '../../hook/effect';
+import {logouts} from '../../utils/FormValidation'
 export default {
     title:'Admin',
     name:"AdminLayout",
@@ -74,6 +75,7 @@ export default {
         }
         function showChatList(){showChatLists(store)}
         function showNotification(){showNotifications(store)}
+        function logout(){logouts(store)}
         return{
             nav,
             sidebar,
@@ -84,6 +86,7 @@ export default {
             showNotification,
             showChatList,
             loadSideBar,
+            logout,
         }
     },
 }
