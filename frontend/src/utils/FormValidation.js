@@ -94,23 +94,26 @@ async function loginForm(email,password,store,err){
 }
 async function forgetPassword(email){
     try{
-        await axios.post(localhost+'/forgetpassword',{email}).then(
+        await axios.post(localhost+'/forgetpassword',{email:email}).then(
         async result=>{
-            await localStorage.setItem('data',result.data)
-            email="";
+            console.log(result.data)
+            if(result.data.send){
+                return true;
+            }else{
+                return false
+            }
         }
         )
     }catch(err){
-        console.log("");
+        return false;
     }
 }
 async function registerAccount(data){
     var {username,email,password,confirmpassword,err,success}=data
     
     const formValidate = new FormValidation();
-    formValidate._setSignUpForm(email,password,confirmpassword);
+    formValidate._setSignUpForm(email.value,password.value,confirmpassword.value);
     const [pairPassword,checkValidateEmail,checkValidatePassword]=[
-        
         formValidate.checkPassword(),
         formValidate.checkValidateEmail(),
         formValidate.checkValidatePassword(),
@@ -119,31 +122,34 @@ async function registerAccount(data){
     formValidate.checkEmail().then(result=>checkEmail=result)
     const result =checkEmail&&!pairPassword&&checkValidateEmail!==true&&!checkValidatePassword;
     if(result){
-        if(checkEmail)err.email = "Email has already existed!";
-        if(!pairPassword)err.confirmpassword = "Password is not matched"
-        if(!checkValidateEmail)err.email = checkValidateEmail;
-        if(!checkValidatePassword)err.password = "Password should contain at least 1 letter(),1 number and 8 digits up"
+        if(checkEmail)err.value.email = "Email has already existed!";
+        if(!pairPassword)err.value.confirmpassword = "Password is not matched"
+        if(!checkValidateEmail)err.value.email = checkValidateEmail;
+        if(!checkValidatePassword)err.value.password = "Password should contain at least 1 letter(),1 number and 8 digits up"
         setTimeout(()=>err={},2000);
-        success;
     }
     else{
         await axios.post(localhost+'/register',{
-            username,
-            email,
-            password,
+            username:username.value,
+            email:email.value,
+            password:password.value,
         }).then(result=>{
-            if(result){
-                username = "";email="";confirmpassword="";password="";
-                success= username+" has been created";
-                setTimeout(()=>()=>success="",2000);
-
+            if(result.data._id){
+                username.value = "";email.value="";confirmpassword.value="";password.value="";
+                success.value= username+" has been created";
+                setTimeout(()=>()=>success.value="",2000);
             }
         })
     }
+}
+function logouts(store){
+    localStorage.clear();
+    store.dispatch('auth/setSession',null);
 }
 export{
     FormValidation, 
     loginForm,
     forgetPassword,
     registerAccount,
+    logouts
 }
