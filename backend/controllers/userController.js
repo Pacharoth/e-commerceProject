@@ -35,7 +35,7 @@ exports.login = async(req,res)=>{
                     }
                 }
             )
-        }else return res.json({user:"Not found"});
+        }else return res.json({password:"Password Not Matched!"});
     }).catch(err=>{
         return res.status(400).json({user:"Not Found!"});
     })

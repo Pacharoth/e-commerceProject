@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade"  id="exampleModal" ref="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade"  id="exampleModal" ref="modal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" v-if="status=='signin'">
             <div class="modal-header">
@@ -8,16 +8,25 @@
             </div>
             <div class="modal-body all-contain">
                 <form @submit.prevent="Login">
-                    <div class="mb-3">
+                    <div v-if="success!==''" class="alert alert-success" role="alert">
+                        {{success}}
+                    </div>
+                    <div>
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
                         <input type="email" v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="youremail@website.com">
+                     
                     </div>
-                    <div class="mb-3">
+                    <div v-if="err.email" class="alert alert-secondary mt-0 p-2 ms-0 mb-0" role="alert">
+                        {{err.email}}
+                    </div>
+                    <div class="mt-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
                         <input type="password" v-model="password" class="input" id="exampleInputPassword1" placeholder="********fA">
                     </div>
-                    
-                    <button type="submit" class="button">Login</button>
+                    <div v-if="err.password" class="alert alert-secondary mt-0 p-2 ms-0 mb-0" role="alert">
+                        {{err.password}}
+                    </div>
+                    <button type="submit" class="button mt-3">Login</button>
                     <div class="d-flex flex-column">
                         <button class=" mt-2 mb-2 forgetpassword m-auto" @click="setStatus('forgetpassword')">forget password</button>
                        <div class="m-auto">
@@ -90,13 +99,22 @@ export default {
     name:'LoginSignup',
     setup() {
         const store = useStore();
-        const modal = ref("open");
+        const modal = ref("");  
         const username=ref("");  
         const password=ref(""); 
         const email = ref("");
+        var err  =ref({});
+        const success=ref("")
         const status = computed(()=>store.getters['auth/getStatus']);
         function forgetPasswords(){forgetPassword(email.value,password.value)}
-        function Login(){loginForm(email.value,password.value,store)}
+        function Login(){
+            const check=loginForm(email.value,password.value,store,err.value);
+            if(check){
+                email.value="";password.value="";
+                success.value="Login successful Please out of form";
+                setTimeout(()=>success.value="",3000);
+            }
+        }
         onMounted(()=>{
         })
         return{
@@ -104,6 +122,8 @@ export default {
             modal,
             username,
             password,
+            err,
+            success,
             //compute
             status,
 
