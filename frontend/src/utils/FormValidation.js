@@ -24,7 +24,7 @@ class FormValidation{
             await axios.post('http://localhost:3000/email',this._email).then(
                 result=>{
                     if(result.data.email){
-                        return false;
+                        return true;
                         
                     }
                 }
@@ -34,11 +34,11 @@ class FormValidation{
         }
     }
     checkValidateEmail(){
-        const emailValid=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+.(?:\.[a-zA-Z0-9-]+)$/
+        const emailValid=  /[a-zA-Z]+[0-9]+@[a-zA-Z]+\.com/
         if(this._email == ""){
             return "email require";
-        }else if(emailValid.test(this._email)){
-            return "Email Invalid";
+        }else if(!emailValid.test(this._email)){
+            return "Email Invalid!";
         }else{
             return true;
         }
@@ -62,18 +62,35 @@ class FormValidation{
         }
     }
 }
-async function loginForm(email,password,store){
-    await axios.post(localhost+'/login',{email,password}).then(
-        async result=>{
-            store.dispatch('auth/setSession',result);
-            localStorage.username=result.data.username;
-            localStorage.userid=result.data.userId;
-            localStorage.userrole=result.data.userRole;
-            localStorage.useremail = result.data.email;
-            email=""
-            password=""
-        }
-    )
+async function loginForm(email,password,store,err){
+    const formValidate = new FormValidation();
+    formValidate._setLoginForm(email,password);
+    const checkValidateEmail=formValidate.checkValidateEmail()
+    if(checkValidateEmail!==true){
+        err.email = checkValidateEmail;
+        setTimeout(()=>err.email="",2000)
+        return false;
+    }
+    else{
+        await axios.post(localhost+'/login',{email:email,password:password}).then(
+            async result=>{
+
+                if(result.data.email){
+                    store.dispatch('auth/setSession',result);
+                    localStorage.username=result.data.username;
+                    localStorage.userid=result.data.userId;
+                    localStorage.userrole=result.data.userRole;
+                    localStorage.useremail = result.data.email;
+                    return true
+                }else{
+                    err.password=result.data.password
+                    setTimeout(()=>err.password="",2000)
+                    return false
+                }
+                
+            }
+        )
+    }
 }
 async function forgetPassword(email){
     try{
@@ -87,8 +104,46 @@ async function forgetPassword(email){
         console.log("");
     }
 }
+async function registerAccount(data){
+    var {username,email,password,confirmpassword,err,success}=data
+    
+    const formValidate = new FormValidation();
+    formValidate._setSignUpForm(email,password,confirmpassword);
+    const [pairPassword,checkValidateEmail,checkValidatePassword]=[
+        
+        formValidate.checkPassword(),
+        formValidate.checkValidateEmail(),
+        formValidate.checkValidatePassword(),
+    ]
+    var checkEmail=false;
+    formValidate.checkEmail().then(result=>checkEmail=result)
+    const result =checkEmail&&!pairPassword&&checkValidateEmail!==true&&!checkValidatePassword;
+    if(result){
+        if(checkEmail)err.email = "Email has already existed!";
+        if(!pairPassword)err.confirmpassword = "Password is not matched"
+        if(!checkValidateEmail)err.email = checkValidateEmail;
+        if(!checkValidatePassword)err.password = "Password should contain at least 1 letter(),1 number and 8 digits up"
+        setTimeout(()=>err={},2000);
+        success;
+    }
+    else{
+        await axios.post(localhost+'/register',{
+            username,
+            email,
+            password,
+        }).then(result=>{
+            if(result){
+                username = "";email="";confirmpassword="";password="";
+                success= username+" has been created";
+                setTimeout(()=>()=>success="",2000);
+
+            }
+        })
+    }
+}
 export{
     FormValidation, 
     loginForm,
     forgetPassword,
+    registerAccount,
 }
