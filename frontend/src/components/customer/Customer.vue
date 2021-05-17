@@ -29,9 +29,9 @@
         </div>
 
         <div class="container-fluid">
-            <div class="row mt-3 mb-3">
-            <a href="http://localhost:8080/productdetail" class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3 cart">
-                <div class="card" style="width: 18rem; position: relative;">
+            <div class="product-listing">
+            <router-link to="/productdetail" class=" cart">
+                <div class="card" style="">
                 <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
                 <div class="discount">20% DISCOUNT</div>
                 <div class="card-body">
@@ -40,9 +40,9 @@
                     <span class="dis_price">$16</span> <span class="price">$20</span>
                 </div>
                 </div>
-            </a>
-            <!-- <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3">
-                <div class="card" style="width: 18rem; position: relative;">
+            </router-link>
+            <router-link to="/productdetail" class=" cart">
+                <div class="card" style="">
                 <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
                 <div class="discount">20% DISCOUNT</div>
                 <div class="card-body">
@@ -51,9 +51,9 @@
                     <span class="dis_price">$16</span> <span class="price">$20</span>
                 </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3">
-                <div class="card" style="width: 18rem; position: relative;">
+            </router-link>
+                        <router-link to="/productdetail" class=" cart">
+                <div class="card" style="">
                 <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
                 <div class="discount">20% DISCOUNT</div>
                 <div class="card-body">
@@ -62,9 +62,9 @@
                     <span class="dis_price">$16</span> <span class="price">$20</span>
                 </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3">
-                <div class="card" style="width: 18rem; position: relative;">
+            </router-link>
+            <router-link to="/productdetail" class=" cart">
+                <div class="card" style="">
                 <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
                 <div class="discount">20% DISCOUNT</div>
                 <div class="card-body">
@@ -73,10 +73,9 @@
                     <span class="dis_price">$16</span> <span class="price">$20</span>
                 </div>
                 </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3">
-                <div class="card" style="width: 18rem; position: relative;">
+            </router-link>
+            <router-link to="/productdetail" class=" cart">
+                <div class="card" style="">
                 <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
                 <div class="discount">20% DISCOUNT</div>
                 <div class="card-body">
@@ -85,18 +84,8 @@
                     <span class="dis_price">$16</span> <span class="price">$20</span>
                 </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3 ">
-                <div class="card" style="width: 18rem; position: relative;">
-                <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
-                <div class="discount">20% DISCOUNT</div>
-                <div class="card-body">
-                    <h6>Sneaker Shop</h6>
-                    <p class="card-text">White Sneaker from USA</p>
-                    <span class="dis_price">$16</span> <span class="price">$20</span>
-                </div>
-                </div>
-            </div> -->
+            </router-link>
+            
             
             </div>
         </div>
@@ -167,6 +156,36 @@ export default {
   .cart{
       text-decoration: none;
       color: black;
+      margin:1%;
+      width: 23%;
+    
   }
-
+.product-listing{
+    margin-top: 1%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+@media (max-width:820px) {
+    .cart{
+        width: 31%;
+    }
+}
+@media (max-width:654px) {
+    .product-listing{
+        margin-left: 0%;
+    }
+    .cart{
+        width:48%;
+    }
+}
+@media (max-width:400px) {
+    .product-listing{
+        justify-content: center;
+    }
+    .cart{
+        width:100%;
+    }
+}
 </style>

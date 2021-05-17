@@ -7,7 +7,7 @@ import CustomerLayout from '../components/layout/CustomerLayout.vue'
 import Customer from '../components/customer/Customer.vue';
 import view_profile from '../components/customer/view_profile.vue';
 import store from '../stores/store';
-
+import receipt from '../components/customer/receipt.vue'
 
 const customerRouter = {
     name:'homepage',
@@ -78,7 +78,12 @@ const customerRouter = {
                 if(to.name=='profile'&&isAuthenticate)next()
                 else next({name:'customerlistproduct'})
             }
-        }
+        },
+        {
+            path:'receipt',
+            name:'receipt',
+            component:receipt,
+        },
 
     ],
 }
