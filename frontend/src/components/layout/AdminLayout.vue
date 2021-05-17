@@ -59,10 +59,12 @@ export default {
         Notification
     },
     setup() {
-        const store= useStore()
-        const modal = ref(null);
-        const nav =ref(null);
-        const sidebar = ref(null);
+    
+        const store= useStore(); //this.$store
+        const modal = ref(null); //this.$ref.modal
+        const nav =ref(null); //this.$ref.nav
+        const sidebar = ref(null); 
+        
         const user = computed(()=>store.getters['auth/getSession'])
         onMounted(()=>{
             var modal=new Modal(modal)
@@ -77,6 +79,7 @@ export default {
         function showNotification(){showNotifications(store)}
         function logout(){logouts(store)}
         return{
+            //data
             nav,
             sidebar,
             modal,
