@@ -7,4 +7,5 @@ routers.post('/getsession',userController.getSession);
 routers.post('/logout',userController.logout)
 routers.post('/registerany',userController.registerAnyRole);
 routers.post('/forgetpassword',userController.forgetPassword);
+routers.post('/email',userController.findUser);
 module.exports=routers;

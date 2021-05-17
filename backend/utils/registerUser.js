@@ -4,6 +4,7 @@ const role =require('../models/roleModel');
 const user = require('../models/userModel');
 exports.registerUser=async(req,res,names)=>{
     const request = req.body
+    console.log(request)
     const salt = bcrypt.genSaltSync(10);
     const roles=await role.findOne({name:names});
     const userAccount = new user({

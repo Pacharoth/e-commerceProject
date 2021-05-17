@@ -49,28 +49,28 @@
                     </div>
                     <div>
                         <label for="exampleInputEmail1" class="form-label">Username</label>
-                        <input type="text" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="text" v-model="username" class="input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Your Name">
                     </div>
                      <div v-if="err.user" class="alert alert-secondary mt-0 p-2 ms-0 mb-0" role="alert">
                         {{err.user}}
                     </div>
                     <div class="mt-2">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email" placeholder="yourname@website.com">
                     </div>
                     <div v-if="err.email" class="alert alert-secondary mt-0 p-2 ms-0 mb-0" role="alert">
                         {{err.email}}
                     </div>
                     <div class="mt-2">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="input" id="exampleInputPassword1">
+                        <input type="password" class="input" id="exampleInputPassword1" v-model="password" placeholder="*********1Ag">
                     </div>
                     <div v-if="err.password" class="alert alert-secondary mt-0 p-2 ms-0 mb-0" role="alert">
                         {{err.password}}
                     </div>
                     <div class="mt-2">
                         <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
-                        <input type="password" v-model="confirmpassword" class="input" id="exampleInputPassword1">
+                        <input type="password" v-model="confirmpassword" class="input" id="exampleInputPassword1" placeholder="*********1Ag">
                     </div>
                     <div v-if="err.confirmpassword" class="alert alert-secondary mt-0 p-2 ms-0 mb-0" role="alert">
                         {{err.confirmpassword}}
@@ -150,7 +150,7 @@ export default {
             const check=loginForm(email.value,password.value,store,err.value);
             if(check){
                 email.value="";password.value="";
-                success.value="Login successful Please out of form";
+                success.value="Login successful Please click out of form";
                 setTimeout(()=>success.value="",3000);
             }
         }
@@ -158,6 +158,7 @@ export default {
             const data = {username,email,password,confirmpassword,err,success}
             await registerAccount(data);
         }
+
         //mount
         onMounted(()=>{
         })

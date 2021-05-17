@@ -5,7 +5,8 @@ class FormValidation{
         this._email = email;
         this._password= password;
     }
-    _setSignUpForm(email,password,confirmpassword){
+    _setSignUpForm(username,email,password,confirmpassword){
+        this._username=username
         this._email = email;
         this._password = password,
         this._confirmPassword=confirmpassword;
@@ -21,9 +22,10 @@ class FormValidation{
     }
     async checkEmail(){
         if(this._email){
-            await axios.post('http://localhost:3000/email',this._email).then(
+            await axios.post('http://localhost:3000/email',{email:this._email}).then(
                 result=>{
-                    if(result.data.email){
+                    if(result.data===null){
+                        console.log(result.data)
                         return true;
                         
                     }
@@ -44,7 +46,7 @@ class FormValidation{
         }
     }
     checkPassword(){
-        if(this._email!==this._confirmPassword) return false;
+        if(this._password!==this._confirmPassword) return false;
         else return true;
     }
     checkValidatePassword(){
@@ -53,11 +55,13 @@ class FormValidation{
         //(?=.*[0-9]) at least on number
         //(?=.*[!@#$%^&*]]) at least one special but I wont use it
         //(?=.{8,}) range 8 character up
-        const validatePassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/
+        const validatePassword = RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
+        console.log(validatePassword.test(this._password))
         if(validatePassword.test(this._password)){
             return true;
         }
         else{
+            console.log("false")
             return false;
         }
     }
@@ -112,31 +116,42 @@ async function registerAccount(data){
     var {username,email,password,confirmpassword,err,success}=data
     
     const formValidate = new FormValidation();
-    formValidate._setSignUpForm(email.value,password.value,confirmpassword.value);
+    console.log(email.value,password.value,confirmpassword.value,username)
+    formValidate._setSignUpForm(username.value,email.value,password.value,confirmpassword.value);
     const [pairPassword,checkValidateEmail,checkValidatePassword]=[
         formValidate.checkPassword(),
         formValidate.checkValidateEmail(),
         formValidate.checkValidatePassword(),
     ]
     var checkEmail=false;
-    formValidate.checkEmail().then(result=>checkEmail=result)
-    const result =checkEmail&&!pairPassword&&checkValidateEmail!==true&&!checkValidatePassword;
-    if(result){
-        if(checkEmail)err.value.email = "Email has already existed!";
-        if(!pairPassword)err.value.confirmpassword = "Password is not matched"
-        if(!checkValidateEmail)err.value.email = checkValidateEmail;
-        if(!checkValidatePassword)err.value.password = "Password should contain at least 1 letter(),1 number and 8 digits up"
-        setTimeout(()=>err={},2000);
+    await axios.post('http://localhost:3000/email',{email:email.value}).then(
+        result=>{
+            if(result.data===null){
+                checkEmail=true;
+            }
+        }
+    )
+    const result =checkEmail&&pairPassword&&checkValidateEmail&&checkValidatePassword;
+    console.log(checkEmail,pairPassword,checkValidateEmail,checkValidatePassword)
+    console.log(result)
+    if(result==false){
+        if(checkEmail===false)err.value.email = "Email has already existed!";
+        if(pairPassword===false)err.value.confirmpassword = "Password is not matched"
+        if(checkValidateEmail!==true)err.value.email = checkValidateEmail;
+        if(checkValidatePassword===false)err.value.password = "Password should contain at least 1 letter(),1 number and 8 digits up"
+        setTimeout(()=>err.value={},2000);
     }
     else{
         await axios.post(localhost+'/register',{
-            username:username.value,
-            email:email.value,
-            password:password.value,
+            username: username.value, 
+            email: email.value,
+            password: password.value 
+            
         }).then(result=>{
+
             if(result.data._id){
                 username.value = "";email.value="";confirmpassword.value="";password.value="";
-                success.value= username+" has been created";
+                success.value= username.value+" has been created";
                 setTimeout(()=>()=>success.value="",2000);
             }
         })
