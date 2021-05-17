@@ -118,8 +118,11 @@ import { computed, onMounted } from '@vue/runtime-core';
 import {useStore} from 'vuex';
 export default {
     name:'LoginSignup',
+    
     setup() {
         const store = useStore();
+        //data
+         
         const modal = ref("");  
         const username=ref("");  
         const password=ref(""); 
@@ -127,7 +130,10 @@ export default {
         const confirmpassword=ref("");
         var err  =ref({});
         const success=ref("")
+        //compute
+       
         const status = computed(()=>store.getters['auth/getStatus']);
+        //method
         function forgetPasswords(){
             var checkmail=false;
             forgetPassword(email.value).then(result=>checkmail=result);
@@ -152,6 +158,7 @@ export default {
             const data = {username,email,password,confirmpassword,err,success}
             await registerAccount(data);
         }
+        //mount
         onMounted(()=>{
         })
         return{

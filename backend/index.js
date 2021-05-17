@@ -1,12 +1,10 @@
 const express =require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoDBStore= require('connect-mongodb-session')(session);
 const cookieParser =require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const app = express();
-const store = new MongoDBStore({uri:"mongodb://localhost:27017/connect_mongodb_session",collection:"Session"});
 const bodyParser = require("body-parser");
 const user = require('./routers/User');
 const feedbackRoutes = require('./routers/feedbackRouter');
@@ -24,9 +22,6 @@ const io = require('socket.io')(server,{
     methods:['GET','POST','PUT','DELETE'],
   }
 });
-store.on('err',function(error){
-    console.log(error);
-})
 app.use(cors({
   allowedHeaders:[
     "*"
@@ -69,7 +64,7 @@ app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
 
-mongoose.connect('mongodb://localhost:27017/ecommerceproject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{useNewUrlParser: true,useUnifiedTopology: true})
+mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
   console.log("Db is connected");
   console.log("server is running on port 3000")
