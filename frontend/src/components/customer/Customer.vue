@@ -30,7 +30,7 @@
 
         <div class="container-fluid">
             <div class="row mt-3 mb-3">
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3">
+            <a href="http://localhost:8080/productdetail" class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3 cart">
                 <div class="card" style="width: 18rem; position: relative;">
                 <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
                 <div class="discount">20% DISCOUNT</div>
@@ -40,8 +40,8 @@
                     <span class="dis_price">$16</span> <span class="price">$20</span>
                 </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3">
+            </a>
+            <!-- <div class="col-sm-6 col-md-4 col-lg-3 mt-3 mb-3">
                 <div class="card" style="width: 18rem; position: relative;">
                 <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
                 <div class="discount">20% DISCOUNT</div>
@@ -96,7 +96,7 @@
                     <span class="dis_price">$16</span> <span class="price">$20</span>
                 </div>
                 </div>
-            </div>
+            </div> -->
             
             </div>
         </div>
@@ -163,6 +163,10 @@ export default {
   .about-shop{
     color: #D60265;
 
+  }
+  .cart{
+      text-decoration: none;
+      color: black;
   }
 
 </style>

@@ -20,10 +20,10 @@
                 <p class="price">$10</p>
                 <p>Size:</p>
                 <div class="size mb-3">
-                    <span class="border shadow">M</span>
-                    <span class="border shadow">L</span>
-                    <span class="border shadow">XL</span>
-                    <span class="border shadow">XXL</span>
+                    <button class="border shadow sizebtn" >M</button>
+                    <button class="border shadow sizebtn">L</button>
+                    <button class="border shadow sizebtn">XL</button>
+                    <button class="border shadow sizebtn">XXL</button>
                 </div>
                 <p>Color:</p>
                 <div class="color mb-3"> 
@@ -37,8 +37,8 @@
                 <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
                 <span> 6297 pieces available</span>
                 <div>
-                    <button class="buynow mt-3 ">Buy Now</button>
-                    <button class=" addtocart mt-3 ml-3">Add to Cart</button>
+                    <button href="" class="buynow mt-3 ">Buy Now</button>
+                    <a href="http://localhost:8080/shoppingcart" class=" addtocart mt-3 ml-3">Add to Cart</a>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">
@@ -169,5 +169,9 @@ export default {
     .color-img{
         width: 10%;
         margin-right: 5%;
+    }
+    .active, .sizebtn:hover {
+    background-color:#D60265;
+    color: white;
     }
 </style>
