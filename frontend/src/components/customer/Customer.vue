@@ -132,7 +132,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style  scoped>
   .discount{
     position: absolute;
     top: 10px;
@@ -158,7 +158,9 @@ export default {
       color: black;
       margin:1%;
       width: 23%;
-    
+  }
+  .cart:hover,.cart:focus{
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),0 8px 16px rgba(0, 0, 0, 0.1);
   }
 .product-listing{
     margin-top: 1%;

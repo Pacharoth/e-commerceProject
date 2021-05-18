@@ -19,11 +19,11 @@
                     Solid Color Classic Ankle-length Pants</p>
                 <p class="price">$10</p>
                 <p>Size:</p>
-                <div class="size mb-3">
-                    <button class="border shadow sizebtn" >M</button>
-                    <button class="border shadow sizebtn">L</button>
-                    <button class="border shadow sizebtn">XL</button>
-                    <button class="border shadow sizebtn">XXL</button>
+                <div class="size mb-3" ref="color">
+                    <button class="border shadow " @click="changeColor(0)">M</button>
+                    <button class="border shadow " @click="changeColor(1)">L</button>
+                    <button class="border shadow" @click="changeColor(2)">XL</button>
+                    <button class="border shadow" @click="changeColor(3)">XXL</button>
                 </div>
                 <p>Color:</p>
                 <div class="color mb-3"> 
@@ -50,9 +50,30 @@
     </div>
 </template>
 <script>
+import { ref } from '@vue/reactivity'
+import { onMounted, watchEffect } from '@vue/runtime-core';
 export default {
     title:'Product Detail',
     name:'ProductDetail',
+    setup() {
+        const color = ref(null);
+        onMounted(()=>{
+            console.log(color.value.children[0]);
+        })
+        //watch change
+        watchEffect(()=>{
+            console.log(color.value);
+        })
+        //method
+        function changeColor(number){
+            let colors = color.value.children[number].classList;
+            colors.contains('active')?colors.remove('active'):colors.add('active');
+        }
+        return{
+            color,
+            changeColor
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -170,8 +191,8 @@ export default {
         width: 10%;
         margin-right: 5%;
     }
-    .active, .sizebtn:hover {
-    background-color:#D60265;
-    color: white;
+    .active{
+        background-color:#D60265;
+        color: white;
     }
 </style>
