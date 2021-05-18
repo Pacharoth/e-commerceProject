@@ -30,7 +30,7 @@
 import axios from 'axios'
 import router from '../../routers/route'
 import { ref } from '@vue/reactivity'
-import { onMounted } from '@vue/runtime-core'
+import { onMounted, watchEffect } from '@vue/runtime-core'
 import {searchCategories,addACategory,updateACategory,getACategory,deleteACategory} from'../../hook/category'
 let localhost= 'http://localhost:3000'
 export default {
@@ -54,6 +54,9 @@ export default {
                 }
             }
             getCategory();
+        })
+        watchEffect(()=>{
+            searchCategories();
         })
 
         //method

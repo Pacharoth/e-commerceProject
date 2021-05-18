@@ -1,9 +1,10 @@
 <template>
+  <Suspense>
+     <template #default>
       <div class="container">
     <h2 class="text-secondary "><strong>Customer</strong></h2>
     <div class="row">
       <table id="example" class="table table-striped" style="width:100%">
-        <caption></caption>
         <thead class="bg-primary text-light">
             <th scope="">id</th>
             <th scope="">Name</th>
@@ -12,8 +13,9 @@
             <th scope="">Register Date</th>
             <th scope="">Action</th>
         </thead>
-        <admin-customers v-for="customer in customerList" :key="customer" :customer="customer"/>
-    </table>
+           <admin-customers v-for="customer in customerList" :key="customer" :customer="customer"/>
+        
+      </table>
       <nav aria-label="..." >
         <ul class="pagination">
           <li v-if="page>2" class="page-item disabled">
@@ -28,6 +30,11 @@
     </div>
     
   </div>
+  </template>
+    <template #fallback>
+            <div>Loading</div>  
+    </template>
+  </Suspense>
 </template>
 <script>
 import { computed, onMounted } from '@vue/runtime-core';
@@ -62,16 +69,38 @@ export default {
     .container{
       margin-top:7% ;
       padding: 2%;
+      padding-bottom: 1%;
       font-family: Avenir, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       background: white;
       box-shadow: $shadow_1;
       border-radius: 5px;
+      overflow: auto;
+      &::-webkit-scrollbar{
+      width: 2px;
+        &:hover{
+            background-color:rgb(250, 241, 241) ;
+        }
+      }
+      &::-webkit-scrollbar-thumb{
+          &:hover{
+          background-color: rgb(212, 209, 209);
+          height: 20px;
+          border-radius: 50px;
+        }
+      }
+    
+      &::-webkit-resizer{
+          height: 20%;
+      }
+      @include breakpoint-down(medium){
+        margin-top: 9%;
+        width: 80%;
+      }
       @include breakpoint-down(small){
-        margin-top: 12% ;
-        width: 100%;
-        height: 100%;
+        margin-top: 15% ;
+        width: 98%;
       }
     }
 </style>

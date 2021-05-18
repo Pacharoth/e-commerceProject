@@ -37,7 +37,7 @@ const adminRouter =     {
             name:'customer',
             path:'customer',
             component:AdminCustomer,
-            props:(adminRouter)=>({page:adminRouter.query.page})
+            props:true,
         }
     ],
     beforeEnter: (to, from, next) => {

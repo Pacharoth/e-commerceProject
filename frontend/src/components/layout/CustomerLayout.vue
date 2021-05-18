@@ -28,9 +28,11 @@
                             <ul class="dropdown-menu"
                             v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'"
                             aria-labelledby="dropdownMenuButton1">
-                            <li><router-link to="/pastorder" class="dropdown-item" href="#">My Ordered</router-link></li>
-                            <li><router-link to="/edituser" class="dropdown-item" href="#">Profile</router-link></li>
+                            <li><router-link to="/pastorder" class="dropdown-item" >My Ordered</router-link></li>
+                            <li><router-link to="/edituser" class="dropdown-item">Profile</router-link></li>
                             <li><router-link to="/" @click="logout" class="dropdown-item" href="#">Log Out</router-link></li>
+                            <li v-if="user.role=='admin'"><router-link to="/admin" class="dropdown-item">Admin</router-link></li>
+                            <li v-if="user.role=='seller'||user.role=='admin'"><router-link to="/seller" class="dropdown-item">Seller</router-link></li>
                             </ul>
                         </div>
                     </div>
