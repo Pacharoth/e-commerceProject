@@ -12,25 +12,43 @@
             <th scope="">Register Date</th>
             <th scope="">Action</th>
         </thead>
-        <admin-customers v-for="customer in customerList" :key="customer.id" :customer="customer"/>
+        <admin-customers v-for="customer in customerList" :key="customer" :customer="customer"/>
     </table>
+      <nav aria-label="..." >
+        <ul class="pagination">
+          <li v-if="page>2" class="page-item disabled">
+            <span class="page-link">Previous</span>
+          </li>
+          <li class="page-item" v-for="pages in page" :key="pages"><a class="page-link" href="#">{{pages}}</a></li>
+          <li class="page-item" v-if="page>2">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
     </div>
     
   </div>
 </template>
 <script>
-import { computed } from '@vue/runtime-core';
+import { computed, onMounted } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import AdminCustomers from './AdminCustomers';
+import {getCustomers} from '../../hook/customer'
 export default {
   title:'Customer',
   name:'AdminCustomer',
   components:{
     AdminCustomers,
   },
-  setup() {
+  setup(props) {
+    console.log(props)
     const store = useStore();
+    onMounted(async()=>{
+      getCustomers(store);
+    })
+    const page =computed(()=>store.getters['customer/getPage'])
     return{
+      page,
       customerList:computed(()=>store.getters['customer/getAdminCustomers']) 
     }
   },
@@ -44,7 +62,6 @@ export default {
     .container{
       margin-top:7% ;
       padding: 2%;
-      height: 88%;
       font-family: Avenir, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
