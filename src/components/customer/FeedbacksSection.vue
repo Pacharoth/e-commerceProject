@@ -1,10 +1,8 @@
 <template>
   <div class="container my-5">
 		<div class="row">
-			<div class="col-6">
 				<!-- Post Begins -->
 				<section v-for="feedback in getFeedbacks" :key="feedback.id" class="card mt-4">
-					<div class="border p-2">
 						<!-- post header -->
 						<div class="row m-0">
 							<div class="">
@@ -29,17 +27,18 @@
 								<ul class="list-group list-group-horizontal">
 									<li class="list-group-item flex-fill text-center p-0 px-lg-2 border border-right-0 border-top-0 border-bottom-0 ">
 										<a class="small text-decoration-none" href="#">
-											<i class="fas fa-share"  style="font-size:15px;color:#d60265">Reply</i> 
+											<i class="fas fa-share"  style="font-size:15px;color:#d60265;">
+Reply</i> 
 										</a>
 									</li>
 								</ul>
 							</div>
 
 						</footer>
-					</div>
+
 				</section>
 				<!-- Post Ends -->
-			</div>
+		
 		</div>
 	</div>
 </template>
