@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 const customerModel = new Schema({
     users:{
         type:Schema.Types.ObjectId,
-        ref:'users'
+        ref:'users',
+        unique:true
     },
     phoneNumber:{
         type:String,

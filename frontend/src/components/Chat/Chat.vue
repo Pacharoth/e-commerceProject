@@ -30,9 +30,7 @@
 <script>
 import { computed, onMounted, ref, watchEffect } from '@vue/runtime-core'
 import { useStore } from 'vuex'
-// import {io} from 'socket.io-client';
-// var localhost = 'http://localhost:3000'
-// const socket = io(localhost);
+import {io} from 'socket.io-client';
 
 export default {
     name:'Chat',
@@ -45,6 +43,7 @@ export default {
         const msg = ref([]);
         const color = ref("");
         const mess = ref("");
+        const socket =ref();
         //computed
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
         //method
@@ -55,7 +54,25 @@ export default {
         onMounted(()=>{
             color.value="rgb(66, 207, 66)";
             chat_status.value="online"
-        })
+        });
+        //watch effect
+        watchEffect(()=>{
+            const s= io('http://localhost:3000')
+            socket.value=s;
+            return()=>{
+                s.disconnect()
+            }
+        });
+        // watchEffect(()=>{
+        //     if(socket.value==null) return
+            
+        //     const interval = setInterval(()=>{
+        //         socket.emit("save-chat",{});
+        //     },2000)
+        //     return ()=>{
+        //         clearInterval(interval);
+        //     }
+        // })
         watchEffect(()=>{  
             window.ononline=()=>{
                 color.value="rgb(66, 207, 66)";

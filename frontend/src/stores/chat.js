@@ -4,6 +4,7 @@ const chatStore={
         return{
             contentChat:"",
             chatButton:"",
+            chat:[],
         }
     },
     getters:{

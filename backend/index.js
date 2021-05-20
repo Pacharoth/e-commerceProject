@@ -11,8 +11,9 @@ const feedbackRoutes = require('./routers/feedbackRouter');
 const categoryRoutes =require('./routers/category');
 const customerRoutes = require('./routers/customer');
 const sellerRoutes = require('./routers/seller');
-const { chatLoading } = require('./sockets/chatSocket');
+const chatRoutes = require('./routers/chat');
 const server=require('http').createServer(app);
+const chat= require('./sockets/chat');
 const io = require('socket.io')(server,{
   cors:{
     origin:[
@@ -37,12 +38,14 @@ app.use(cors({
   exposedHeaders:['set-cookie']
 }));
 app.use(fileUpload({
+    useTempFiles:true,
+    tempFileDir:__dirname+"public",
     limits: { fileSize: 50* 1024 * 1024}
   }));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static('./public/'))
+app.use(express.static('public'))
 app.use(session({
     
     name:"sid",
@@ -63,7 +66,7 @@ app.use(feedbackRoutes);
 app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
-
+app.use(chatRoutes)
 mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
   console.log("Db is connected");
@@ -72,6 +75,7 @@ mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.n
   console.log(err);
 })
 io.on('connection',(socket)=>{
-    chatLoading(io,socket)
+  chat.chatData(io,socket);
 });
+
 server.listen(port);
