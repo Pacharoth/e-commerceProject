@@ -1,4 +1,5 @@
 const io = require('socket.io');
+const user = require('../models/userModel');
 exports.chatFile =async(req,res)=>{
     const file = req.files.voice;
     const filePath="/public/assets/voice/"+file.name+".mp3";
@@ -14,4 +15,10 @@ exports.chatFile =async(req,res)=>{
     }catch(err){
         res.json(err);
     }
+}
+exports.searchChat =async(req,res)=>{
+    const users =await user.find({username:{
+        $regex:new RegExp(req.body.user)
+    }}).populate('roles').limit(5);
+    res.json(users);
 }

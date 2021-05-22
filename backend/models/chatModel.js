@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const {model,Schema} = require('mongoose');
 const chatModel = new Schema({
     users:{
             type:Schema.Types.ObjectId,
@@ -22,5 +21,5 @@ const chatModel = new Schema({
         default:'unread',
     },
 });
-const chat = mongoose.model('chat',chatModel)
+const chat =model('chat',chatModel)
 module.exports = chat;

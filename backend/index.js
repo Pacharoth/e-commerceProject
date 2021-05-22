@@ -13,7 +13,7 @@ const customerRoutes = require('./routers/customer');
 const sellerRoutes = require('./routers/seller');
 const chatRoutes = require('./routers/chat');
 const server=require('http').createServer(app);
-const chat= require('./sockets/chat');
+const {chatData,chatList}= require('./sockets/chat');
 const io = require('socket.io')(server,{
   cors:{
     origin:[
@@ -67,7 +67,11 @@ app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
 app.use(chatRoutes)
-mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{useNewUrlParser: true,useUnifiedTopology: true})
+mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+})
 .then(result => {
   console.log("Db is connected");
   console.log("server is running on port 3000")
@@ -75,7 +79,8 @@ mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.n
   console.log(err);
 })
 io.on('connection',(socket)=>{
-  chat.chatData(io,socket);
+  chatData(io,socket);
+  chatList(io,socket)
 });
 
 server.listen(port);

@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
+const {model,Schema} = require('mongoose')
 const customerModel = new Schema({
     users:{
         type:Schema.Types.ObjectId,
@@ -11,5 +10,5 @@ const customerModel = new Schema({
         default:null
     },
 });
-const customer = mongoose.model('customers',customerModel);
+const customer = model('customers',customerModel);
 module.exports = customer;
