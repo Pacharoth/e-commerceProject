@@ -1,0 +1,24 @@
+.container{
+    color: #d60265;
+    font-size: 28px;
+}
+.title{
+    font-weight: 600;
+    font-size: 45px;
+    border-bottom:0.5px solid black;
+}
+.left{
+    border-right: 0.5px solid black;
+}
+.colon{
+    padding-right: 2em;
+
+    
+}
+.data{
+    color: black;
+}
+.btn{
+    background-color: #d60265;
+    color: white;
+}
