@@ -17,6 +17,7 @@
                 @click="popChat({
                     ownerId:chat._id,
                     username:chat.username,
+                    role:chat.roles.name
                 })" 
                 v-for="chat in listChat" :key="chat">
                     <img src="../../assets/logo.png" alt="">
@@ -29,12 +30,17 @@
                 </button>
             </div>
             <div class="list-user" v-else>
-                <button class="users btn" @click="popChat">
+                <button class="users btn" @click="popChat" v-for="chat in chatSocket" :key="chat">
                     <img src="../../assets/logo.png" alt="">
                     <div class="chat-time">
-                        <div class="chat">
+                        <div class="chat" >
                             <span >Pizza (seller)</span>
                             <span class="text-chat">hello world</span>
+                            <!-- <template v-if="user._id!==id">
+                                <span >{{user.username}} (chat.)</span>
+                                <span class="text-chat">hello world</span>
+                            </template> -->
+                            
                         </div>
                         <div class="status" :style="{'background-color':color}"></div>
                     </div>
@@ -50,12 +56,13 @@
     </Suspense>
 </template>
 <script>
-import { computed, ref, watchEffect } from '@vue/runtime-core';
+import { computed, onBeforeMount, ref, watchEffect } from '@vue/runtime-core';
 import Chat from './Chat';
 import ChatLoading from './ChatLoading.vue';
 import { useStore } from 'vuex';
 import axios from 'axios';
 import { localhost } from '../../utils/FormValidation';
+import { io } from 'socket.io-client';
 export default {
     name:"ChatList",
     setup() {
@@ -65,29 +72,32 @@ export default {
         const searchData=ref(false);
         const listChat = ref([]);
         const chatlist= computed(()=>store.getters['chat/getChatList']);
-        const popChat = (data)=>{
-            const {ownerId,username,roomId}=data
-            store.dispatch('chat/changeContent','active');
-            store.dispatch('chat/changeList','');
-            if(searchData){
-                store.dispatch('chat/putToChat',{
-                    userId:ownerId,
-                    username:username
-                });
-            }else{
-                store.dispatch('chat/putToChat',{
-                    userId:ownerId,
-                    roomId:roomId,
-                    username:username
-                })
+        const socket = ref(null);
+        const chatSocket =ref([]);
+        const id =ref("");
+        onBeforeMount(()=>{
+            const s = io(localhost);
+            socket.value=s;
+            return()=>{
+                s.disconnect();
             }
-        }
+        })
+        watchEffect(()=>{
+            if(socket.value==null) return socket.value;
+            id.value=localStorage.getItem('userid');
+            socket.value.emit('getchats',localStorage.getItem('userid'))
+        })
+        watchEffect(()=>{
+            if(socket.value==null) return socket.value;
+            socket.value.on('listchats',data=>{
+                chatSocket.value=data;
+            })
+        })
         watchEffect(()=>{
             window.ononline=()=>{
                 color.value = 'green';
             }
             window.onoffline=()=>{
-                
                 color.value = 'grey';
             }
         })
@@ -96,6 +106,25 @@ export default {
             listChat.value=response.data;
         })
         //method
+        const popChat = (data)=>{
+            const {role,ownerId,username,roomId}=data
+            store.dispatch('chat/changeContent','active');
+            store.dispatch('chat/changeList','');
+            if(searchData){
+                store.dispatch('chat/putToChat',{
+                    userId:ownerId,
+                    username:username,
+                    role:role,
+                });
+            }else{
+                store.dispatch('chat/putToChat',{
+                    userId:ownerId,
+                    roomId:roomId,
+                    username:username,
+                    role:role,
+                })
+            }
+        }
         const searchUser=()=>{
             searchData.value=false
         }
@@ -105,10 +134,14 @@ export default {
         return{
             color,
             chatlist,
-            search,
-            popChat,
+            chatSocket,
             listChat,
             searchData,
+            search,
+            socket,
+            id,
+            //method
+            popChat,
             searchUser,
             changeToSearchUser,
         }

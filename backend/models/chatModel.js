@@ -20,6 +20,6 @@ const chatModel = new Schema({
         type:String,
         default:'unread',
     },
-});
+},{collection:'chat'});
 const chat =model('chat',chatModel)
 module.exports = chat;

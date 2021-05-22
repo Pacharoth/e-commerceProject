@@ -9,5 +9,5 @@ const RoomChat = new Schema({
         ref:'chat',
     }]
 },{collection:'roomChat'})
-const room = model('roomchat',RoomChat);
+const room = model('roomChat',RoomChat);
 module.exports = room;

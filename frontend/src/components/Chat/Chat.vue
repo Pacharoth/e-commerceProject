@@ -5,7 +5,7 @@
                     <img src="../../assets/logo.png" alt="">
                 <div class="chat-status">
                     <div class="chat-text" >
-                        <span >Pizza (seller)</span>
+                        <span >{{chatData.username}} ({{chatData.role}})</span>
                         <span v-if="status=='online'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> active</span>
                         <span v-else-if="status=='offline'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> offline</span>
                     </div>
@@ -46,7 +46,6 @@ export default {
         const mess = ref("");
         const socket =ref();
         const chat=ref(null)
-        const chatData=computed(()=>store.getters['chat/getChat']);
         onBeforeMount(()=>{
             const s = io('http://localhost:3000');
             socket.value=s;
@@ -83,18 +82,24 @@ export default {
         });
         
         //computed
+        const chatData=computed(()=>store.getters['chat/getChat']);
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
         //method
         const message =()=>{
             if(socket.value==null) return;
             if(chat.value.scrollHeight>0){
                 chat.value.scrollTop=chat.value.scrollHeight+64
-
             }
-
-            socket.value.emit('get-chat',mess.value);
+            socket.value.emit('get-chat',{
+                userId:chatData.value.userId,
+                ownerId:localStorage.getItem('userid'),
+                content:mess.value,
+            });
         }
-        const closeChat = ()=>store.dispatch('chat/changeContent','');
+        const closeChat = ()=>{
+            store.dispatch('chat/changeContent','')
+            store.dispatch('chat/putToChat',{});
+        };
         const loadStatus=()=>{}
 
         const status = computed(()=>chat_status.value);

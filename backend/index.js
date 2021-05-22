@@ -14,6 +14,7 @@ const sellerRoutes = require('./routers/seller');
 const chatRoutes = require('./routers/chat');
 const server=require('http').createServer(app);
 const {chatData,chatList}= require('./sockets/chat');
+const roleRoutes = require('./routers/role');
 const io = require('socket.io')(server,{
   cors:{
     origin:[
@@ -67,6 +68,7 @@ app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
 app.use(chatRoutes)
+app.use(roleRoutes)
 mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{
   useNewUrlParser: true,
   useUnifiedTopology: true,
