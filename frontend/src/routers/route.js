@@ -27,8 +27,8 @@ router.beforeEach(async(to,from,next)=>{
     if(result.data.userRole!==undefined){
         store.dispatch('auth/setSession',result);
     }
-    const response = await axios.post(localhost+'/role')
-    store.dispatch('role/addRole',response.data);
+    // const response = await axios.post(localhost+'/role')
+    // store.dispatch('role/addRole',response.data);
     console.log(store.getters['auth/getSession'])
     console.log(to,next());
 })

@@ -30,7 +30,7 @@
                 </button>
             </div>
             <div class="list-user" v-else>
-                <button class="users btn" @click="popChat" v-for="chat in chatSocket" :key="chat">
+                <button class="users btn" @click="popChat" v-for="chat in chatSocket.length" :key="chat">
                     <img src="../../assets/logo.png" alt="">
                     <div class="chat-time">
                         <div class="chat" >
@@ -75,6 +75,9 @@ export default {
         const socket = ref(null);
         const chatSocket =ref([]);
         const id =ref("");
+        //computed
+        const role = computed(()=>store.getters['role/getRoles'])
+
         onBeforeMount(()=>{
             const s = io(localhost);
             socket.value=s;
@@ -140,6 +143,7 @@ export default {
             search,
             socket,
             id,
+            role,
             //method
             popChat,
             searchUser,
