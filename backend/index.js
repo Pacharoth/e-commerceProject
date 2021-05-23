@@ -11,9 +11,12 @@ const feedbackRoutes = require('./routers/feedbackRouter');
 const categoryRoutes =require('./routers/category');
 const customerRoutes = require('./routers/customer');
 const sellerRoutes = require('./routers/seller');
-const { chatLoading } = require('./sockets/chatSocket');
-const productRouter = require('./routers/product');
+const chatRoutes = require('./routers/chat');
 const server=require('http').createServer(app);
+const {chatData,chatList}= require('./sockets/chat');
+
+const roleRoutes = require('./routers/role');
+const productRouter = require('./routers/product');
 const io = require('socket.io')(server,{
   cors:{
     origin:[
@@ -38,12 +41,14 @@ app.use(cors({
   exposedHeaders:['set-cookie']
 }));
 app.use(fileUpload({
+    useTempFiles:true,
+    tempFileDir:__dirname+"public",
     limits: { fileSize: 50* 1024 * 1024}
   }));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static('./public/'))
+app.use(express.static('public'))
 app.use(session({
     
     name:"sid",
@@ -64,8 +69,14 @@ app.use(feedbackRoutes);
 app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
-app.use(productRouter);
-mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{useNewUrlParser: true,useUnifiedTopology: true})
+app.use(chatRoutes)
+app.use(roleRoutes)
+app.use(productRouter)
+mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+})
 .then(result => {
   console.log("Db is connected");
   console.log("server is running on port 3000")
@@ -73,6 +84,8 @@ mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.n
   console.log(err);
 })
 io.on('connection',(socket)=>{
-    chatLoading(io,socket)
+  chatData(io,socket);
+  chatList(io,socket)
 });
+
 server.listen(port);

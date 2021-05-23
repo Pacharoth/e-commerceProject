@@ -1,14 +1,14 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
+const {model,Schema} = require('mongoose')
 const customerModel = new Schema({
     users:{
         type:Schema.Types.ObjectId,
-        ref:'users'
+        ref:'users',
+        unique:true
     },
     phoneNumber:{
         type:String,
         default:null
     },
 });
-const customer = mongoose.model('customers',customerModel);
+const customer = model('customers',customerModel);
 module.exports = customer;

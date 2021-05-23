@@ -13,7 +13,7 @@
                     </div>
                     <div>
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="youremail@website.com">
+                        <input type="email" required v-model="email" class="input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="youremail@website.com">
                      
                     </div>
                     <div v-if="err.email" class="alert alert-secondary mt-0 p-2 ms-0 mb-0" role="alert">

@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const {Schema,model} = require('mongoose');
 const notificationModel = new Schema({
     userId:{
         type:Schema.Types.ObjectId,
@@ -13,5 +12,5 @@ const notificationModel = new Schema({
         default:"unread",
     },
 });
-const notification = mongoose.model('notifications',notificationModel);
+const notification = model('notifications',notificationModel);
 module.exports = notification;

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '../routers/route';
 const localhost="http://localhost:3000"
 class FormValidation{
     _setLoginForm(email,password){
@@ -69,32 +70,26 @@ class FormValidation{
 async function loginForm(email,password,store,err){
     const formValidate = new FormValidation();
     formValidate._setLoginForm(email,password);
-    const checkValidateEmail=formValidate.checkValidateEmail()
-    if(checkValidateEmail!==true){
-        err.email = checkValidateEmail;
-        setTimeout(()=>err.email="",2000)
-        return false;
-    }
-    else{
-        await axios.post(localhost+'/login',{email:email,password:password}).then(
-            async result=>{
+    await axios.post(localhost+'/login',{email:email,password:password}).then(
+        async result=>{
 
-                if(result.data.email){
-                    store.dispatch('auth/setSession',result);
-                    localStorage.username=result.data.username;
-                    localStorage.userid=result.data.userId;
-                    localStorage.userrole=result.data.userRole;
-                    localStorage.useremail = result.data.email;
-                    return true
-                }else{
-                    err.password=result.data.password
-                    setTimeout(()=>err.password="",2000)
-                    return false
-                }
-                
+            if(result.data){
+                store.dispatch('auth/setSession',result);
+                localStorage.username=result.data.username;
+                localStorage.userid=result.data.userId;
+                localStorage.userrole=result.data.userRole;
+                localStorage.useremail = result.data.email;
+
+                return true
+            }else{
+                err.password=result.data.password
+                setTimeout(()=>err.password="",2000)
+                return false
             }
-        )
-    }
+            
+        }
+    )
+    
 }
 async function forgetPassword(email){
     try{
@@ -131,13 +126,11 @@ async function registerAccount(data){
             }
         }
     )
-    const result =checkEmail&&pairPassword&&checkValidateEmail&&checkValidatePassword;
+    const result =checkEmail&&pairPassword&&checkValidatePassword;
     console.log(checkEmail,pairPassword,checkValidateEmail,checkValidatePassword)
-    console.log(result)
     if(result==false){
         if(checkEmail===false)err.value.email = "Email has already existed!";
         if(pairPassword===false)err.value.confirmpassword = "Password is not matched"
-        if(checkValidateEmail!==true)err.value.email = checkValidateEmail;
         if(checkValidatePassword===false)err.value.password = "Password should contain at least 1 letter(),1 number and 8 digits up"
         setTimeout(()=>err.value={},2000);
     }
@@ -150,9 +143,10 @@ async function registerAccount(data){
         }).then(result=>{
 
             if(result.data._id){
-                username.value = "";email.value="";confirmpassword.value="";password.value="";
                 success.value= username.value+" has been created";
-                setTimeout(()=>()=>success.value="",2000);
+                router.push({name:"customerlistproduct"})
+                username.value = "";email.value="";confirmpassword.value="";password.value="";
+                setTimeout(()=>()=> success.value="",2000);
             }
         })
     }
@@ -166,5 +160,6 @@ export{
     loginForm,
     forgetPassword,
     registerAccount,
-    logouts
+    logouts,
+    localhost,
 }

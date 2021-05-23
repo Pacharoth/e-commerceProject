@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema
+const {model,Schema}= require('mongoose');
 const orderModel = new Schema({
     customerId:{
         type:Schema.Types.ObjectId,
@@ -29,5 +28,5 @@ const orderModel = new Schema({
         default:"unread",
     }
 });
-const order= mongoose.model('orders',orderModel);
+const order= model('orders',orderModel);
 module.exports = order;
