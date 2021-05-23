@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const productModel = new Schema({
-    categoryId:{
+    categories:{
         type:Schema.Types.ObjectId,
         ref:'categories',
     },
-    sellerId:{
+    sellers:{
         type:Schema.Types.ObjectId,
         ref:'sellers'
     },
@@ -15,7 +15,7 @@ const productModel = new Schema({
     },
     sizeOrcolor:{
         type:String,
-        required:true,
+        
     },
     description:{
         type:String,
@@ -28,9 +28,14 @@ const productModel = new Schema({
         type:Number.isInteger(),
         default:0,
     },
+    img:[
+        {
+            type:String,
+        }
+    ],
     price:{
         type:Number,
-        required:true,
+        default:0,
     }
 })
 const product = mongoose.model("products",productModel);

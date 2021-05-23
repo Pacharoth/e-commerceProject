@@ -12,6 +12,7 @@ const categoryRoutes =require('./routers/category');
 const customerRoutes = require('./routers/customer');
 const sellerRoutes = require('./routers/seller');
 const { chatLoading } = require('./sockets/chatSocket');
+const productRouter = require('./routers/product');
 const server=require('http').createServer(app);
 const io = require('socket.io')(server,{
   cors:{
@@ -63,7 +64,7 @@ app.use(feedbackRoutes);
 app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
-
+app.use(productRouter);
 mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{useNewUrlParser: true,useUnifiedTopology: true})
 .then(result => {
   console.log("Db is connected");
