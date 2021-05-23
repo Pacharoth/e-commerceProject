@@ -1,20 +1,26 @@
 const seller = require('../models/sellerModel');
-const userModel = require('../models/userModel');
+const user = require('../models/userModel')
 exports.registerSeller = async(req,res)=>{
     const {email,company,contact,address,img}=req.body;
-    if(req.session.roles=="admin"){
-        await userModel.findOne({email:email}).then(async(result)=>{
-            if(result){
-                const aSeller = new seller({
-                    users:result._id,
-                    company,
-                    contact,
-                    address,
-                    img,
-                })
-                await aSeller.save().then(result=>res.status(200).json({register:"successful"}))
-                .catch(err=>res.status(500).json(err));
-            }
-        }).catch(result=>res.status(400).json({notfound:true}))
+    const responseUser = await user.findOne({email}).poplate('roles');
+    const companyName = await seller.findOne({company});
+    if(responseUser.length>0){
+        if(companyName.length>0){
+            res.json({result:"Company's name is already existed.Please change"})
+        }else{
+            const newSeller = new seller({
+                users:responseUser._id,
+                company,
+                contact,
+                address,
+            })
+            await newSeller.save()
+            res.json(await seller.find({_id:newSeller._id}).populate('users'));
+        }
+    }else{
+        res.json({result:"Could not found in User"});
     }
+}
+exports.getSellers = async(req,res)=>{
+    res.json(res.pagination);
 }

@@ -10,19 +10,19 @@
       <div class="modal-body">
             <div class="form-group">
                 <label for="Company " class="text-secondary">Company Name:</label>
-                <input type="text" class="input">
+                <input type="text" v-model="company" class="input">
             </div>
             <div class="form-group">
                 <label for="Email" class="text-secondary">Email:</label>
-                <input type="email" class="input">
+                <input type="email" v-model="email" class="input">
             </div>
             <div class="form-group">
                 <label for="Contact" class="text-secondary">Contact:</label>
-                <input type="text" class="input">
+                <input type="text" v-model="contact" class="input">
             </div>
             <div class="form-group">
                 <label for="Address" class="text-secondary">Address:</label>
-                <input type="text" class=" input">
+                <input type="text" v-model="address" class=" input">
             </div>
       </div>
       <div class="modal-footer">
@@ -35,12 +35,25 @@
 </div>
 </template>
 <script>
+import { ref } from '@vue/reactivity'
 
 export default {
    title:'Admin Seller',
     props:['show'],
     name:"SellerRegister", 
-       
+    setup() {
+      const email =ref("");
+      const company=ref("");
+      const address = ref("");
+      const contact=ref("");
+   
+      return{
+        email,
+        company,
+        address,
+        contact
+      }
+    }
 }
 </script>
 <style lang="scss" scope>

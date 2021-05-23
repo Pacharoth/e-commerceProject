@@ -28,22 +28,28 @@
             <img src="../../assets/logo.png" alt="">
             <span>Ice cream Store</span>
         </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        
+
     </div>
 </template>
 
 <script>
+import { computed, onMounted } from '@vue/runtime-core';
+import {useStore} from 'vuex';
+import {getSellers} from '../../hook/seller';
 export default {
     title:'Admin Seller',
     name:"SellerList",
+    setup() {
+        const store = useStore();
+        const sellers = computed(()=>store.getters['seller/getSellers']);
+
+        onMounted(async()=>{
+            await getSellers(store);
+        })
+        return{
+            sellers
+        }
+    }
 }
 </script>
 <style lang="scss" scope>
@@ -65,11 +71,14 @@ export default {
         }
         @include breakpoint-down(medium){
             margin-top:7%; 
+
         }
         @include breakpoint-down(small){
-            margin-top: 10%;
+            margin-top: 12%;
             padding: 2%;
-            justify-content: center;
+            // justify-content: center;
+            margin-left:15% 
+            
         }
         .seller{
             @extend .d-flex,.flex-column,.btn;

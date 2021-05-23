@@ -18,13 +18,13 @@
       </table>
       <nav aria-label="..." >
         <ul class="pagination">
-          <li v-if="page>2" class="page-item disabled">
+          <!-- <li v-if="page>=2" class="page-item disabled">
             <span class="page-link">Previous</span>
-          </li>
-          <li class="page-item" v-for="pages in page" :key="pages"><a class="page-link" href="#">{{pages}}</a></li>
-          <li class="page-item" v-if="page>2">
+          </li> -->
+          <li class="page-item" v-for="pages in page" :key="pages"><button class="page-link" @click="paginaton(pages)">{{pages}}</button></li>
+          <!-- <li class="page-item" v-if="page>2">
             <a class="page-link" href="#">Next</a>
-          </li>
+          </li> -->
         </ul>
       </nav>
     </div>
@@ -40,23 +40,28 @@
 import { computed, onMounted } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import AdminCustomers from './AdminCustomers';
-import {getCustomers} from '../../hook/customer'
+import {getCustomerByPagination, getCustomers} from '../../hook/customer'
 export default {
   title:'Customer',
   name:'AdminCustomer',
   components:{
     AdminCustomers,
   },
-  setup(props) {
-    console.log(props)
+  setup() {
     const store = useStore();
     onMounted(async()=>{
-      getCustomers(store);
+      await getCustomers(store);
     })
+    //computed
     const page =computed(()=>store.getters['customer/getPage'])
+    //method
+    async function paginaton(pages){
+      await getCustomerByPagination({page:pages,store});
+      }
     return{
       page,
-      customerList:computed(()=>store.getters['customer/getAdminCustomers']) 
+      customerList:computed(()=>store.getters['customer/getAdminCustomers']) ,
+      paginaton
     }
   },
 }

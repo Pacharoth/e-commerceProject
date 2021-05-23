@@ -17,7 +17,6 @@ function pagination(model){
                 limit:limit,
             }
         }
-        console.log(endPoint);
         await model.find().populate('users').limit(limit).skip(startPoint).then(resu=>{
             results.results=resu
             res.pagination =results;
