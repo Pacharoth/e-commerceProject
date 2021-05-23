@@ -17,11 +17,11 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="" ref="form" enctype="multipart/form-data">
                   <div class="modal-body">
                     <div class="form-group">
                       <label for="productname">Product name</label>
-                      <input type="text" class="form-control" id="productName" name="productName" placeholder="Product name">
+                      <input type="text"  class="form-control" id="productName" name="productName" placeholder="Product name">
                     </div>
                     <div class="form-group">
                       <label for="price">Price per unit</label>
@@ -30,7 +30,7 @@
 
                     <div class="form-group">
                       <label for="qty">Quantity</label>
-                      <input type="number" class="form-control" id="qty" placeholder="Quantity" name="qty">
+                      <input type="number"  class="form-control" id="qty" placeholder="Quantity" name="qty">
                     </div>
 
                     <div class="form-group">
@@ -49,7 +49,7 @@
                       <option value="clothes">Clothes</option>
                     </select>
                     <label for="productImg" class="form-label">Product's image</label>
-                    <input class="form-control" type="file" id="productImg" name="productimg" />
+                    <input class="form-control" type="file" id="productImg" name="img" />
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
@@ -111,9 +111,25 @@
 <script>
 import {Modal} from 'bootstrap';
 import CardDashboard from '../Admin/CardDashboard'
+import { ref } from '@vue/reactivity';
+import axios from 'axios';
+
 export default {
     title:'Seller',
     name:"MainSeller",
+    setup(){
+      const form =ref(null)
+      
+      async function createProduct(){
+        const newForm = new FormData(form.value);
+        await axios.post("http://localhost:3000/product",newForm);        
+      }
+
+      return{
+        form,
+        createProduct
+      }
+    },
     data(){
         return {
             modal:null,
