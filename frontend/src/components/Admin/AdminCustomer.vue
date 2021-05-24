@@ -6,7 +6,6 @@
     <div class="row">
       <table id="example" class="table table-striped" style="width:100%">
         <thead class="bg-primary text-light">
-            <th scope="">id</th>
             <th scope="">Name</th>
             <th scope="">Phone</th>
             <th scope="">Email</th>
@@ -28,7 +27,7 @@
         </ul>
       </nav>
     </div>
-    
+    <edit-delete-user :namemodal="customerModal"/>
   </div>
   </template>
     <template #fallback>
@@ -41,17 +40,21 @@ import { computed, onMounted } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import AdminCustomers from './AdminCustomers';
 import {getCustomerByPagination, getCustomers} from '../../hook/customer'
+import EditDeleteUser from './EditDeleteUser.vue';
 export default {
   title:'Customer',
   name:'AdminCustomer',
   components:{
     AdminCustomers,
+    EditDeleteUser,
   },
   setup() {
     const store = useStore();
     onMounted(async()=>{
+      console.log("hello")
       await getCustomers(store);
     })
+    const customerModal=computed(()=>store.getters['customer/getModal'])
     //computed
     const page =computed(()=>store.getters['customer/getPage'])
     //method
@@ -61,7 +64,8 @@ export default {
     return{
       page,
       customerList:computed(()=>store.getters['customer/getAdminCustomers']) ,
-      paginaton
+      paginaton,
+      customerModal
     }
   },
 }

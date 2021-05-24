@@ -1,35 +1,72 @@
 <template>
     <tbody>
      <tr>
-        <td>1</td>
         <th scope=""> {{users.username}}</th>
         <td>{{phoneNumber}}</td>
         <td>{{users.email}}</td>
         <td>{{registerAt}}</td>
-        <td><span data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn text-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#customerModal" ><em class="fas fa-edit"></em></button></span>
-            <span data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn text-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#customerModal" ><em class="fas fa-trash-alt"></em></button></span>
+        <td><span data-placement="top" data-toggle="tooltip" title="Edit">
+                <button class="btn text-primary btn-xs" 
+                @click="editModal(customer)" data-title="Edit" data-bs-toggle="modal" data-bs-target="#customerModal" >
+                    <em class="fas fa-edit"></em>
+                </button>
+            </span>
+            <span data-placement="top" data-toggle="tooltip" title="Delete">
+                <button class="btn text-danger btn-xs" 
+                @click="deleteModal(customer)" data-title="Delete" data-bs-toggle="modal" data-bs-target="#customerModal">
+                    <em class="fas fa-trash-alt"></em>
+                </button>
+            </span>
         </td>
     </tr>
   </tbody>
     
 </template>
 <script>
-import { toRefs } from '@vue/reactivity'
+import { ref, toRefs } from '@vue/reactivity'
+import { useStore } from 'vuex';
+import { computed, onMounted } from '@vue/runtime-core';
+import {Modal} from 'bootstrap';
 export default {
   name:'AdminCustomers',
   props:["customer"],
+  components:{
+  },
   setup(props) {
-      const {customer}=toRefs(props);
-      const {phoneNumber,users}=customer.value
-      const registerAt2 =new Date(users.registerAt)
-
-      const registerAt = registerAt2.toLocaleDateString()
-
-      return {
-          phoneNumber,
-          users,
-          registerAt,
-      }
+    const store = useStore();
+    const {customer}=toRefs(props);
+    var {phoneNumber,users}=customer.value
+    const registerAt2 =new Date(users.registerAt)
+    const registerAt = registerAt2.toLocaleDateString()
+    const modal =ref(null)
+    const count =ref(0);
+    const modelvalue =ref({});
+    onMounted(()=>{
+        modal.value= new Modal(modal.value)
+    })
+    if(phoneNumber==null) phoneNumber="null"
+    const customerModal = computed(()=>store.getters['customer/getModal'])
+    const deleteModal = (data)=>{
+        modelvalue.value=data;
+        store.dispatch('customer/setAdminCustomer',modelvalue.value._id)
+        store.dispatch('customer/changeToModal',"delete");
+    }
+    const editModal = (data)=>{
+        modelvalue.value=data,
+        store.dispatch('customer/setAdminCustomer',modelvalue.value._id);
+        store.dispatch('customer/changeToModal',"edit");
+    }
+    
+    return {
+        phoneNumber,
+        users,
+        registerAt,
+        deleteModal,
+        editModal,
+        customerModal,
+        count,
+        modelvalue,
+    }
   }
 }
 </script>
