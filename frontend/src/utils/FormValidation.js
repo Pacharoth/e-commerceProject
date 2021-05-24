@@ -67,24 +67,30 @@ class FormValidation{
         }
     }
 }
-async function loginForm(email,password,store,err){
-    const formValidate = new FormValidation();
-    formValidate._setLoginForm(email,password);
-    await axios.post(localhost+'/login',{email:email,password:password}).then(
+async function loginForm(email,password,store,err,success){
+    await axios.post(localhost+'/login',{email:email.value,password:password.value}).then(
         async result=>{
-
-            if(result.data){
+            if(result.data.username!==undefined){
                 store.dispatch('auth/setSession',result);
                 localStorage.username=result.data.username;
                 localStorage.userid=result.data.userId;
                 localStorage.userrole=result.data.userRole;
                 localStorage.useremail = result.data.email;
+                email.value=""
+                password.value=""
+                success.value = "Login successful! Please click anywhere out of form";
+                setTimeout(()=>success.value="",3000);
+            }else if(result.data.err!==undefined){
+                if(result.data.passwordErr===true){
 
-                return true
-            }else{
-                err.password=result.data.password
-                setTimeout(()=>err.password="",2000)
-                return false
+                    err.value.password=result.data.err
+                }
+                else if(result.data.emailErr===true){
+                    
+                    err.value.email = result.data.err
+                    
+                }
+                setTimeout(()=>err.value={},2000)
             }
             
         }

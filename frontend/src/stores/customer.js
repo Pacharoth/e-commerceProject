@@ -23,8 +23,17 @@ const customerStore={
             state.adminCustomer=state.adminCustomer.filter(element=>element._id!==data);
         },
         setAdminCustomer(state,id){
-            
             state.anAdminCustomer = state.adminCustomer.find(element=>element._id==id);
+        },
+        updateAdminCustomer(state,data){
+            state.adminCustomer.find(element=>{
+                const {email,username,phoneNumber}=data;
+                if(element._id===data._id){
+                    element.users.email=email,
+                    element.users.username=username,
+                    element.phoneNumber=phoneNumber
+                }   
+            });
         }
         
     },
@@ -40,6 +49,9 @@ const customerStore={
         },
         setAdminCustomer({commit},id){
             commit('setAdminCustomer',id)
+        },
+        updateAdminCustomer({commit},data){
+            commit('updateAdminCustomer',data);
         }
     },
     getters:{

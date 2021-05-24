@@ -22,7 +22,6 @@ exports.login = async(req,res)=>{
                         res.cookie('username',result.username,{expire:3600*24*1000})
                         res.cookie('logged-time',new Date().toISOString(),{expire:3600*1000*24});
                         const roles = result.roles
-                        console.log(roles);
                         const [email,userRole,userId,username]=[result.email,roles.name,result._id,result.username]
                         req.session.email=email
                         req.session.userRole=userRole
@@ -31,13 +30,13 @@ exports.login = async(req,res)=>{
                         console.log(req.session)
                         return res.status(200).json(req.session);
                     }else{
-                        res.json({passwordMatch:false});
+                        res.json({err:"Password Not Matched!",passwordErr:true});
                     }
                 }
             )
-        }else return res.json({password:"Password Not Matched!"});
-    }).catch(err=>{
-        return res.status(400).json({user:"Not Found!"});
+        }else return res.json({err:"Email is not Found!",emailErr:true});
+    }).catch(()=>{
+        return res.status(400).json({err:"Err Backend!",emailErr:true});
     })
 }
 exports.registerCustomer = async(req,res)=>{

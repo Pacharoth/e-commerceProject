@@ -146,13 +146,8 @@ export default {
                 setTimeout(()=>err.value.email="",3000);
             }   
         }
-        function Login(){
-            const check=loginForm(email.value,password.value,store,err.value);
-            if(check){
-                email.value="";password.value="";
-                success.value="Login successful Please click out of form";
-                setTimeout(()=>success.value="",3000);
-            }
+        async function Login(){
+            await loginForm(email,password,store,err,success);
         }
         async function registerCustomer(){
             const data = {username,email,password,confirmpassword,err,success}

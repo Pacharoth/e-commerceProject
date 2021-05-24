@@ -32,7 +32,7 @@ async function getCustomerByPagination(data){
 
 }
 async function editACustomer(){
-
+    
 }
 async function changePage(){
     
