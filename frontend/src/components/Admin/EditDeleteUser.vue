@@ -21,24 +21,24 @@
             <h5 class=" modal-title text-centered text-primary" id="customerModalLabel">Edit Customer</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form action="">
+          <form action="" @submit.prevent="editUser">
             <div class="modal-body">
                   <div class="form-group">
                       <label for="Company " class="text-secondary">Username:</label>
-                      <input type="text" v-model="customers.users.username" class="input">
+                      <input type="text" v-model=" username" class="input">
                   </div>
                   <div class="form-group">
                       <label for="Company " class="text-secondary">Email:</label>
-                      <input type="email" v-model="customers.users.email" class="input">
+                      <input type="email" v-model="email" class="input">
                   </div>
                   <div class="form-group">
                       <label for="Company " class="text-secondary">Phone Number:</label>
-                      <input type="text" v-model="customers.phoneNumber" class="input">
+                      <input type="text" v-model="phoneNumber" class="input">
                   </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" @click="editUser">Save changes</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
           </form>
         </div>
@@ -51,29 +51,50 @@ import { useStore } from 'vuex'
 import axios from 'axios'
 import {Modal} from 'bootstrap';
 import { localhost } from '../../utils/FormValidation'
+import { editACustomer } from '../../hook/customer';
 export default {
     props:["namemodal","customer"],
     setup() {
       var modal = ref(null)
       const store = useStore()
+      const username= ref("");
+      const email = ref("");
+      const phoneNumber=ref("");
       const customers = computed(()=>store.getters['customer/getAnAdminCustomer']) 
       const newModal = ref(null)
+      const message  =ref("")
       onMounted(()=>{ 
          newModal.value= new Modal(modal.value)
       })
       watchEffect(()=>{
         console.log(customers.value)
+        if(customers.value.users){
+          username.value=customers.value.users.username
+          email.value = customers.value.users.email 
+          phoneNumber.value=customers.value.phoneNumber 
+        }
       })
       const deleteUser =async()=>{
         await axios.delete(localhost+'/admin/customer/'+customers.value._id,{id:customers.value.users._id})
         store.dispatch('customer/deleteUser',customers.value._id);
       }
       const editUser = async()=>{
-        
+        const validatePhoneNumber = /^(\+|0){1}\d{5,15}$/;
+        if(validatePhoneNumber.test(phoneNumber.value)){
+          console.log(username.value)
+          const data = {username,phoneNumber,email,customers,newModal,store,message};
+          await editACustomer(data);
+        }else{
+          console.log("wrong")
+        }
       }
       return {
         modal,
         customers,
+        username,
+        email,
+        phoneNumber,
+
         deleteUser,
         editUser,
       }

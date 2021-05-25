@@ -26,14 +26,16 @@ const customerStore={
             state.anAdminCustomer = state.adminCustomer.find(element=>element._id==id);
         },
         updateAdminCustomer(state,data){
-            state.adminCustomer.find(element=>{
-                const {email,username,phoneNumber}=data;
-                if(element._id===data._id){
-                    element.users.email=email,
-                    element.users.username=username,
-                    element.phoneNumber=phoneNumber
-                }   
-            });
+            const {_id,email,username,phoneNumber}=data;
+            state.adminCustomer.forEach(
+               element=>{
+                   if(element._id===_id){
+                       element.users.email=email;
+                        element.users.username=username;
+                        element.phoneNumber=phoneNumber;
+                   }
+               }
+           )
         }
         
     },

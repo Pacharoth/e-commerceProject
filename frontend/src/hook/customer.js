@@ -31,9 +31,34 @@ async function getCustomerByPagination(data){
     }
 
 }
-async function editACustomer(){
-    
-}
+async function editACustomer(data){
+    console.log("hi")
+    const {username,phoneNumber,email,customers,newModal,store,message} = data
+    console.log(username.value)
+    const response =await axios.put(localhost+'/admin/customer/'+customers.value._id,
+    {
+        id:customers.value.users._id,
+        email:email.value,
+        phoneNumber:phoneNumber.value,
+        username:username.value,
+    }
+    )
+    console.log(response.data)
+    if(response.data.length>0){
+        store.dispatch('customer/updateAdminCustomer',{
+            _id:customers.value._id,
+            email:email.value,
+            username:username.value,
+            phoneNumber:phoneNumber.value,
+        })
+        newModal.value.hide()
+    }else{
+        if(response.data.err){
+           message.value=response.data.err
+            setTimeout(()=>message.value="",3000);
+        }
+    }
+}   
 async function changePage(){
     
 }

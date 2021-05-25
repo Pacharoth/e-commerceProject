@@ -67,7 +67,7 @@ class FormValidation{
         }
     }
 }
-async function loginForm(email,password,store,err,success){
+async function loginForm(email,password,store,err,success,newModal){
     await axios.post(localhost+'/login',{email:email.value,password:password.value}).then(
         async result=>{
             if(result.data.username!==undefined){
@@ -80,6 +80,7 @@ async function loginForm(email,password,store,err,success){
                 password.value=""
                 success.value = "Login successful! Please click anywhere out of form";
                 setTimeout(()=>success.value="",3000);
+                newModal.value.hide()
             }else if(result.data.err!==undefined){
                 if(result.data.passwordErr===true){
 
@@ -114,7 +115,7 @@ async function forgetPassword(email){
     }
 }
 async function registerAccount(data){
-    var {username,email,password,confirmpassword,err,success}=data
+    var {username,email,password,confirmpassword,err,success,newModal}=data
     
     const formValidate = new FormValidation();
     console.log(email.value,password.value,confirmpassword.value,username)
@@ -153,6 +154,7 @@ async function registerAccount(data){
                 router.push({name:"customerlistproduct"})
                 username.value = "";email.value="";confirmpassword.value="";password.value="";
                 setTimeout(()=>()=> success.value="",2000);
+                newModal.value.hide();
             }
         })
     }

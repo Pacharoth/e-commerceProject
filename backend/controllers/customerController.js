@@ -10,15 +10,21 @@ exports.editCustomer=async(req,res)=>{
     }
     if(username||email){
         const reponse=await user.findOne({_id:id});
+        console.log(reponse)
         if(username!=reponse.username){
             reponse.username = username;
         }
         if(email!=reponse.email){
             reponse.email =email
         }
-        reponse.save();
+        try{
+            await reponse.save();
+        }
+        catch{
+            res.json({err:"Email or Username Already Exists"});
+        }
     }
-    res.json(await customer.findOne({_id:req.params.id}).populate('users'))
+    res.json(await customer.find({_id:req.params.id}).populate('users'))
 }
 exports.getCustomer = async(req,res)=>{
     await customer.findOne({_id:req.params.id}).populate('users').then(result=>{
