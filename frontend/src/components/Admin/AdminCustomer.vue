@@ -19,6 +19,8 @@
   </div>
 </template>
 <script>
+import { computed } from '@vue/runtime-core';
+import { useStore } from 'vuex';
 import AdminCustomers from './AdminCustomers';
 export default {
   title:'Customer',
@@ -26,11 +28,12 @@ export default {
   components:{
     AdminCustomers,
   },
-  computed:{
-    customerList(){
-      return this.$store.getters['customer/getAdminCustomers'];
+  setup() {
+    const store = useStore();
+    return{
+      customerList:computed(()=>store.getters['customer/getAdminCustomers']) 
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>

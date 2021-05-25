@@ -2,6 +2,7 @@ import Seller from '../components/Seller/Seller.vue';
 import ProductionList from '../components/Seller/ProductionList.vue';
 import MainSeller from '../components/Seller/MainSeller.vue';
 import SellerProfile from '../components/Seller/SellerProfile.vue'
+import store from '../stores/store';
 const sellerRouter = {
     name:'seller',
     path:'/seller',
@@ -25,13 +26,12 @@ const sellerRouter = {
             component:SellerProfile,
         }
     ],
-    // beforeEnter: (to, from, next) => {
-    //     // const store = this.$store;
-    //     // store.dispatch('auth/setSession');
-    //     // //check authentication
-    //     // if(to.name==="seller" && store.getters['auth/getSession'].isRole==="seller")next({name:'seller'});
-    //     // else next({name:'homepage'});
-        
-    // }
+    beforeEnter: (to, from, next) => {
+        var role = store.getters['auth/getSession'].role
+        const isAuthenticate=/((admin)|(seller))/;
+        const regex = /((sellerprofile)|(sellerpage)|(sellerproductlist)|(seller))/
+        if(regex.test(to.name)&&isAuthenticate.test(role))next()
+        else next({name:'customerlistproduct'})
+    }
 }
 export default sellerRouter;

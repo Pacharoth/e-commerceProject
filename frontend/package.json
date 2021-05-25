@@ -18,7 +18,7 @@
     "core-js": "^3.6.5",
     "jspdf": "^2.3.1",
     "sass-loader": "^10.1.1",
-    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.1",
     "vue": "^3.0.0",
     "vue-chartjs": "^3.5.1",
     "vue-router": "^4.0.6",
@@ -34,6 +34,7 @@
     "eslint-plugin-vue": "^7.0.0",
     "sass": "^1.32.8"
   },
+  "proxy": "http://localhost:3000/",
   "eslintConfig": {
     "root": true,
     "env": {

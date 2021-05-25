@@ -12,6 +12,10 @@ const chatModel = new Schema({
     content:{
         type:String,
     },
+    chatAt:{
+        type:Date,
+        required:true
+    },
     status:{
         type:String,
         default:'unread',

@@ -44,8 +44,6 @@
 export default {
     title:'Admin Seller',
     name:"SellerList",
-    methods:{
-    }
 }
 </script>
 <style lang="scss" scope>

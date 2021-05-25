@@ -1,13 +1,13 @@
 <template>
-    
     <div class="customer-dashboard">
-
         <div class="nav_bar shadow p-2 mb-2 bg-body rounded">
-
                 <div class="d-flex bd-highlight ">
                     <router-link to="/" class="me-auto p-1 bd-highlight text-decoration-none"><h4 class="name">AmazingShop</h4></router-link>
                     <div class="p-2 bd-highlight">
-                        <button class="btn chat p-0" @click="showChatList"><em class="fas fa-comment-dots"></em></button>
+                        <button v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'" 
+                        class="btn chat p-0" @click="showChatList"
+                        ><em class="fas fa-comment-dots"></em>
+                        </button>
                     </div>
                     <div class="p-2 bd-highlight d-flex justify-content-between">
 
@@ -18,20 +18,26 @@
                     
                     <div class="p-2 bd-highlight">
                         <div class="dropdown">
-                            <button v-if="user!='customer'" class="btn dropdown-toggle p-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <em class="fas fa-user-circle user"></em>Ginzy
+                            <button v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'" 
+                            class="btn dropdown-toggle p-0" type="button" 
+                            id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                                <em class="fas fa-user-circle user"></em>{{user.user}}
                             </button>
                             <button v-else class="btn p-0 signin" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setStatus('signin')">Sign in</button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><router-link to="/postorder" class="dropdown-item" href="#">My Ordered</router-link></li>
+                            <ul class="dropdown-menu"
+                            v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'"
+                            aria-labelledby="dropdownMenuButton1">
+                            <li><router-link to="/pastorder" class="dropdown-item" href="#">My Ordered</router-link></li>
                             <li><router-link to="/edituser" class="dropdown-item" href="#">Profile</router-link></li>
-                            <li><router-link to="/" class="dropdown-item" href="#">Log Out</router-link></li>
+                            <li><router-link to="/" @click="logout" class="dropdown-item" href="#">Log Out</router-link></li>
                             </ul>
                         </div>
                     </div>
                     <login-signup/>
                     <div class="p-2 bd-highlight">
-                        <router-link v-if="user!='customer'" to="/shoppingcart" class=" cart">
+                        <router-link v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'" 
+                        to="/shoppingcart" class=" cart">
                             <em class="fas fa-shopping-cart"></em>
                         </router-link>
                     </div>
@@ -48,7 +54,7 @@
 </template>
 
 <script>
-// import {Modal,Carousel} from 'bootstrap';
+
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
 export default {
@@ -57,12 +63,16 @@ export default {
         return {
             modal:null,
             carousel:null,
-            user:'customer'
         }
     },
     components:{
         ChatList,
         LoginSignup,
+    },
+    computed:{
+        user(){
+           return this.$store.getters['auth/getSession']
+        }
     },
     methods: {
         slideDown(){
@@ -92,10 +102,14 @@ export default {
         showSearch(){
             const search = this.$refs.search.classList
             search.contains('active')?search.remove('active'):search.add('active')
+        },
+        logout(){
+            localStorage.clear();
+            this.$store.dispatch('auth/setSession',null)
         }
     },
     mounted() {
-    
+        // this.carousel = new Carousel(this.$refs.Carousel);
     },
     
 }

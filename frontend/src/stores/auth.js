@@ -1,5 +1,4 @@
-import axios from 'axios';
-const localhost = 'http://localhost:3000/';
+
 const authStore = {
     namespaced:true,
     state(){
@@ -10,7 +9,7 @@ const authStore = {
                 user:"",
                 isRole:"",
                 email:"",
-            }
+            },
         }
     },
     mutations:{
@@ -30,23 +29,30 @@ const authStore = {
         setStatus({commit},text){
             commit('setStatus',text);
         },
-        async setSession({commit}){
-            await axios.post(localhost+'getSession').then(result=>{
-                const response = result.data
-                commit('setSession',{
-                    userid:response.userId,
-                    user:response.username,
-                    role:response.userRole,
-                    email:response.email,
-                });
-            }).catch(error=>console.log(error));
+        setSession({commit},result){
+            try{
+                var responses = result.data!==null;
+                if(responses){
+                    let response=result.data
+                    commit('setSession',{
+                        userid:response.userId,
+                        user:response.username,
+                        role:response.userRole,
+                        email:response.email,
+                    }); 
+                }
+            }catch(err){
+                commit('setSession',{user:'',role:'',email:'',userid:''});
+            }
+            
         }
     },
     getters:{
         getStatus(state){
             return state.status;
         },
-        async getSession(state){
+        
+        getSession(state){
             return state.isAuthenticate;
         },
         

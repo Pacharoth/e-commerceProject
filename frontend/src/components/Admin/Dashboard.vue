@@ -6,9 +6,7 @@
             <h4 v-if="title=='Seller'">Seller</h4>
             <button class="btn btn-primary">Generate Report</button>
         </div>
-        <!-- card -->
             <card-dashboard :title="title"/>
-        <!-- endcard -->
         <div class="dashboard-graph">
             <div class="dashboard-gmy">
                 <span class="earning">Earning Statistics</span>
@@ -23,28 +21,30 @@
 import Chart from 'chart.js/auto';
 import linegraph from '../chart/chartline';
 import CardDashboard from './CardDashboard';
+import { ref, toRefs } from '@vue/reactivity';
+import { onMounted } from '@vue/runtime-core';
 export default {
-    // title:'Dashboard',
     name:"Dashboard",
     props:['title'],
     components:{
         CardDashboard,
     },
-    data(){
-    
-         return{
-            chartdata:linegraph,
-            title_dashboard:this.title,
+    setup(props) {
+        const chart =ref(null)
+        const chartdata=ref(linegraph);
+        const {title} = toRefs(props);
+        const title_dashboard = title.value;
+        onMounted(()=>{
+            console.log(title.value)
+            new Chart(chart.value,chartdata.value);
+        })  
+        return{
+            //data
+            title_dashboard,
+            chartdata,
+            chart,
         }
     },
-    mounted() {
-        const chart= this.$refs.chart;
-        new Chart(chart,this.chartdata);
-        
-    },
-    methods:{
-        
-    }
 }
 </script>
 <style lang="scss" scoped>
@@ -110,6 +110,14 @@ export default {
             box-shadow: $shadow_1;
             .chart-container{
                 width: 100%;
+                height: 60vh;
+                @include breakpoint-down(medium){
+                    height: 60vh;
+                }
+                @include breakpoint-down(small){
+                    height: 50vh;
+                }
+
                 
             }
             .dashboard-gmy{

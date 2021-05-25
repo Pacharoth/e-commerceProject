@@ -1,52 +1,75 @@
 <template>
-   <div class="content-chat" >
-        <div class="list-chat" :class="chatlist">
-           <div class="content-logo-chat">
-                <h4 >Chats</h4>
-           </div>
-           <div class="search-component">
-                <input type="text" class="form-control search-user" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'">
-           </div>
-           <div class="list-user">
-               <button class="users btn" @click="popChat">
-                   <img src="../../assets/logo.png" alt="">
-                <div class="chat-time">
-                    <div class="chat">
-                         <span >Pizza (seller)</span>
-                        <span class="text-chat">hello world</span>
+    <Suspense>
+        <template #default>
+                <div class="content-chat" >
+            <div class="list-chat" :class="chatlist">
+            <div class="content-logo-chat">
+                    <h4 >Chats</h4>
+            </div>
+            <div class="search-component">
+                    <input type="text" class="form-control search-user" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'">
+            </div>
+            <div class="list-user">
+                <button class="users btn" @click="popChat">
+                    <img src="../../assets/logo.png" alt="">
+                    <div class="chat-time">
+                        <div class="chat">
+                            <span >Pizza (seller)</span>
+                            <span class="text-chat">hello world</span>
+                        </div>
+                        <div class="status" :style="{'background-color':color}"></div>
                     </div>
-                    <div class="status"></div>
-                </div>
-               </button>
-           </div>
-        </div>
-        <chat/>
+                </button>
+            </div>
+            </div>
+            <chat/>
    </div>
+        </template>
+        <template #fallback>
+            <chat-loading/>
+        </template>
+    </Suspense>
 </template>
 <script>
+import { computed, ref, watchEffect } from '@vue/runtime-core';
 import Chat from './Chat';
+import ChatLoading from './ChatLoading.vue';
+import { useStore } from 'vuex';
 export default {
     name:"ChatList",
+    setup() {
+        const store =useStore()
+        const color = ref("");
+        
+        const chatlist= computed(()=>store.getters['chat/getChatList']);
+        const popChat = ()=>{
+            store.dispatch('chat/changeContent','active');
+            store.dispatch('chat/changeList','');
+        }
+        watchEffect(()=>{
+            window.ononline=()=>{
+                color.value = 'green';
+            }
+            window.onoffline=()=>{
+                
+                color.value = 'grey';
+            }
+        })
+        return{
+            color,
+            chatlist,
+            popChat,
+        }
+    },
     data(){
       return{
           active:"",
       }  
     },
     components:{
-        Chat
+        Chat,   
+        ChatLoading,
     },
-    computed:{
-        chatlist(){
-            console.log(this.$store.getters['chat/getChatList'])
-            return this.$store.getters['chat/getChatList'];
-        }
-    },
-    methods:{
-        popChat(){
-           this.$store.dispatch('chat/changeContent','active');
-           this.$store.dispatch('chat/changeList','');
-        }
-    }
 
 }
 </script>

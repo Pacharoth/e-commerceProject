@@ -15,7 +15,7 @@
                 <div class="avatar-chat">
                     <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> <span class="">1</span></button>
                     <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em><span>1</span></button>
-                    <button class="btn avatar"> <span class="name"> Pacharoth</span> <em class="fas fa-user-circle user"></em></button>
+                    <button class="btn avatar"> <span class="name">{{user.user}}</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
             <chat-list/>
@@ -28,9 +28,10 @@
             <ul class="link nav nav-pill flex-column mb-auto">
                 <li class=""><router-link to="/admin" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
                 <li ><router-link to="/admin/seller" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
+                <li><router-link to="/admin/category" class="nav-link"><em class="fas fa-list-alt me-2"></em>Category</router-link></li>
                 <li ><router-link to="/admin/customer" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
                 <li ><router-link to="/admin" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal"><em class="bi bi-person-plus-fill me-2"></em> Add Seller</router-link></li>
-                <li><router-link to="/" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
+                <li><router-link to="/" @click="logout" class="nav-link logout" ><em class="bi bi-box-arrow-right me-2"></em>logout</router-link></li>
             </ul>
         </div>
 
@@ -44,6 +45,11 @@ import ChatList from '../Chat/ChatList'
 import SellerRegister from '../Admin/SellerRegister'
 import {Modal} from 'bootstrap';
 import Notification from '../Admin/Notification';
+import { ref } from '@vue/reactivity';
+import { computed, onMounted } from '@vue/runtime-core';
+import { useStore } from 'vuex';
+import {showChatLists,showNotifications} from '../../hook/effect';
+import {logouts} from '../../utils/FormValidation'
 export default {
     title:'Admin',
     name:"AdminLayout",
@@ -52,39 +58,40 @@ export default {
         SellerRegister,
         Notification
     },
-    data(){
+    setup() {
+    
+        const store= useStore(); //this.$store
+        const modal = ref(null); //this.$ref.modal
+        const nav =ref(null); //this.$ref.nav
+        const sidebar = ref(null); 
+        
+        const user = computed(()=>store.getters['auth/getSession'])
+        onMounted(()=>{
+            var modal=new Modal(modal)
+        })
+        function loadSideBar(){
+            let nes  =nav.value.classList;
+            nes.contains('active')?nes.remove('active'):nes.add('active');
+            let side = sidebar.value.classList;
+            side.contains('active')?side.remove('active'):side.add('active');
+        }
+        function showChatList(){showChatLists(store)}
+        function showNotification(){showNotifications(store)}
+        function logout(){logouts(store)}
         return{
-            modal:null,
+            //data
+            nav,
+            sidebar,
+            modal,
+            //computed
+            user,
+            //method
+            showNotification,
+            showChatList,
+            loadSideBar,
+            logout,
         }
     },
-    mounted(){
-        this.modal=new Modal(this.$refs.modal)
-    },
-    methods:{
-        loadSideBar(){
-            const nav = this.$refs.nav.classList;
-            nav.contains('active')?nav.remove('active'):nav.add('active')
-            const sidebar = this.$refs.sidebar.classList;
-            sidebar.contains('active')?sidebar.remove('active'):sidebar.add('active');
-        },
-        showChatList(){
-            const store = this.$store
-            if(!store.getters['chat/getChatList']){
-                store.dispatch('chat/changeList','active');
-            }else{
-                store.dispatch('chat/changeList','');
-            }
-        },
-        showNotification(){
-            const store = this.$store;
-            if(!store.getters['notification/getContent']){
-                store.dispatch('notification/changeContent','active');
-            }else{
-                store.dispatch('notification/changeContent','')
-            }
-        }
-    },
-
 }
 </script>
 <style lang="scss" scope>

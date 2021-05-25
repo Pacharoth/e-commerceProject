@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+    roles: {
+        type: Schema.Types.ObjectId,
+        ref: 'roles',
+    },
     username: {
         type: String,
         required: true
@@ -19,10 +23,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     }, 
-    role: {
-        type: Schema.Types.ObjectId,
-        ref: 'roles',
-    }
+
 }, {collection: 'users'});
 
 const user = mongoose.model("users", userSchema);

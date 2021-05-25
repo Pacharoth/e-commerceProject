@@ -3,10 +3,10 @@ const Schema = mongoose.Schema
 const categoryModel = new Schema({
     name:{
         type:String,
-        required:true,
+        unique: true
     }
-});
+},{collection:'categories'});
 const category = mongoose.model("categories",categoryModel);
-const arrCategory = [{name:'electronic'},{name:'clothes'},{name:'electronic'},{name:'bag'}]
-category.insertMany(arrCategory).then(result=>console.log(result)).catch(err=>console.log("existed"));
+const arrCategory = [{name:'clothes'},{name:'electronic'},{name:'bag'}]
+category.insertMany(arrCategory).then(result=>console.log(result)).catch(()=>console.log("existed"));
 module.exports = category;

@@ -19,11 +19,11 @@
                     Solid Color Classic Ankle-length Pants</p>
                 <p class="price">$10</p>
                 <p>Size:</p>
-                <div class="size mb-3">
-                    <span class="border shadow">M</span>
-                    <span class="border shadow">L</span>
-                    <span class="border shadow">XL</span>
-                    <span class="border shadow">XXL</span>
+                <div class="size mb-3" ref="color">
+                    <button class="border shadow " @click="changeColor(0)">M</button>
+                    <button class="border shadow " @click="changeColor(1)">L</button>
+                    <button class="border shadow" @click="changeColor(2)">XL</button>
+                    <button class="border shadow" @click="changeColor(3)">XXL</button>
                 </div>
                 <p>Color:</p>
                 <div class="color mb-3"> 
@@ -37,8 +37,8 @@
                 <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
                 <span> 6297 pieces available</span>
                 <div>
-                    <button class="buynow mt-3 ">Buy Now</button>
-                    <button class=" addtocart mt-3 ml-3">Add to Cart</button>
+                    <button href="" class="buynow mt-3 ">Buy Now</button>
+                    <a href="http://localhost:8080/shoppingcart" class=" addtocart mt-3 ml-3">Add to Cart</a>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">
@@ -50,9 +50,30 @@
     </div>
 </template>
 <script>
+import { ref } from '@vue/reactivity'
+import { onMounted, watchEffect } from '@vue/runtime-core';
 export default {
     title:'Product Detail',
     name:'ProductDetail',
+    setup() {
+        const color = ref(null);
+        onMounted(()=>{
+            console.log(color.value.children[0]);
+        })
+        //watch change
+        watchEffect(()=>{
+            console.log(color.value);
+        })
+        //method
+        function changeColor(number){
+            let colors = color.value.children[number].classList;
+            colors.contains('active')?colors.remove('active'):colors.add('active');
+        }
+        return{
+            color,
+            changeColor
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -169,5 +190,9 @@ export default {
     .color-img{
         width: 10%;
         margin-right: 5%;
+    }
+    .active{
+        background-color:#D60265;
+        color: white;
     }
 </style>

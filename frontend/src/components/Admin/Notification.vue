@@ -19,13 +19,16 @@
     </div>
 </template>
 <script>
+import { computed } from '@vue/runtime-core'
+import { useStore } from 'vuex'
 export default {
     name:'Notification',
-    computed:{
-        active(){
-            return this.$store.getters['notification/getContent']
-        }
-    }
+    setup() {
+        const store= useStore();
+        return{
+            active:computed(()=>store.getters['notification/getContent'])
+        }  
+    },
 }
 </script>
 <style lang="scss" scope>

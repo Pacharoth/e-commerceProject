@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const customerModel = new Schema({
-    user:{
+    users:{
         type:Schema.Types.ObjectId,
         ref:'users'
     },
-    contact:{
+    phoneNumber:{
         type:String,
-        required:true,
+        default:null
     },
 });
 const customer = mongoose.model('customers',customerModel);

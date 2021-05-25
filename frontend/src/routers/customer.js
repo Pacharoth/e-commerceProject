@@ -6,7 +6,8 @@ import ProductDetail from '../components/customer/ProductDetail.vue';
 import CustomerLayout from '../components/layout/CustomerLayout.vue'
 import Customer from '../components/customer/Customer.vue';
 import view_profile from '../components/customer/view_profile.vue';
-
+import store from '../stores/store';
+import receipt from '../components/customer/receipt.vue'
 
 const customerRouter = {
     name:'homepage',
@@ -21,23 +22,46 @@ const customerRouter = {
         },
         {
             path:'edituser',
-            name:'Edit User',
+            name:'edituser',
             component:edit_user,
+            beforeEnter: (to, from, next) => {
+                var role = store.getters['auth/getSession'].role
+                var regex = /((admin)|(seller)|(customer))/
+                if(to.name=='edituser'&&role=='customer'||regex.test(role))next()
+                else next({name:'customerlistproduct'})
+            }
         },
         {
             path:'feedback',
             name:'FeedBack',
             component:feedback,
+            beforeEnter: (to, from, next) => {
+                var role = store.getters['auth/getSession'].role
+                if(to.name=='FeedBack'&&role=='customer'|role=='admin')next()
+                else next({name:'customerlistproduct'})
+            }
         },
         {
             path:'pastorder',
-            name:"PostOrder",
+            name:"PastOrder",
             component:post_order,
+            beforeEnter: (to, from, next) => {
+                var role = store.getters['auth/getSession'].role
+                const isAuthenticate=role=='customer'||role=='admin'||role=='seller';
+                if(to.name=='PastOrder'&&isAuthenticate)next()
+                else next({name:'customerlistproduct'})
+            }
         },
         {
             path:'shoppingcart',
-            name:'shopping cart',
+            name:'shoppingcart',
             component:shopping_cart,
+            beforeEnter: (to, from, next) => {
+                var role = store.getters['auth/getSession'].role
+                const isAuthenticate=role=='customer'||role=='admin'||role=='seller';
+                if(to.name=='shoppingcart'&&isAuthenticate )next()
+                else next({name:'customerlistproduct'});
+            }
         },
         {
             path:'productdetail',
@@ -48,9 +72,19 @@ const customerRouter = {
             path:'profile',
             name:'profile',
             component:view_profile,
-        }
+            beforeEnter: (to, from, next) => {
+                var role = store.getters['auth/getSession'].role
+                const isAuthenticate=role=='customer'||role=='admin'||role=='seller';
+                if(to.name=='profile'&&isAuthenticate)next()
+                else next({name:'customerlistproduct'})
+            }
+        },
+        {
+            path:'receipt',
+            name:'receipt',
+            component:receipt,
+        },
+
     ],
-    // beforeEnter: (to, from, next) => {
-    // }
 }
 export default customerRouter;
