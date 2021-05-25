@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const {model,Schema} = require('mongoose');
 const chatModel = new Schema({
     users:{
+            type:Schema.Types.ObjectId,
+            ref:'users',
+        }
+    ,
+    roomChat:{
         type:Schema.Types.ObjectId,
-        ref:'users',
-    },
-    roomId:{
-        type:String,
-        required:true,
+        ref:'roomChat',
     },
     content:{
         type:String,
@@ -20,6 +20,6 @@ const chatModel = new Schema({
         type:String,
         default:'unread',
     },
-});
-const chat = mongoose.model('chat',chatModel)
+},{collection:'chat'});
+const chat =model('chat',chatModel)
 module.exports = chat;

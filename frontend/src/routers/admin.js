@@ -37,6 +37,7 @@ const adminRouter =     {
             name:'customer',
             path:'customer',
             component:AdminCustomer,
+            props:true,
         }
     ],
     beforeEnter: (to, from, next) => {

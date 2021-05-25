@@ -4,6 +4,7 @@ const chatStore={
         return{
             contentChat:"",
             chatButton:"",
+            chat:{},
         }
     },
     getters:{
@@ -12,6 +13,9 @@ const chatStore={
         },
         getChatList(state){
             return state.chatButton;
+        },
+        getChat(state){
+            return state.chat;
         }
     },
     mutations:{
@@ -20,14 +24,20 @@ const chatStore={
         },
         changeList(state,text){
             state.chatButton=text;
+        },
+        putToChat(state,data){
+            state.chat=data;
         }
     },
     actions: {
-        changeContent(context,text){
-            context.commit("changeContent",text);
+        changeContent({commit},text){
+            commit("changeContent",text);
         },
-        changeList(context,text){
-            context.commit('changeList',text);
+        changeList({commit},text){
+            commit('changeList',text);
+        },
+        putToChat({commit},data){
+            commit("putToChat",data);
         }
     },
 }

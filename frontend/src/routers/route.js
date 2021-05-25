@@ -5,7 +5,6 @@ import sellerRouter from './seller';
 import customerRouter from './customer';
 import store from '../stores/store';
 
-
 const routes = [
     adminRouter,
     sellerRouter,
@@ -27,6 +26,7 @@ router.beforeEach(async(to,from,next)=>{
     if(result.data.userRole!==undefined){
         store.dispatch('auth/setSession',result);
     }
+  
     console.log(store.getters['auth/getSession'])
     console.log(to,next());
 })

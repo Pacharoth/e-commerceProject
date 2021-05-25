@@ -1,13 +1,14 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
+const {Schema,model} = require('mongoose')
 const sellerModel = new Schema({
     users:{
         type:Schema.Types.ObjectId,
-        ref:'users'
+        ref:'users',
+        unique:true,
     },
     company:{
         type:String,
         required:true,
+        unique:true,
     },
     contact:{
         type:String,
@@ -21,5 +22,5 @@ const sellerModel = new Schema({
         type:String,
     }
 });
-const seller = mongoose.model('sellers',sellerModel);
+const seller = model('sellers',sellerModel);
 module.exports = seller;

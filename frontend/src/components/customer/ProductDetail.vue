@@ -60,7 +60,7 @@ export default {
         onMounted(()=>{
             console.log(color.value.children[0]);
         })
-        //watch change
+        //watch change  
         watchEffect(()=>{
             console.log(color.value);
         })

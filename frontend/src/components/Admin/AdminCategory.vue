@@ -2,8 +2,8 @@
     <div class="category-modal" :class="display" @click="redirectAdmin" ref="model">
         <div class="category-content">
             <div class="search">
-                <form action="" v-if="status=='search'" @submit.prevent="searchCategory">
-                    <input type="text" class=" search-category" @change="searchCategory"  placeholder="&#xf002; Search Categories" v-model="name" style="font-family: Arial, 'Font Awesome 5 Free'">
+                <form v-if="status=='search'">
+                    <input type="text" class=" search-category"  placeholder="&#xf002; Search Categories" v-model="name" style="font-family: Arial, 'Font Awesome 5 Free'">
                 </form>
                 <form action="" v-if="status=='add'" @submit.prevent="addCategory">               
                     <input type="text"  class="search-category" placeholder="&#xf022; Add Categories" v-model="name" style="font-family: Arial, 'Font Awesome 5 Free'">
@@ -30,7 +30,7 @@
 import axios from 'axios'
 import router from '../../routers/route'
 import { ref } from '@vue/reactivity'
-import { onMounted } from '@vue/runtime-core'
+import { onMounted, watchEffect } from '@vue/runtime-core'
 import {searchCategories,addACategory,updateACategory,getACategory,deleteACategory} from'../../hook/category'
 let localhost= 'http://localhost:3000'
 export default {
@@ -55,6 +55,9 @@ export default {
             }
             getCategory();
         })
+        watchEffect(async()=>{
+            await searchCategories(name,category,err)
+        })
 
         //method
         function redirectAdmin(event){
@@ -73,7 +76,6 @@ export default {
         async function deleteCategory(ids){await deleteACategory(ids,category,err);}
         function getCategory(ids){getACategory(ids,category,id,status,name);}
         async function updateCategory(ids){await updateACategory(ids,name,category,id,status,err);}
-        async function searchCategory(){await searchCategories(name,category,err)}
         async function addCategory(){await addACategory(name,category,err)}
 
         return{
@@ -92,7 +94,6 @@ export default {
             deleteCategory,
             getCategory,
             addCategory,
-            searchCategory,
         }
     },
 }

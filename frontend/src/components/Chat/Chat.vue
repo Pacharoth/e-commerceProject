@@ -5,7 +5,7 @@
                     <img src="../../assets/logo.png" alt="">
                 <div class="chat-status">
                     <div class="chat-text" >
-                        <span >Pizza (seller)</span>
+                        <span >{{chatData.username}} ({{chatData.role}})</span>
                         <span v-if="status=='online'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> active</span>
                         <span v-else-if="status=='offline'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> offline</span>
                     </div>
@@ -14,29 +14,28 @@
             <button  @click="closeChat" class="btn close"><em class="fas fa-times"></em></button>
         </div>
         <div class="content-all-chat">
-            <div class="admin acive" v-for="msgs in msg" :key="msgs">
-                <img src="../../assets/logo.png" alt="">
-                <span>{{msgs}}</span>
+            <div ref="chat" class="chatting">
+                <div class="admin " v-for="msgs in msg" :key="msgs">
+                    <img src="../../assets/logo.png" alt="">
+                    <span>{{msgs}}</span>
+                </div>
             </div>
-            
         </div>
-        <div class="input-message">
+        <form class="input-message" @submit.prevent="message">
             <button class="btn"> <em class="bi bi-mic"></em></button>
             <input v-model="mess" type="text" class="form-control send"  placeholder="Aa">
-            <button @click="message()" class="btn"><em class="bi bi-play"></em></button>
-        </div>
+            <button class="btn"><em class="bi bi-play"></em></button>
+        </form>
     </div>
 </template>
 <script>
-import { computed, onMounted, ref, watchEffect } from '@vue/runtime-core'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, watchEffect } from '@vue/runtime-core'
 import { useStore } from 'vuex'
-// import {io} from 'socket.io-client';
-// var localhost = 'http://localhost:3000'
-// const socket = io(localhost);
+import {io} from 'socket.io-client';
 
 export default {
     name:'Chat',
-    props:['id','chat'],
+    props:['id'],
     setup() {
         //data
         const store = useStore();
@@ -45,17 +44,32 @@ export default {
         const msg = ref([]);
         const color = ref("");
         const mess = ref("");
-        //computed
-        const chatcontent=computed(()=>store.getters['chat/getChatContent'])
-        //method
-        const message =()=>{}
-        const closeChat = ()=>store.dispatch('chat/changeContent','');
-        const loadStatus=()=>{}
-
+        const socket =ref();
+        const chat=ref(null)
+        onBeforeMount(()=>{
+            const s = io('http://localhost:3000');
+            socket.value=s;
+            return()=>{
+                s.disconnect();
+            }
+        })
         onMounted(()=>{
             color.value="rgb(66, 207, 66)";
             chat_status.value="online"
+            if(socket.value==null) return
+            socket.value.on('load-chat',msgs=>{
+                mess.value=""
+                msg.value.push(msgs)
+                
+            })
+            return ()=>{
+                socket.value.off('load-chat');
+            }
+        });
+        onUnmounted(()=>{
+            socket.value.disconnect();
         })
+        //watch effect
         watchEffect(()=>{  
             window.ononline=()=>{
                 color.value="rgb(66, 207, 66)";
@@ -66,6 +80,28 @@ export default {
                 chat_status.value="offline";
             }
         });
+        
+        //computed
+        const chatData=computed(()=>store.getters['chat/getChat']);
+        const chatcontent=computed(()=>store.getters['chat/getChatContent'])
+        //method
+        const message =()=>{
+            if(socket.value==null) return;
+            if(chat.value.scrollHeight>0){
+                chat.value.scrollTop=chat.value.scrollHeight+64
+            }
+            socket.value.emit('get-chat',{
+                userId:chatData.value.userId,
+                ownerId:localStorage.getItem('userid'),
+                content:mess.value,
+            });
+        }
+        const closeChat = ()=>{
+            store.dispatch('chat/changeContent','')
+            store.dispatch('chat/putToChat',{});
+        };
+        const loadStatus=()=>{}
+
         const status = computed(()=>chat_status.value);
 
         return{
@@ -74,9 +110,12 @@ export default {
             msg,
             color,
             mess,
+            socket,
+            chat,
             //computed
             status,
             chatcontent,
+            chatData,
             //method,
             message,
             closeChat,
@@ -224,58 +263,68 @@ export default {
             }
         }
         .content-all-chat{
-            height: 80%;
+            height: 100%;
             width: 100%;
-            overflow-y: scroll;
-            &::-webkit-scrollbar{   
-            width: 5px;
-                &:hover{
-                    background-color:rgb(250, 241, 241) ;
+            position: relative;
+            .chatting{
+                position: absolute;
+                width: 100%;
+                max-height: 100%;
+                bottom: 0;
+                overflow-y: scroll;
+                &::-webkit-resizer{
+                    width: 10px;
                 }
-            }
-            &::-webkit-scrollbar-thumb{
+                &::-webkit-scrollbar{   
+                width: 10px;
                 &:hover{
-                background-color: rgb(212, 209, 209);
-                height: 20px;
-                border-radius: 50px;
+                        background-color:rgb(250, 241, 241) ;
+                    }
                 }
-            }
-            .admin{
-                width: 80%;
-                margin-top: 2%;
-                padding: 2%;
-                display: flex;
-                justify-items: center;
-                &.active{
+                &::-webkit-scrollbar-thumb{
+                    &:hover{
+                    background-color: rgb(212, 209, 209);
+                    height: 20px;
+                    border-radius: 50px;
+                    }
+                }
+                .admin{
                     width: 100%;
-                    flex-direction: row-reverse;
+                    padding: 2%;
+                    display: flex;
+                    justify-items: center;
+                    &.active{
+                        width: 100%;
+                        flex-direction: row-reverse;
+                        img{
+                            margin-left: 2%;
+                        }
+                        span{
+                            background-color: $color_background_btn;
+                            color:$blue_color;
+                        }
+                    }
                     img{
-                        margin-left: 2%;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        box-shadow: $shadow_1;
                     }
                     span{
-                        background-color: $color_background_btn;
-                        color:$blue_color;
+                        display: flex;
+                        align-items: center;
+                        background-color: #eeeeee;
+                        border-radius: 50px;
+                        padding-left: 4%;
+                        padding-right:4% ;
+                        margin-left: 2%;
+                        box-shadow: $shadow_1;
+                        font-size: 14px;
+                        
                     }
                 }
-                img{
-                    width: 15%;
-                    height: 15%;
-                    border-radius: 50%;
-                    box-shadow: $shadow_1;
-                }
-                span{
-                    display: flex;
-                    align-items: center;
-                    background-color: #eeeeee;
-                    border-radius: 50px;
-                    padding-left: 4%;
-                    padding-right:4% ;
-                    margin-left: 2%;
-                    box-shadow: $shadow_1;
-                    font-size: 14px;
-                    
-                }
             }
+
         }
     }
 </style>
