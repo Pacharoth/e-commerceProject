@@ -4,12 +4,13 @@ exports.postProduct = async(req,res)=>{
     const arrayPic=[]
     try{
         const reqFile = req.files.img
-        for(const i in reqFile){
-            var filename='/assets/img/'+reqFile[i].name;
+        // for(const i in reqFile){
+            var filename='/public/assets/img/'+reqFile.name;
             var pathSave=__dirname+filename
-            await reqFile[i].mv(pathSave)
+            await reqFile.mv(pathSave)
             arrayPic.push(filename);
-        }
+        // }
+        console.log(reqFile)
     }catch(e){
         console.log(e);
     }

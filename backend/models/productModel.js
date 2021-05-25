@@ -1,13 +1,13 @@
 const {Schema,model} = require('mongoose');
 const productModel = new Schema({
-    categories:{
-        type:Schema.Types.ObjectId,
-        ref:'categories',
-    },
-    sellers:{
-        type:Schema.Types.ObjectId,
-        ref:'sellers'
-    },
+    // categories:{
+    //     type:Schema.Types.ObjectId,
+    //     ref:'categories',
+    // },
+    // sellers:{
+    //     type:Schema.Types.ObjectId,
+    //     ref:'sellers'
+    // },
     productName:{
         type:String,
         required:true,

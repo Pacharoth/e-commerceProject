@@ -115,20 +115,32 @@
 <script>
 // import {Modal} from 'bootstrap';
 import Categorydropdown from './Categorydropdown'
+import axios from 'axios'
 export default {
     title:'Homepage ',
     name:"Customer",
     data(){
         return{
             modal:null,
-            carousel:null
+            carousel:null,
+            product:[]
         }
     },
     components:{
         Categorydropdown
     },
-    mounted(){
+    async mounted(){
+        const result = await axios.get('http://localhost:3000/listproducts')
+        this.product = result.data
+        console.log(this.product)
+    },
+    methods:{
+       listProduct(){
+           const result = axios.get('http://localhost:3000/listproducts')
+           this.product = result.data
+           console.log(this.product)
 
+       } 
     }
 }
 </script>

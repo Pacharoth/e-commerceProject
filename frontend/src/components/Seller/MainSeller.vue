@@ -17,7 +17,7 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form method="POST" action="" ref="form" enctype="multipart/form-data">
+                <form method="POST" action="" ref="form" @submit.prevent="createProduct()" enctype="multipart/form-data">
                   <div class="modal-body">
                     <div class="form-group">
                       <label for="productname">Product name</label>
@@ -53,7 +53,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn opt">Add Product</button>
+                    <button @click="createProduct()" type="button" class="btn opt">Add Product</button>
                   </div>
                 </form>
               </div>
@@ -122,6 +122,8 @@ export default {
       
       async function createProduct(){
         const newForm = new FormData(form.value);
+        // console.log('new form '+ newForm.forEach)
+      
         await axios.post("http://localhost:3000/product",newForm);        
       }
 
