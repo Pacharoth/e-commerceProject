@@ -108,12 +108,7 @@ exports.resetPassword = async(req,res)=>{
     ).catch(err=>res.status(400).json(err));
 }
 exports.findUser = async(req,res)=>{
-    await user.findOne({email:req.body.email}).then(result=>{
-        if(result){
-            res.json(result);
-        }
-        else{
-            res.json(null);
-        }
-    }).catch(()=>res.json(null))
+    console.log(req.body)
+    const response=await user.find({email:req.body.email});
+    res.json(response);
 }

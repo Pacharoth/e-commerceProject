@@ -1,6 +1,7 @@
 import axios from 'axios';
 import router from '../routers/route';
 const localhost="http://localhost:3000"
+const validatePhoneNumber = /^(\+|0){1}\d{5,15}$/;
 class FormValidation{
     _setLoginForm(email,password){
         this._email = email;
@@ -128,7 +129,7 @@ async function registerAccount(data){
     var checkEmail=false;
     await axios.post('http://localhost:3000/email',{email:email.value}).then(
         result=>{
-            if(result.data===null){
+            if(result.data.length<=0){
                 checkEmail=true;
             }
         }
@@ -152,6 +153,7 @@ async function registerAccount(data){
             if(result.data._id){
                 success.value= username.value+" has been created";
                 router.push({name:"customerlistproduct"})
+                alert(username.value+"has been registered");
                 username.value = "";email.value="";confirmpassword.value="";password.value="";
                 setTimeout(()=>()=> success.value="",2000);
                 newModal.value.hide();
@@ -170,4 +172,5 @@ export{
     registerAccount,
     logouts,
     localhost,
+    validatePhoneNumber,
 }

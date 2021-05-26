@@ -1,24 +1,20 @@
 const seller = require('../models/sellerModel');
 const user = require('../models/userModel')
 exports.registerSeller = async(req,res)=>{
-    const {email,company,contact,address,img}=req.body;
-    const responseUser = await user.findOne({email}).poplate('roles');
-    const companyName = await seller.findOne({company});
-    if(responseUser.length>0){
-        if(companyName.length>0){
-            res.json({result:"Company's name is already existed.Please change"})
-        }else{
-            const newSeller = new seller({
-                users:responseUser._id,
-                company,
-                contact,
-                address,
-            })
-            await newSeller.save()
-            res.json(await seller.find({_id:newSeller._id}).populate('users'));
-        }
+    console.log(req.body)   
+    const {company,contact,address,email,_id}= req.body;
+    const auser = await seller.find({users:_id});
+    if(auser.length<=0){
+        const aseller = new seller({
+            users:_id,
+            company,
+            contact,
+            address,
+        })
+        await aseller.save()
+        res.json(await seller.find({_id:aseller._id}).populate('users'));
     }else{
-        res.json({result:"Could not found in User"});
+        res.json({result:"User already exists"});
     }
 }
 exports.getSellers = async(req,res)=>{

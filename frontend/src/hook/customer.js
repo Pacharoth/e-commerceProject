@@ -32,7 +32,6 @@ async function getCustomerByPagination(data){
 
 }
 async function editACustomer(data){
-    console.log("hi")
     const {username,phoneNumber,email,customers,newModal,store,message} = data
     console.log(username.value)
     const response =await axios.put(localhost+'/admin/customer/'+customers.value._id,

@@ -2,16 +2,12 @@ const product = require('../models/productModel')
 exports.postProduct = async(req,res)=>{
     const reqs= req.body
     const arrayPic=[]
-    try{
-        const reqFile = req.files.img
-        for(const i in reqFile){
-            var filename='/assets/img/'+reqFile[i].name;
-            var pathSave=__dirname+filename
-            await reqFile[i].mv(pathSave)
-            arrayPic.push(filename);
-        }
-    }catch(e){
-        console.log(e);
+    const reqFile = req.files.img
+    for(const i in reqFile){
+        var filename='/assets/img/'+reqFile[i].name;
+        var pathSave=__dirname+filename
+        await reqFile[i].mv(pathSave)
+        arrayPic.push(filename);
     }
     
     const product = new product({

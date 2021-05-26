@@ -23,6 +23,9 @@
           </div>
           <form action="" @submit.prevent="editUser">
             <div class="modal-body">
+                <div class="alert alert-warning" v-if="message">
+                  {{message}}
+                </div>
                   <div class="form-group">
                       <label for="Company " class="text-secondary">Username:</label>
                       <input type="text" v-model=" username" class="input">
@@ -50,7 +53,7 @@ import { computed, onMounted, ref, watchEffect } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import axios from 'axios'
 import {Modal} from 'bootstrap';
-import { localhost } from '../../utils/FormValidation'
+import { localhost,validatePhoneNumber } from '../../utils/FormValidation'
 import { editACustomer } from '../../hook/customer';
 export default {
     props:["namemodal","customer"],
@@ -77,15 +80,18 @@ export default {
       const deleteUser =async()=>{
         await axios.delete(localhost+'/admin/customer/'+customers.value._id,{id:customers.value.users._id})
         store.dispatch('customer/deleteUser',customers.value._id);
+        alert("Delete success");
       }
       const editUser = async()=>{
-        const validatePhoneNumber = /^(\+|0){1}\d{5,15}$/;
+        
         if(validatePhoneNumber.test(phoneNumber.value)){
           console.log(username.value)
           const data = {username,phoneNumber,email,customers,newModal,store,message};
           await editACustomer(data);
+          alert("Update successful")
         }else{
-          console.log("wrong")
+          message.value="PhoneNumber Invalid! +,0 and the rest is number range 15 digit"
+          setTimeout(()=>message.value="",3000);
         }
       }
       return {
@@ -94,9 +100,9 @@ export default {
         username,
         email,
         phoneNumber,
-
         deleteUser,
         editUser,
+        message,
       }
     }
 }

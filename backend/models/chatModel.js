@@ -1,9 +1,9 @@
 const {model,Schema} = require('mongoose');
 const chatModel = new Schema({
     users:{
-            type:Schema.Types.ObjectId,
-            ref:'users',
-        }
+        type:Schema.Types.ObjectId,
+        ref:'users',
+    }
     ,
     roomChat:{
         type:Schema.Types.ObjectId,

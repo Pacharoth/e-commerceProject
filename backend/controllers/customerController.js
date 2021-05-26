@@ -32,8 +32,12 @@ exports.getCustomer = async(req,res)=>{
     }).catch(err=>res.json(err));
 }
 exports.deleteCustomer = async(req,res)=>{  
-    const acustomer=await customer.deleteOne({_id:req.params.id}).then(result=>console.log(result)).catch(err=>console.log(err));
-    const auser=await user.deleteOne({_id:req.body.id}).then(result=>console.log(result)).catch(err=>console.log(err));
-    console.log(auser,acustomer);
+    console.log(req.body)
+    const acustomer =await customer.findOneAndDelete({_id:req.params.id});
+    console.log(acustomer.users)
+    const auser =await user.findOneAndDelete({_id:acustomer.users})
+    // const acustomer=await customer.deleteOne({_id:req.params.id});
+    // const auser=await user.deleteOne({_id:req.body.id});
+    // console.log(auser,acustomer);
     res.json({delete:"successful"})
 }
