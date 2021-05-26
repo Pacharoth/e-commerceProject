@@ -36,8 +36,5 @@ exports.deleteCustomer = async(req,res)=>{
     const acustomer =await customer.findOneAndDelete({_id:req.params.id});
     console.log(acustomer.users)
     const auser =await user.findOneAndDelete({_id:acustomer.users})
-    // const acustomer=await customer.deleteOne({_id:req.params.id});
-    // const auser=await user.deleteOne({_id:req.body.id});
-    // console.log(auser,acustomer);
     res.json({delete:"successful"})
 }
