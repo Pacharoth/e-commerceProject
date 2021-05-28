@@ -8,4 +8,6 @@ routers.post('/logout',userController.logout)
 routers.post('/registerany',userController.registerAnyRole);
 routers.post('/forgetpassword',userController.forgetPassword);
 routers.post('/email',userController.findUser);
+routers.get('/resetpassword/:id',userController.findUserById);
+routers.put('/resetpassword/:id',userController.resetPassword);
 module.exports=routers;

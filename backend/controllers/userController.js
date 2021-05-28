@@ -96,19 +96,23 @@ exports.forgetPassword = async(req,res)=>{
 }
 exports.resetPassword = async(req,res)=>{
     const salt = bcrypt.genSalt(10);
-    await user.findOne({_id:req.params.id}).then(
-        result=>{
-            result.password = bcrypt.hashSync(req.body.password,salt);
-            result.save().then(
-                result=>{
-                    res.status(200).json({passwordChange:"success"});
-                }
-            )
-        }
-    ).catch(err=>res.status(400).json(err));
+    const response =await user.findOne({_id:req.params.id})
+    response.password =  bcrypt.hashSync(req.body.password,salt);
+    try{
+        await response.save()
+        res.json({result:"reset password successful"});
+    }catch(err){
+        res.json({result:"cannot reset password"});
+    }
+
 }
 exports.findUser = async(req,res)=>{
     console.log(req.body)
     const response=await user.find({email:req.body.email});
+    res.json(response);
+}
+exports.findUserById = async (req,res)=>{
+    console.log(req.body);
+    const response = await user.find({_id:req.params.id});
     res.json(response);
 }
