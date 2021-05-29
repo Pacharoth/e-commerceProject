@@ -61,7 +61,6 @@ export default {
       })
       const registerUser =async()=>{
         const emails = await axios.post(localhost+'/email',{email:email.value});
-        console.log(emails.data.length);
         if(emails.data.length>0){
           if(validatePhoneNumber.test(contact.value)){
             const response = await axios.post(localhost+'/admin/seller',{

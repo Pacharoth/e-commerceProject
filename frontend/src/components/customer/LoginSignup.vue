@@ -112,11 +112,12 @@
 </div>
 </template>
 <script>
-import {loginForm,forgetPassword, registerAccount} from '../../utils/FormValidation';
+import {localhost, loginForm,registerAccount} from '../../utils/FormValidation';
 import { ref } from '@vue/reactivity';
 import { computed, onMounted } from '@vue/runtime-core';
 import {useStore} from 'vuex';
 import {Modal} from 'bootstrap';
+import axios from 'axios';
 export default {
     name:'LoginSignup',
     
@@ -138,14 +139,16 @@ export default {
        })
         const status = computed(()=>store.getters['auth/getStatus']);
         //method
-        function forgetPasswords(){
-            var checkmail=false;
-            forgetPassword(email.value).then(result=>checkmail=result);
-            if(checkmail){
+        async function forgetPasswords(){
+            var checkmail={};
+            checkmail = await axios.post(localhost+'/forgetpassword',{email:email.value});
+            console.log(checkmail)
+            if(checkmail.data.send){
                 success.value="Send "+email.value+" successful"
                 setTimeout(()=>success.value="",3000);
-                newModal.value.hide()
+                alert("Send Message to "+email.value+" successful")
                 email.value = ""
+                newModal.value.hide()
             }else{
                 err.value.email = "Email cant be found";
                 setTimeout(()=>err.value.email="",3000);

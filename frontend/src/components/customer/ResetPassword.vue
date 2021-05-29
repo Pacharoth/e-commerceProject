@@ -1,25 +1,81 @@
 <template>
     <div class="resetpwd-container">
-        <form action="">
+        <form action="" @submit.prevent="resetPassword">
             <h5 class="fw-bold">Reset Password</h5>
             <hr>
+            <div v-if="result.err==true" class="alert alert-success" role="alert">
+                {{result.result}}
+            </div>
+            <div v-else class="alert alert-warning" role="alert">
+                {{result}}
+            </div>
+            <div class="mb-2">
+                <label for="exampleInputPassword1" class="form-label">Account:{{user.email}}</label>
+            </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" required class="form-control" id="exampleInputPassword1">
+                <input type="password" v-model="password" required class="form-control" >
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Confirm password</label>
-                <input type="password" required class="form-control" id="exampleInputPassword1">
+                <input type="password" v-model="confirmPassword" required class="form-control" >
             </div>
             <button type="submit" >Save Change</button>
         </form>
     </div>
 </template>
 <script>
+import { onMounted, ref, toRefs } from '@vue/runtime-core';
+import axios from 'axios';
+import { FormValidation, localhost } from '../../utils/FormValidation';
 export default {
     name:"ResetPassword",
     title:"Reset Password",
-
+    props:['id'],
+    
+    setup(props) {
+        const {id}  = toRefs(props)
+        const user = ref({});
+        const result = ref({});
+        const password = ref("");
+        const confirmPassword = ref("");
+        onMounted(async ()=>{
+            const response = await axios.get(localhost+'/resetpassword/'+id.value);
+            if(response.data.length>0){
+                user.value=response.data[0];
+            }
+        });
+        async function resetPassword(){
+            const form = new FormValidation();
+            form._setPassword(password.value);
+            form._setConfirmPassword(confirmPassword.value);
+            if(form.checkValidatePassword()){
+                result.value.err=true;
+                result.value.result ="Password is not Matched"; 
+            }else if(form.checkPassword()==false){
+                result.value.err = false;
+                
+            }
+            
+            if((form.checkPassword()&&form.checkValidatePassword())==true){
+                const response =await axios.post(localhost+'/resetpassword/'+id.value,password.value);
+                if(response.data.err){
+                    result.value.result= response.data.result
+                    setTimeout(()=>result.value="",3000);
+                }else{
+                    result.value.result=response.data.result;
+                    setTimeout(()=>result.value="",3000);
+                }
+            }
+        }
+        return{
+            user,
+            resetPassword,
+            result,
+            password,
+            confirmPassword,
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -58,6 +114,9 @@ export default {
                 color: white;
                 border: none;
             }
+        }
+        @include breakpoint-down(small){
+            width: 60%;
         }
     }
 </style>

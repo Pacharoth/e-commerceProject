@@ -22,6 +22,9 @@ class FormValidation{
     _setPassword(password){
         this._password = password;
     }
+    _setConfirmPassword(confirmpassword){
+        this._confirmPassword=confirmpassword;
+    }
     async checkEmail(){
         if(this._email){
             await axios.post('http://localhost:3000/email',{email:this._email}).then(
@@ -79,9 +82,11 @@ async function loginForm(email,password,store,err,success,newModal){
                 localStorage.useremail = result.data.email;
                 email.value=""
                 password.value=""
-                success.value = "Login successful! Please click anywhere out of form";
-                setTimeout(()=>success.value="",3000);
-                newModal.value.hide()
+                success.value = "Login successful!";
+                setTimeout(()=>{
+                    success.value="";
+                    newModal.value.hide()
+                },1000);
             }else if(result.data.err!==undefined){
                 if(result.data.passwordErr===true){
 

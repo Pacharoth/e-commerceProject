@@ -72,12 +72,12 @@
           <li class="nav-item dropdown" @click="showProfile">
             <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
               <em class="fas fa-user-circle user" style="margin-right: 8%;
-              font-size: 1.5vw;"></em>Ginzy
+              font-size: 1.5vw;"></em>{{user.username}}
             </a>
             <div class="dropdown-menu profile" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
                 <a class="dropdown-item header" href="#">Setting</a>
-                <a class="dropdown-item header" href="#">Log out</a>
+                <router-link class="dropdown-item header" @click="logout" to="/">Log out</router-link>
             </div>
             </li>
         </ul>
@@ -93,14 +93,19 @@ import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
 export default {
     name:'Seller',
+    
     data() {
       return {
-        
+        user:{},
       }
     },
     components:{
         ChatList,
         Notification
+    },
+    mounted() {
+      this.user.username= localStorage.getItem("username");
+      this.user.userid = localStorage.getItem("userid");
     },
     methods: {
       showDropdown(){
@@ -119,6 +124,10 @@ export default {
                 store.dispatch('notification/changeContent','')
             }
         },
+      logout(){
+        localStorage.clear()
+        this.$store.dispatch('auth/setSession',null);
+      },
       showChatList(){
         const store = this.$store
             if(!store.getters['chat/getChatList']){

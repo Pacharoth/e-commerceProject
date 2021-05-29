@@ -142,7 +142,8 @@ export default {
     },
     mounted(){
         this.modal=new Modal(this.$refs.modal);
-    }
+    },
+    
 }
 </script>
 <style lang="scss">
