@@ -41,7 +41,8 @@ export default {
       }
     }, 
     async mounted(){
-      const result = await axios.get('http://localhost:3000/getProduct/'+localStorage.getItem('userid') )
+      console.log(localStorage.getItem('userid'))
+      const result = await axios.get('http://localhost:3000/getProduct/'+localStorage.getItem('userid'))
       console.log('got products',result.data)
       this.products = result.data
     },

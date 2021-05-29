@@ -154,15 +154,12 @@ export default {
           form.append("detail",this.product.detail);
           form.append("category",this.product.category);
           form.append("sellerid", localStorage.getItem('userid'))
-        
-
+          form.append("detail",this.product.detail);
           const response=await axios.post('http://localhost:3000/postProduct', form)
           this.log = response.data.message
           if(response.data.message){
             this.form.hide();
-          }
-          
-        // await axios.post("http://localhost:3000/product",product);        
+          }          
       }
     }
     
