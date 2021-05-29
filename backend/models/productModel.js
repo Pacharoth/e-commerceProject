@@ -8,7 +8,7 @@ const productModel = new Schema({
     //     type:Schema.Types.ObjectId,
     //     ref:'sellers'
     // },
-    productName:{
+    name:{
         type:String,
         required:true,
     },
@@ -16,14 +16,14 @@ const productModel = new Schema({
         type:String,
         
     },
-    description:{
+    detail:{
         type:String,
     },
     discount:{
         type:Number,
         default:0,
     },
-    quantity:{
+    qty:{
         type:Number.isInteger(),
         default:0,
     },
@@ -35,6 +35,17 @@ const productModel = new Schema({
     price:{
         type:Number,
         default:0,
+    },
+    instock:{
+        type:Date
+    },
+    categories:{
+        type: Schema.Types.ObjectId,
+        ref:'categories'
+    },
+    sellers:{
+        type:Schema.Types.ObjectId,
+        ref:'sellers'
     }
 })
 const product = model("products",productModel);

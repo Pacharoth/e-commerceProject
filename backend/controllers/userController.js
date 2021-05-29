@@ -107,17 +107,6 @@ exports.resetPassword = async(req,res)=>{
 
 }
 exports.findUser = async(req,res)=>{
-<<<<<<< HEAD
-    await user.findOne({email:req.body.email}).then(result=>{
-        if(result){
-            res.json(result);
-        }
-        else{
-            res.json(null);
-        }
-    }).catch(()=>res.json(null))
-}
-=======
     console.log(req.body)
     const response=await user.find({email:req.body.email});
     res.json(response);
@@ -127,4 +116,3 @@ exports.findUserById = async (req,res)=>{
     const response = await user.find({_id:req.params.id});
     res.json(response);
 }
->>>>>>> ac19fc72a4d7f57fdb5ed1a0d66922d2aa0eaca0

@@ -26,3 +26,6 @@ exports.registerSeller = async(req,res)=>{
 exports.getSellers = async(req,res)=>{
     res.json(res.pagination);
 }
+// exports.getSeller = async(req,res)=>{
+//     const id 
+// }
