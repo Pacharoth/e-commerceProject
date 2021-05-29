@@ -31,9 +31,22 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
     title:'Product List',
-    name:'ProductionList',    
+    name:'ProductionList',  
+    data(){
+      return{
+        product:[]
+      }
+    }, 
+    async mounted(){
+      const result = await axios.get('http://localhost:3000/getProduct',localStorage.getItem('userid'))
+      console.log('got products',result.data)
+    },
+    methods:{
+
+    }
 }
 </script>
 <style lang="scss" scoped>

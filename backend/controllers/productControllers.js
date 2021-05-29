@@ -1,4 +1,5 @@
-const product = require('../models/productModel')
+const product = require('../models/productModel');
+const categoryModel = require('../models/categoryModel')
 // exports.postProduct = async(req,res)=>{
 //     const reqs= req.body
 //     const arrayPic=[]
@@ -26,11 +27,12 @@ const product = require('../models/productModel')
 // }
 exports.getProducts=async(req,res)=>{
     const reqs = req.body;
-    const products = await product.find({sellers:reqs.sellerid}).populate('sellers').populate('categories').exec()
+    console.log('get product req', reqs)
+    const products = await product.find({sellers:reqs.sellerid}).populate('categories').exec()
     res.json(products);
 }
 exports.postProduct = async (req,res)=>{
-    const{productname,price,instock,qty,sellerid} = req.body;
+    const{productname,price,instock,qty,sellerid,category} = req.body;
     const file = req.files.file
     if(file){
         var filename='/assets/img/'+file.name;
@@ -44,10 +46,13 @@ exports.postProduct = async (req,res)=>{
             qty:qty,
             img:filename
         })
+        const cate = await categoryModel.find({name:category});
+        newProduct.categories = cate[0]._id
         await newProduct.save()
-        res.json({'message':'prodcut is created'})
+
+        res.json({'message':'New prodcut is created'})
     }else{
-        res.json({'message':"can't create product"})
+        res.json({'message':"Can't create product"})
     }
     // console.log("file",file)
 }

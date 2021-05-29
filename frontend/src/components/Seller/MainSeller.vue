@@ -151,10 +151,11 @@ export default {
           form.append("price",this.product.price);
           form.append("instock",this.product.instock);
           form.append("qty",this.product.qty);
+          form.append("category",this.product.category);
           form.append("sellerid", localStorage.getItem('userid'))
         
 
-          const response=await axios.post('http://localhost:3000/product', form)
+          const response=await axios.post('http://localhost:3000/postProduct', form)
           this.log = response.data.message
           if(response.data.message){
             this.form.hide();
