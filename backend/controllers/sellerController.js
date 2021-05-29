@@ -23,8 +23,14 @@ exports.registerSeller = async(req,res)=>{
         res.json({result:"User already exists"});
     }
 }
-exports.getSellers = async(req,res)=>{
+exports.getSellers = async(req,res)=>{    
     res.json(res.pagination);
+
+}
+exports.getSellerByID = async (req,res)=>{
+    var sell = await seller.findOne({users:req.params.id}).populate('users')
+    console.log("seller ",sell);
+    res.json(sell)
 }
 // exports.getSeller = async(req,res)=>{
 //     const id 
