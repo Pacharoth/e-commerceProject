@@ -24,7 +24,7 @@ const productModel = new Schema({
         default:0,
     },
     qty:{
-        type:Number.isInteger(),
+        type:Number,
         default:0,
     },
     img:[

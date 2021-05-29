@@ -1,5 +1,6 @@
 const product = require('../models/productModel');
 const categoryModel = require('../models/categoryModel')
+const seller = require('../models/sellerModel')
 // exports.postProduct = async(req,res)=>{
 //     const reqs= req.body
 //     const arrayPic=[]
@@ -26,14 +27,16 @@ const categoryModel = require('../models/categoryModel')
 //     res.json(await product.populate('categories').populate('sellers').exec())
 // }
 exports.getProducts=async(req,res)=>{
-    const reqs = req.body;
-    console.log('get product req', reqs)
-    const products = await product.find({sellers:reqs.sellerid}).populate('categories').exec()
+   
+    const products = await product.find({sellers:req.params.id}).populate('categories')
+    console.log('got from db', products)
     res.json(products);
+
 }
 exports.postProduct = async (req,res)=>{
-    const{productname,price,instock,qty,sellerid,category} = req.body;
+    const{productname,price,instock,qty,sellerid,category,detail} = req.body;
     const file = req.files.file
+    
     if(file){
         var filename='/assets/img/'+file.name;
         var pathSave='./public'+filename
@@ -44,8 +47,10 @@ exports.postProduct = async (req,res)=>{
             instock:instock,
             sellers:sellerid,
             qty:qty,
+            detail:detail,
             img:filename
         })
+        console.log(newProduct);
         const cate = await categoryModel.find({name:category});
         newProduct.categories = cate[0]._id
         await newProduct.save()
