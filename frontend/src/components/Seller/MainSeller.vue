@@ -19,6 +19,9 @@
                 </div>
                 <form ref="form" @submit.prevent="createProduct()" enctype="multipart/form-data">
                   <div class="modal-body">
+                    <div v-if="log != ''" class="alert alert-success" role="alert">
+                      {{log}}
+                    </div>
                     <div class="form-group">
                       <label for="productname">Product name</label>
                       <input v-model="product.name" type="text" class="form-control" id="productName" name="productName" placeholder="Product name">
@@ -119,7 +122,9 @@ export default {
             modal:null,
             categories:[{}],
             product:{},
-            form:null
+            form:null,
+            log:''
+            
         }
     },
     components:{
@@ -129,7 +134,7 @@ export default {
         this.modal=new Modal(this.$refs.modal);
          const categories = await axios.get("http://localhost:3000/category")
          this.categories = categories.data
-         console.log("categories", categories.data)
+        //  console.log("categories", categories.data)
          this.form =new Modal(this.$refs.modal)
 
     },
@@ -150,6 +155,7 @@ export default {
         
 
           const response=await axios.post('http://localhost:3000/product', form)
+          this.log = response.data.message
           if(response.data.message){
             this.form.hide();
           }
