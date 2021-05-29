@@ -13,12 +13,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="productInfo">1</td>
-            <td class="productInfo">Productname</td>
-            <td class="productInfo">category1</td>
-            <td class="productInfo">10</td>
-            <td class="productInfo">$100</td>
+          <tr v-for="item in products" :key="item">
+            <td class="productInfo">{{item._id}}</td>
+            <td class="productInfo">{{item.name}}</td>
+            <td class="productInfo">{{item.categories.name}}</td>
+            <td class="productInfo">{{item.qty}}</td>
+            <td class="productInfo">{{item.price}}</td>
 
             <td>
                 <button class="btn btn-light"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></button>
@@ -37,12 +37,13 @@ export default {
     name:'ProductionList',  
     data(){
       return{
-        product:[]
+        products:[]
       }
     }, 
     async mounted(){
-      const result = await axios.get('http://localhost:3000/getProduct',localStorage.getItem('userid'))
+      const result = await axios.get('http://localhost:3000/getProduct/'+localStorage.getItem('userid') )
       console.log('got products',result.data)
+      this.products = result.data
     },
     methods:{
 
