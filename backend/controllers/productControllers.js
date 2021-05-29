@@ -2,15 +2,21 @@ const product = require('../models/productModel');
 const categoryModel = require('../models/categoryModel')
 const seller = require('../models/sellerModel')
 exports.getProducts=async(req,res)=>{
-    const products = await product.find({sellers:req.params.id}).populate('categories')
-    console.log('got from db', products)
+    var aseller =await seller.find().populate({
+        path:'users',
+        match:{
+            _id:req.params.id
+        }
+    });
+    aseller = aseller.filter(element=>element.users!==null);
+    const products = await product.find({sellers:aseller[0].id}).populate('categories')
+    console.log('got from db', products);
     res.json(products);
 
 }
 exports.postProduct = async (req,res)=>{
     const{productname,price,instock,qty,sellerid,category,detail} = req.body;
     const file = req.files.file
-    
     if(file){
         var filename='/assets/img/'+file.name;
         var pathSave='./public'+filename
@@ -23,15 +29,15 @@ exports.postProduct = async (req,res)=>{
             detail:detail,
             img:filename
         })
-        console.log(newProduct);
         const cate = await categoryModel.find({name:category});
-        const aseller = await seller.find().populate({
+        var aseller = await seller.find().populate({
             path:'users',
             match:{
                 _id:sellerid
             }
         })
         aseller = aseller.filter(element=>element.users!==null);
+        console.log(aseller)
         newProduct.sellers = aseller[0]._id;
         newProduct.categories = cate[0]._id;
         await newProduct.save()
