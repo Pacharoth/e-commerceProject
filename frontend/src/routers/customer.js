@@ -17,7 +17,7 @@ const customerRouter = {
     component:CustomerLayout,
     children:[
         {
-            path:'reset-password',
+            path:'resetpassword/:id',
             name:'resetpassword',
             component:ResetPassword,
             props:true,

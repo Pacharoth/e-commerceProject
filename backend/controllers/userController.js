@@ -100,9 +100,9 @@ exports.resetPassword = async(req,res)=>{
     response.password =  bcrypt.hashSync(req.body.password,salt);
     try{
         await response.save()
-        res.json({result:"reset password successful"});
+        res.json({result:"Password has been reset",err:false});
     }catch(err){
-        res.json({result:"cannot reset password"});
+        res.json({result:"cannot reset password",err:true});
     }
 
 }
