@@ -9,7 +9,7 @@
           </div>
           <div class="row">
             <div class="col-md-3">Email</div>
-            <div class="col-md-8"><span class="colon">:</span>{{seller.uers.email}}</div>
+            <div class="col-md-8"><span class="colon">:</span>{{user.email}}</div>
           </div>
           <div class="row">
             <div class="col-md-3">Contact</div>
@@ -42,13 +42,15 @@ export default {
     name:'SellerProfile',
     data(){
       return{
-        seller:{}
+        seller:{},
+        user:{},
       }
     },
     async mounted(){
      const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
      this.seller = seller.data
-     console.log("seller profile",this.seller)
+     this.user = seller.data.users
+     console.log("seller profile",this.user)
     }
 
     
