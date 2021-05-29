@@ -28,8 +28,13 @@ exports.getSellers = async(req,res)=>{
 
 }
 exports.getSellerByID = async (req,res)=>{
-    var sell = await seller.findOne({users:req.params.id}).populate('users')
-    console.log("seller ",sell);
+    var sell = await seller.findOne().populate({
+        path:'users',
+        match:{
+            _id:req.params.id
+        }
+    })
+    console.log("seller ",sell.users);
     res.json(sell)
 }
 // exports.getSeller = async(req,res)=>{
