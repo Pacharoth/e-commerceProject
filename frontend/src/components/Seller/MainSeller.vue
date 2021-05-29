@@ -151,6 +151,7 @@ export default {
           form.append("price",this.product.price);
           form.append("instock",this.product.instock);
           form.append("qty",this.product.qty);
+          form.append("detail",this.product.detail);
           form.append("category",this.product.category);
           form.append("sellerid", localStorage.getItem('userid'))
         

@@ -5,19 +5,19 @@
         <div class="col-md-8 left data">
           <div class="row">
             <div class="col-md-3">Company</div>
-            <div class="col-md-8"><span class="colon">:</span>myCompanyname</div>
+            <div class="col-md-8"><span class="colon">:</span>{{seller.company}}</div>
           </div>
           <div class="row">
             <div class="col-md-3">Email</div>
-            <div class="col-md-8"><span class="colon">:</span>myCompany@gmail.com</div>
+            <div class="col-md-8"><span class="colon">:</span>{{seller.uers.email}}</div>
           </div>
           <div class="row">
             <div class="col-md-3">Contact</div>
-            <div class="col-md-8"><span class="colon">:</span>+855 112233</div>
+            <div class="col-md-8"><span class="colon">:</span>{{seller.contact}}</div>
           </div>
           <div class="row">
             <div class="col-md-3">Address</div>
-            <div class="col-md-8"><span class="colon">:</span>st. 01, No 02, Meanchey, Phnom Penh</div>
+            <div class="col-md-8"><span class="colon">:</span>{{seller.address}}</div>
           </div>
           <div class="row"><div class="col"><button class="btn" type="button">Change Password</button></div></div>
         </div>
@@ -35,9 +35,22 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
     title:'Seller Profile',
     name:'SellerProfile',
+    data(){
+      return{
+        seller:{}
+      }
+    },
+    async mounted(){
+     const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
+     this.seller = seller.data
+     console.log("seller profile",this.seller)
+    }
+
     
 }
 </script>
