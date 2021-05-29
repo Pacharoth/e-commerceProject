@@ -1,6 +1,7 @@
 import axios from 'axios';
 import router from '../routers/route';
 const localhost="http://localhost:3000"
+const validatePhoneNumber = /^(\+|0){1}\d{5,15}$/;
 class FormValidation{
     _setLoginForm(email,password){
         this._email = email;
@@ -67,24 +68,31 @@ class FormValidation{
         }
     }
 }
-async function loginForm(email,password,store,err){
-    const formValidate = new FormValidation();
-    formValidate._setLoginForm(email,password);
-    await axios.post(localhost+'/login',{email:email,password:password}).then(
+async function loginForm(email,password,store,err,success,newModal){
+    await axios.post(localhost+'/login',{email:email.value,password:password.value}).then(
         async result=>{
-
-            if(result.data){
+            if(result.data.username!==undefined){
                 store.dispatch('auth/setSession',result);
                 localStorage.username=result.data.username;
                 localStorage.userid=result.data.userId;
                 localStorage.userrole=result.data.userRole;
                 localStorage.useremail = result.data.email;
+                email.value=""
+                password.value=""
+                success.value = "Login successful! Please click anywhere out of form";
+                setTimeout(()=>success.value="",3000);
+                newModal.value.hide()
+            }else if(result.data.err!==undefined){
+                if(result.data.passwordErr===true){
 
-                return true
-            }else{
-                err.password=result.data.password
-                setTimeout(()=>err.password="",2000)
-                return false
+                    err.value.password=result.data.err
+                }
+                else if(result.data.emailErr===true){
+                    
+                    err.value.email = result.data.err
+                    
+                }
+                setTimeout(()=>err.value={},2000)
             }
             
         }
@@ -108,7 +116,7 @@ async function forgetPassword(email){
     }
 }
 async function registerAccount(data){
-    var {username,email,password,confirmpassword,err,success}=data
+    var {username,email,password,confirmpassword,err,success,newModal}=data
     
     const formValidate = new FormValidation();
     console.log(email.value,password.value,confirmpassword.value,username)
@@ -121,7 +129,7 @@ async function registerAccount(data){
     var checkEmail=false;
     await axios.post('http://localhost:3000/email',{email:email.value}).then(
         result=>{
-            if(result.data===null){
+            if(result.data.length<=0){
                 checkEmail=true;
             }
         }
@@ -145,8 +153,10 @@ async function registerAccount(data){
             if(result.data._id){
                 success.value= username.value+" has been created";
                 router.push({name:"customerlistproduct"})
+                alert(username.value+"has been registered");
                 username.value = "";email.value="";confirmpassword.value="";password.value="";
                 setTimeout(()=>()=> success.value="",2000);
+                newModal.value.hide();
             }
         })
     }
@@ -162,4 +172,5 @@ export{
     registerAccount,
     logouts,
     localhost,
+    validatePhoneNumber,
 }

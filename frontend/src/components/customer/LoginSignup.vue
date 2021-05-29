@@ -116,6 +116,7 @@ import {loginForm,forgetPassword, registerAccount} from '../../utils/FormValidat
 import { ref } from '@vue/reactivity';
 import { computed, onMounted } from '@vue/runtime-core';
 import {useStore} from 'vuex';
+import {Modal} from 'bootstrap';
 export default {
     name:'LoginSignup',
     
@@ -123,15 +124,18 @@ export default {
         const store = useStore();
         //data
          
-        const modal = ref("");  
+        const modal = ref(null);  
         const username=ref("");  
         const password=ref(""); 
         const email = ref("");
         const confirmpassword=ref("");
         var err  =ref({});
         const success=ref("")
+        const newModal =ref("")
         //compute
-       
+       onMounted(()=>{
+           newModal.value= new Modal(modal.value);
+       })
         const status = computed(()=>store.getters['auth/getStatus']);
         //method
         function forgetPasswords(){
@@ -140,22 +144,18 @@ export default {
             if(checkmail){
                 success.value="Send "+email.value+" successful"
                 setTimeout(()=>success.value="",3000);
+                newModal.value.hide()
                 email.value = ""
             }else{
                 err.value.email = "Email cant be found";
                 setTimeout(()=>err.value.email="",3000);
             }   
         }
-        function Login(){
-            const check=loginForm(email.value,password.value,store,err.value);
-            if(check){
-                email.value="";password.value="";
-                success.value="Login successful Please click out of form";
-                setTimeout(()=>success.value="",3000);
-            }
+        async function Login(){
+            await loginForm(email,password,store,err,success,newModal);
         }
         async function registerCustomer(){
-            const data = {username,email,password,confirmpassword,err,success}
+            const data = {username,email,password,confirmpassword,err,success,newModal}
             await registerAccount(data);
         }
 

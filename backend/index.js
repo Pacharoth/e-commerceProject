@@ -78,6 +78,7 @@ mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.n
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
+  useFindAndModify:false,
 })
 .then(result => {
   console.log("Db is connected");

@@ -10,15 +10,21 @@ exports.editCustomer=async(req,res)=>{
     }
     if(username||email){
         const reponse=await user.findOne({_id:id});
+        console.log(reponse)
         if(username!=reponse.username){
             reponse.username = username;
         }
         if(email!=reponse.email){
             reponse.email =email
         }
-        reponse.save();
+        try{
+            await reponse.save();
+        }
+        catch{
+            res.json({err:"Email or Username Already Exists"});
+        }
     }
-    res.json(await customer.findOne({_id:req.params.id}).populate('users'))
+    res.json(await customer.find({_id:req.params.id}).populate('users'))
 }
 exports.getCustomer = async(req,res)=>{
     await customer.findOne({_id:req.params.id}).populate('users').then(result=>{
@@ -26,8 +32,9 @@ exports.getCustomer = async(req,res)=>{
     }).catch(err=>res.json(err));
 }
 exports.deleteCustomer = async(req,res)=>{  
-    const acustomer=await customer.deleteOne({_id:req.params.id}).then(result=>console.log(result)).catch(err=>console.log(err));
-    const auser=await user.deleteOne({_id:req.body.id}).then(result=>console.log(result)).catch(err=>console.log(err));
-    console.log(auser,acustomer);
+    console.log(req.body)
+    const acustomer =await customer.findOneAndDelete({_id:req.params.id});
+    console.log(acustomer.users)
+    const auser =await user.findOneAndDelete({_id:acustomer.users})
     res.json({delete:"successful"})
 }

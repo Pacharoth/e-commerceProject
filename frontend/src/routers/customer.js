@@ -8,6 +8,7 @@ import Customer from '../components/customer/Customer.vue';
 import view_profile from '../components/customer/view_profile.vue';
 import store from '../stores/store';
 import receipt from '../components/customer/receipt.vue'
+import ResetPassword from '../components/customer/ResetPassword.vue'
 
 const customerRouter = {
     name:'homepage',
@@ -15,6 +16,12 @@ const customerRouter = {
     redirect:{name:'customerlistproduct'},
     component:CustomerLayout,
     children:[
+        {
+            path:'reset-password',
+            name:'resetpassword',
+            component:ResetPassword,
+            props:true,
+        },
         {
             name:'customerlistproduct',
             path:'homepage',
