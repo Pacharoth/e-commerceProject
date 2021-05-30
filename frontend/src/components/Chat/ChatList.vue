@@ -30,16 +30,19 @@
                 </button>
             </div>
             <div class="list-user" v-else>
-                <button class="users btn" @click="popChat" v-for="chat in chatSocket.length" :key="chat">
+                <button class="users btn" @click="popChat" v-for="chat in chatSocket" :key="chat">
                     <img src="../../assets/logo.png" alt="">
                     <div class="chat-time">
-                        <div class="chat" >
-                            <span >Pizza (seller)</span>
-                            <span class="text-chat">hello world</span>
-                            <!-- <template v-if="user._id!==id">
-                                <span >{{user.username}} (chat.)</span>
-                                <span class="text-chat">hello world</span>
-                            </template> -->
+                        <div class="chat" v-for="user in chat.users" :key="user">
+                            <!-- <span >Pizza (seller)</span>
+                            
+                            <span class="text-chat">hello world</span> -->
+                            <template v-if="Object.keys(user).length!==0">
+                                <span v-for="i in role" :key="i">
+                                    <template v-if="user.roles===i._id">{{user.username}} ({{i.name}})</template>
+                                </span>
+                                <span class="text-chat">{{chat.chat[chat.chat.length-1].content}}</span>
+                            </template>
                             
                         </div>
                         <div class="status" :style="{'background-color':color}"></div>

@@ -6,7 +6,7 @@ const sellerStore= {
         }
     },
     mutations:{
-        loadSeller(state,data){
+        LOAD_SELLER(state,data){
             state.data = data
         }
     },
@@ -17,7 +17,7 @@ const sellerStore= {
     },
     actions:{
         loadSeller({commit},data){
-            commit('loadSeller',data);
+            commit('LOAD_SELLER',data);
         }
     }
 }

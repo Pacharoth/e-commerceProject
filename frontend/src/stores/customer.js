@@ -12,20 +12,20 @@ const customerStore={
         }
     },
     mutations:{
-        loadCustomerToList(state,data){
+        LOAD_CUSTOMER_TO_LIST(state,data){
             state.data.page=data.page
             state.adminCustomer=data.data;
         },
-        changeToModal(state,data){
+        CHANGE_TO_MODAL(state,data){
             state.modal = data;
         },
-        deleteUser(state,data){
+        DELETE_USER(state,data){
             state.adminCustomer=state.adminCustomer.filter(element=>element._id!==data);
         },
-        setAdminCustomer(state,id){
+        SET_ADMIN_CUSTOMER(state,id){
             state.anAdminCustomer = state.adminCustomer.find(element=>element._id==id);
         },
-        updateAdminCustomer(state,data){
+        UPDATE_ADMIN_CUSTOMER(state,data){
             const {_id,email,username,phoneNumber}=data;
             console.log(email,username,phoneNumber)
             const index = state.adminCustomer.findIndex(element=>element._id===_id);
@@ -43,19 +43,19 @@ const customerStore={
     },
     actions:{
         loadCustomerToList({commit},data){
-            commit("loadCustomerToList",data);
+            commit("LOAD_CUSTOMER_TO_LIST",data);
         },
         changeToModal({commit},data){
-            commit('changeToModal',data);
+            commit('CHANGE_TO_MODAL',data);
         },
         deleteUser({commit},data){
-            commit('deleteUser',data);
+            commit('DELETE_USER',data);
         },
         setAdminCustomer({commit},id){
-            commit('setAdminCustomer',id)
+            commit('SET_ADMIN_CUSTOMER',id)
         },
         updateAdminCustomer({commit},data){
-            commit('updateAdminCustomer',data);
+            commit('UPDATE_ADMIN_CUSTOMER',data);
         }
     },
     getters:{

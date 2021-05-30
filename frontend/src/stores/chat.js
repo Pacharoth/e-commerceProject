@@ -19,25 +19,25 @@ const chatStore={
         }
     },
     mutations:{
-        changeContent(state,text){
+        CHANGE_CONTENT(state,text){
             state.contentChat=text;
         },
-        changeList(state,text){
+        CHANGE_LIST(state,text){
             state.chatButton=text;
         },
-        putToChat(state,data){
+        PUT_TO_CHAT(state,data){
             state.chat=data;
         }
     },
     actions: {
         changeContent({commit},text){
-            commit("changeContent",text);
+            commit("CHANGE_CONTENT",text);
         },
         changeList({commit},text){
-            commit('changeList',text);
+            commit('CHANGE_LIST',text);
         },
         putToChat({commit},data){
-            commit("putToChat",data);
+            commit("PUT_TO_CHAT",data);
         }
     },
 }
