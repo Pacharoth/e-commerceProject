@@ -21,9 +21,41 @@
           </div>
           <div class="row">
             <div class="col">
-              <button @click="modal.show()" class="btn pink" type="button">
+              <button @click="modalProfile.show()" class="btn pink" type="button">
                 Change Password
               </button>
+              <div class="modal fade" id="example" tabindex="-1" ref="modalProfile" role="dialog" aria-labelledby="exampleLabel" aria-hidden="false">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title header" id="exampleModalLabel">Change Password</h5>
+                    <button type="button" class="close" @click="modalProfile.hide()" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <form ref="form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                      <div class="form-group">
+                        <label for="currentPwd">Current Password</label>
+                        <input  type="password" class="form-control" id="currentPwd" placeholder="Current Password" name="CurrentPwd">
+                      </div>
+                    <div class="form-group">
+                      <label for="newPwd">New Password</label>
+                      <input type="password" class="form-control" id="newPwd" placeholder="New Password" name="newPwd">
+                    </div>
+                    <div class="form-group">
+                      <label for="confirm">Cofirm Password</label>
+                      <input  type="password" class="form-control" id="confirm" placeholder="Confirm Password" name="confirm">
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" @click="modalProfile.hide()" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn opt">Change</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -73,12 +105,14 @@ export default {
     data(){
       return{
         modal:null,
+        modalProfile:null,
         seller:{},
         user:{},
       }
     },
     async mounted(){
      this.modal=new Modal(this.$refs.modal);
+     this.modalProfile=new Modal(this.$refs.modalProfile);
      const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
      this.seller = seller.data
      this.user = seller.data.users
