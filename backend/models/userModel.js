@@ -1,26 +1,30 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const sellerModel = new Schema({
-    users: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-    },
-    company: {
-        type: String,
-        required: true
-    },
-    contact: {
-        type: String,
-        required: true
-    },
-    address: {
-        type: String,
-        required: true
-    },
-    img: {
-        type: String
-    }
-});
 
-const seller = mongoose.model('sellers', sellerModel);
-module.exports = seller;
+const userSchema = new Schema({
+    roles: {
+        type: Schema.Types.ObjectId,
+        ref: 'roles',
+    },
+    username: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    registerAt: {
+        type: String,
+        required: true
+    }, 
+
+}, {collection: 'users'});
+
+const user = mongoose.model("users", userSchema);
+module.exports = user

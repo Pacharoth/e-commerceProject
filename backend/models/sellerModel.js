@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const sellerModel = new Schema({
     users: {
         type: Schema.Types.ObjectId,

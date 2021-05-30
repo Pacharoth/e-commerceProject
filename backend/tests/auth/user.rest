@@ -1,0 +1,47 @@
+# login 
+POST  http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email":"drgero042@gmail.com",
+    "password":"admin",
+    "__v":0
+}
+
+#logout
+POST  http://localhost:3000/logout
+
+#register customer
+POST  http://localhost:3000/register 
+content-type: application/json
+
+{
+    "username":"Helloworld",
+    "password":"123456789",
+    "email":"pacharothroeun01@gmail.com"
+}
+
+#register any role
+
+POST  http://localhost:3000/registerany
+content-type: application/json
+
+{
+    "username":"admin",
+    "password":"admin",
+    "email":"drgero042@gmail.com",
+    "role":"admin",
+    "__v":0
+}
+
+#getSession
+POST  http://localhost:3000/getsession
+
+#forgetpassword
+POST  http://localhost:3000/forgetpassword
+Content-Type: application/json
+
+{
+    "email":"drgero042@gmail.com",
+    "__v":0
+}
