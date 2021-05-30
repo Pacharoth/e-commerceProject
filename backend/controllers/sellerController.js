@@ -37,13 +37,3 @@ exports.getSellerByID = async (req,res)=>{
     console.log("seller ",sell.users);
     res.json(sell)
 }
-exports.getSeller = async(req,res)=>{
-    var sell  = await seller.find().populate({
-        path:'users',
-        match:{
-            _id:req.params.id,
-        }
-    })
-    var sell = sell.filter(element=>element.users!==null);
-    res.json(sell);
-}
