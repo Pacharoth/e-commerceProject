@@ -3,21 +3,20 @@
         <div class="row mt-2">
             <div class="col-md-6">
                 <div class="row">
-                    <img class="img" src="../../assets/img/pants.jpg" alt="">
+                    <img class="img" :src="'http://localhost:3000/'+product.img" alt="">
                 </div>
                 <div class="flex mt-3 mb-3">
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
                 </div>
 
             </div>
             <div class="col-md-6 ">
-                <p class="decription">HYBSKR Men's Casual Oversize Pants 2021
-                    Fashion Harajuku Streetwear Trousers Male 
-                    Solid Color Classic Ankle-length Pants</p>
-                <p class="price">$10</p>
+                <h3>{{product.name}}</h3>
+                <p class="decription">{{product.detail}}</p>
+                <p class="price">{{product.price}}$</p>
                 <p>Size:</p>
                 <div class="size mb-3" ref="color">
                     <button class="border shadow " @click="changeColor(0)">M</button>
@@ -27,15 +26,15 @@
                 </div>
                 <p>Color:</p>
                 <div class="color mb-3"> 
-                    <img class="color-img" src="../../assets/img/pants.jpg" alt="">
-                    <img class="color-img" src="../../assets/img/pants.jpg" alt="">
+                    <img class="color-img" :src="'http://localhost:3000/'+product.img" alt="">
+                    <img class="color-img" :src="'http://localhost:3000/'+product.img" alt="">
                 </div>
                 <p>Quantity:</p>
                 
                 <button class="btn qty shadow "><i class="fas fa-minus"></i></button>
                 <span> 1 </span>
                 <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
-                <span> 6297 pieces available</span>
+                <span> {{product.qty}} pieces available</span>
                 <div>
                     <button href="" class="buynow mt-3 ">Buy Now</button>
                     <a href="http://localhost:8080/shoppingcart" class=" addtocart mt-3 ml-3">Add to Cart</a>
@@ -50,19 +49,26 @@
     </div>
 </template>
 <script>
-import { ref } from '@vue/reactivity'
+import { ref, toRefs } from '@vue/reactivity'
 import { onMounted, watchEffect } from '@vue/runtime-core';
+import axios from 'axios';
 export default {
     title:'Product Detail',
     name:'ProductDetail',
-    setup() {
+    props:["id"],
+    setup(props) {
         const color = ref(null);
+        const {id}= toRefs(props);
+        const product = ref({})
         onMounted(()=>{
+
             console.log(color.value.children[0]);
         })
         //watch change  
-        watchEffect(()=>{
-            console.log(color.value);
+        watchEffect(async()=>{
+            const response =await axios.get("http://localhost:3000/productdetail/"+id.value);
+            console.log(response.data);
+            product.value=response.data;
         })
         //method
         function changeColor(number){
@@ -71,8 +77,15 @@ export default {
         }
         return{
             color,
-            changeColor
+            changeColor,
+            product,
         }
+    },
+    async mounted(){
+
+    },
+    watch:{
+
     }
 }
 </script>

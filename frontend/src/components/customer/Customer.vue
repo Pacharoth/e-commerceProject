@@ -30,63 +30,18 @@
 
         <div class="container-fluid">
             <div class="product-listing">
-            <router-link to="/productdetail" class=" cart">
+            <router-link :to="'/productdetail/'+pro._id" class=" cart" v-for="pro in product" :key="pro">
                 <div class="card" style="">
-                <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
-                <div class="discount">20% DISCOUNT</div>
+                <img :src="'http://localhost:3000/'+pro.img[0]" class="card-img-top " alt="...">
+                <div class="discount" >{{pro.discount}}% DISCOUNT</div>
                 <div class="card-body">
-                    <h6>Sneaker Shop</h6>
-                    <p class="card-text">White Sneaker from USA</p>
-                    <span class="dis_price">$16</span> <span class="price">$20</span>
+                    <h6>{{pro.name}}</h6>
+                    <p class="card-text">{{pro.detail}}</p>
+                    <span class="dis_price">{{pro.price}}$</span> <span class="price"></span>
                 </div>
                 </div>
             </router-link>
-            <router-link to="/productdetail" class=" cart">
-                <div class="card" style="">
-                <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
-                <div class="discount">20% DISCOUNT</div>
-                <div class="card-body">
-                    <h6>Sneaker Shop</h6>
-                    <p class="card-text">White Sneaker from USA</p>
-                    <span class="dis_price">$16</span> <span class="price">$20</span>
-                </div>
-                </div>
-            </router-link>
-                        <router-link to="/productdetail" class=" cart">
-                <div class="card" style="">
-                <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
-                <div class="discount">20% DISCOUNT</div>
-                <div class="card-body">
-                    <h6>Sneaker Shop</h6>
-                    <p class="card-text">White Sneaker from USA</p>
-                    <span class="dis_price">$16</span> <span class="price">$20</span>
-                </div>
-                </div>
-            </router-link>
-            <router-link to="/productdetail" class=" cart">
-                <div class="card" style="">
-                <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
-                <div class="discount">20% DISCOUNT</div>
-                <div class="card-body">
-                    <h6>Sneaker Shop</h6>
-                    <p class="card-text">White Sneaker from USA</p>
-                    <span class="dis_price">$16</span> <span class="price">$20</span>
-                </div>
-                </div>
-            </router-link>
-            <router-link to="/productdetail" class=" cart">
-                <div class="card" style="">
-                <img src="../../assets/img/sneaker.jpg" class="card-img-top" alt="...">
-                <div class="discount">20% DISCOUNT</div>
-                <div class="card-body">
-                    <h6>Sneaker Shop</h6>
-                    <p class="card-text">White Sneaker from USA</p>
-                    <span class="dis_price">$16</span> <span class="price">$20</span>
-                </div>
-                </div>
-            </router-link>
-            
-            
+
             </div>
         </div>
 
@@ -130,18 +85,16 @@ export default {
         Categorydropdown
     },
     async mounted(){
-        const result = await axios.get('http://localhost:3000/listproducts')
-        this.product = result.data
-        console.log(this.product)
+        const response = await axios.get("http://localhost:3000/listProduct");
+        console.log(response.data);
+        this.product = response.data;
     },
     methods:{
-       listProduct(){
-           const result = axios.get('http://localhost:3000/listproducts')
-           this.product = result.data
-           console.log(this.product)
+  
+    },
+  
 
-       } 
-    }
+
 }
 </script>
 <style  scoped>

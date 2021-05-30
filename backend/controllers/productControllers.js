@@ -57,4 +57,14 @@ exports.postProduct = async (req,res)=>{
     // console.log("file",file)
 }
 
+exports.listProduct = async(req,res) =>{
+    const result = await product.find().populate("categories");
+    res.json(result);
+}
+
+exports.getProByID = async(req,res)=>{
+    const result = await product.findById(req.params.id);
+    res.json(result);
+}
+
 //http://localhost:3000/assets/pic.png
