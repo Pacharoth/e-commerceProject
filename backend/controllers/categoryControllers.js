@@ -1,7 +1,7 @@
 const category = require('../models/categoryModel');
 
 exports.getCategories = async(req,res)=>{
-    
+
     const categories = await category.find();
     try{
         return res.status(200).json(categories);

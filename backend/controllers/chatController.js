@@ -22,3 +22,4 @@ exports.searchChat =async(req,res)=>{
     }}).populate('roles').limit(5);
     res.json(users);
 }
+//select * from people like "%naro%"

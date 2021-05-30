@@ -28,12 +28,12 @@
                     </div>
                     <div class="form-group">
                       <label for="price">Price per unit</label>
-                      <input v-model="product.price" type="number" step="any" class="form-control" id="price" name="price" placeholder="Price per unit">             
+                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Price per unit">             
                     </div>
 
                     <div class="form-group">
                       <label for="qty">Quantity</label>
-                      <input v-model="product.qty" type="number"  class="form-control" id="qty" placeholder="Quantity" name="qty">
+                      <input v-model="product.qty" type="number" min="0"  class="form-control" id="qty" placeholder="Quantity" name="qty">
                     </div>
 
                     <div class="form-group">
@@ -111,7 +111,6 @@
 <script>
 import {Modal} from 'bootstrap';
 import CardDashboard from '../Admin/CardDashboard'
-// import { ref } from '@vue/reactivity';
 import axios from 'axios';
 
 export default {
@@ -134,9 +133,7 @@ export default {
         this.modal=new Modal(this.$refs.modal);
          const categories = await axios.get("http://localhost:3000/category")
          this.categories = categories.data
-        //  console.log("categories", categories.data)
          this.form =new Modal(this.$refs.modal)
-
     },
     methods:{
         async createProduct(){
@@ -154,7 +151,6 @@ export default {
           form.append("detail",this.product.detail);
           form.append("category",this.product.category);
           form.append("sellerid", localStorage.getItem('userid'))
-          form.append("detail",this.product.detail);
           const response=await axios.post('http://localhost:3000/postProduct', form)
           this.log = response.data.message
           if(response.data.message){

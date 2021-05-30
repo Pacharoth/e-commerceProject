@@ -21,23 +21,41 @@
             <td class="productInfo">{{item.price}}</td>
 
             <td>
-                <button class="btn btn-light"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></button>
-                <button class="btn btn-light"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></button>
+                <button class="btn btn-light" @click="editStatus(item)" 
+                data-bs-toggle="modal" data-bs-target="#productModal">
+                <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-light" @click="deleteStatus({
+                  id:item._id,
+                  name:item.name,
+                })"
+                 data-bs-toggle="modal" data-bs-target="#productModal">
+                 <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                 </button>
             </td>
           </tr>
           
         </tbody>
       </table>
+      <edit-delete-product :status="status" :dataset="datas" 
+      :product="products"
+      @onDelete-product="deleteProduct"
+      @onUpdate-product="updateProduct"
+      />
     </div>
 </template>
 <script>
 import axios from 'axios'
+import EditDeleteProduct from './EditDeleteProduct.vue'
 export default {
+  components: { EditDeleteProduct },
     title:'Product List',
     name:'ProductionList',  
     data(){
       return{
-        products:[]
+        products:[],
+        status:"",
+        datas:{},
       }
     }, 
     async mounted(){
@@ -47,7 +65,20 @@ export default {
       this.products = result.data
     },
     methods:{
-
+      deleteStatus(data){
+        this.status="delete";
+        this.datas =data;
+      },
+      editStatus(data){
+        this.status="edit";
+        this.datas=data
+      },
+      deleteProduct(newProduct){
+        this.products = newProduct;
+      },
+      updateProduct(newProduct){
+        this.products=newProduct;
+      }
     }
 }
 </script>

@@ -11,7 +11,6 @@ const chatList=(io,socket)=>{
                     count++;
                 }else{
                     element.users[1]={}
-
                     element.users[i]= element.users[i];
                 }
                 if(count>=2){
@@ -20,6 +19,7 @@ const chatList=(io,socket)=>{
                     element.users[0]=auser;
                 }
             }
+            
             return element;
         })
         socket.join(id);
