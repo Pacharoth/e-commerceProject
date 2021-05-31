@@ -84,8 +84,6 @@ export default {
      this.user = seller.data.users
      console.log("seller profile",this.user)
     }
-
-    
 }
 </script>
 <style lang="scss" scoped>
