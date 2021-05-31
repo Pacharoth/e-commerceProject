@@ -1,0 +1,123 @@
+// 1em = 16px
+//640px, 1024px,1400px
+$breakpoints-up: ("medium": "40em", "large": "64em", "xlarge": "87.5em");
+//639px,1023px,1399px
+$breakpoints-down:("small": "39.9375em", "medium": "63.9375em", "large": "87.4375em");
+
+@mixin breakpoint-up($size){
+    @media (max-width: map-get($breakpoints-up, $size)){
+      @content;
+    }
+  }  
+@mixin breakpoint-down($size){
+    @media (max-width: map-get($breakpoints-down, $size)){
+        @content;
+    }
+}
+@mixin buttonpopup {
+  .users{
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    &:active,&:hover{
+        background-color: #eeeeee;
+    }
+    &:focus{
+        box-shadow: none;
+    }
+    img{
+        border-radius: 50%;
+        background-color: white;
+        width: 50px;
+        height: 50px;
+        margin-right: 4% ;
+        &:hover{
+        box-shadow: $shadow_1;
+
+        }
+    }
+    .chat-time{
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .chat{
+            display: flex;
+            flex-direction: column;
+            .text-chat{
+                color: grey;
+                font-size: 12px;
+                text-align: left;
+            }
+        }
+        .status{
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgb(78, 204, 78);
+        }
+      }
+
+  }
+}
+@mixin contentpopup {
+  padding: 5% 2% 2% 2%;
+  display: flex;
+  flex-direction: column;
+  @include buttonpopup;
+}
+@mixin contentlist($width) {
+  display: none;
+  width: $width;
+  max-height: 85%;
+  background: white;
+  position: absolute;
+  box-shadow: $shadow_2;
+  border-radius: 5px;
+  right:3rem;
+  top:8%;
+  color: grey;
+  overflow-y: scroll;
+  transition: 0.4s ease;
+  &.active{
+      position: fixed;
+      display: block;
+      @include breakpoint-up(large){
+          width: 40%;
+      }
+      @include breakpoint-down(medium){
+          // top: 10%;
+          width: 40%;
+      }
+      @include breakpoint-down(small){
+          top: 9%;
+          width: 96%;
+          height: 90%;
+          right: 2%;
+          max-height: 100%;
+      }
+  }
+  &::-webkit-scrollbar{
+      width: 5px;
+      &:hover{
+          background-color:rgb(250, 241, 241) ;
+      }
+  }
+  &::-webkit-scrollbar-thumb{
+      &:hover{
+      background-color: rgb(212, 209, 209);
+      height: 20px;
+      border-radius: 50px;
+    }
+  }
+  &::-webkit-resizer{
+      height: 20%;
+  }
+  @include breakpoint-up(large){
+    top:4%;
+    // height: 70%;
+  }
+  @include breakpoint-down(medium){
+    top:5%;
+  }
+}
