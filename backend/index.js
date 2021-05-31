@@ -74,7 +74,7 @@ app.use(sellerRoutes);
 app.use(chatRoutes)
 app.use(roleRoutes)
 app.use(productRouter)
-mongoose.connect('mongodb://localhost:27017/AmazingShop?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{
+mongoose.connect('mongodb+srv://naruto:narutonaraku01@P@cluster0.o3uwi.mongodb.net/e-commerceproject?retryWrites=true&w=majority',{
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
