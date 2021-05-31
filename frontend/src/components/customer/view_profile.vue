@@ -33,10 +33,10 @@ export default {
         }
     },
     async mounted() {
-       // const customers = await axios.get("http://localhost:3000/getcustomer/"+localStorage.getItem('userid'))
-        const customers = await axios.get("http://localhost:3000/getcustomer")
+        const customers = await axios.get("http://localhost:3000/getcustomer/"+localStorage.getItem('userid'))
+        //const customers = await axios.get("http://localhost:3000/getcustomer")
         console.log(localStorage.getItem('userId'))
-        this.customers = customers.data
+        this.customers = customers.data[0]
         this.user = this.customers.users
         console.log("customer profile", this.user)
     },

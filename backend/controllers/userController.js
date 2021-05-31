@@ -121,12 +121,18 @@ exports.findUserById = async (req,res)=>{
 }
 
 exports.getCustomerByID = async (req,res)=>{
-    var customers = await customer.findOne().populate({
+    console.log(req.params.id)
+    var customers = await customer.find().populate({
         path:'users',
         match:{
             _id:req.params.id
         }
     })
+    customers = customers.filter(element=>element.users!==null)
     console.log("customer ",customers);
     res.json(customers)
+}
+
+exports.editCustomerByID = async (req, res) => {
+    console.log(req.param.id)
 }

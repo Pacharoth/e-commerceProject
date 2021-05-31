@@ -18,6 +18,8 @@
                         <label for="">Mobile Number</label><br>
                         <input type="text" placeholder="" name="mobile number" id="" required>
                     </div>
+
+                    <input type="submit" name="" id="" value="Save" class="btn2">
                 </div>
                 <!--right part-->
                 <div class="column2">
@@ -115,6 +117,21 @@ export default {
     .btn1{
         @extend .btn;
         color: white;
+        background-color: #D60265;
+        float: right;
+        font-size: 20px;
+        box-shadow: $shadow_1;
+        &:hover,&:focus{
+            box-shadow: $shadow_2;
+            color:white;
+            background-color:  #e4267f;
+        }
+    }
+
+    .btn2{
+        @extend .btn;
+        color: white;
+        float: right;
         background-color: #D60265;
         font-size: 20px;
         box-shadow: $shadow_1;
