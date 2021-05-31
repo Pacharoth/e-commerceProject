@@ -17,39 +17,39 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form method="POST" action="" ref="form" enctype="multipart/form-data">
+                <form ref="form" @submit.prevent="createProduct()" enctype="multipart/form-data">
                   <div class="modal-body">
+                    <div v-if="log != ''" class="alert alert-success" role="alert">
+                      {{log}}
+                    </div>
                     <div class="form-group">
                       <label for="productname">Product name</label>
-                      <input type="text"  class="form-control" id="productName" name="productName" placeholder="Product name">
+                      <input v-model="product.name" type="text" class="form-control" id="productName" name="productName" placeholder="Product name">
                     </div>
                     <div class="form-group">
                       <label for="price">Price per unit</label>
-                      <input type="number" step="any" class="form-control" id="price" name="price" placeholder="Price per unit">             
+                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Price per unit">             
                     </div>
 
                     <div class="form-group">
                       <label for="qty">Quantity</label>
-                      <input type="number"  class="form-control" id="qty" placeholder="Quantity" name="qty">
+                      <input v-model="product.qty" type="number" min="0"  class="form-control" id="qty" placeholder="Quantity" name="qty">
                     </div>
 
                     <div class="form-group">
                       <label for="detail">Detail</label>
-                      <input type="text" class="form-control" id="detail" placeholder="Product detail" name="detail">
+                      <input v-model="product.detail" type="text" class="form-control" id="detail" placeholder="Product detail" name="detail">
                     </div>
                     <div class="form-group">
                       <label for="instock">Instock Date</label>
-                      <input type="date" class="form-control" id="instock" placeholder="Instock Date" name="instock">
+                      <input v-model="product.instock" type="date" class="form-control" id="instock" placeholder="Instock Date" name="instock">
                     </div>
                     <label for="Category">Category</label>
-                    <select class="form-select" aria-label="Default select example" id="category" name="category">
-                      <option selected value="electronic">Electronics</option>
-                      <option value="bag">Bags</option>
-                      <option value="wallet">Wallets</option>
-                      <option value="clothes">Clothes</option>
+                    <select v-model="product.category" class="form-select" aria-label="Default select example" id="category" name="category">
+                      <option  v-for="item in categories" :key = item.id :value="item.name">{{item.name}}</option>
                     </select>
                     <label for="productImg" class="form-label">Product's image</label>
-                    <input class="form-control" type="file" id="productImg" name="img" />
+                    <input ref="img" class="form-control" type="file" id="productImg" name="img" />
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
@@ -111,36 +111,53 @@
 <script>
 import {Modal} from 'bootstrap';
 import CardDashboard from '../Admin/CardDashboard'
-import { ref } from '@vue/reactivity';
 import axios from 'axios';
 
 export default {
     title:'Seller',
     name:"MainSeller",
-    setup(){
-      const form =ref(null)
-      
-      async function createProduct(){
-        const newForm = new FormData(form.value);
-        await axios.post("http://localhost:3000/product",newForm);        
-      }
-
-      return{
-        form,
-        createProduct
-      }
-    },
     data(){
         return {
             modal:null,
+            categories:[{}],
+            product:{},
+            form:null,
+            log:''
+            
         }
     },
     components:{
         CardDashboard
     },
-    mounted(){
+    async mounted(){
         this.modal=new Modal(this.$refs.modal);
+         const categories = await axios.get("http://localhost:3000/category")
+         this.categories = categories.data
+         this.form =new Modal(this.$refs.modal)
     },
+    methods:{
+        async createProduct(){
+          const dataform = new FormData(this.$refs.form)
+          console.log("product created ", this.product)
+          // console.log("form data",dataform)
+          dataform.get("img")
+          
+          const form = new FormData()
+          form.append("file",dataform.get("img"))
+          form.append("productname",this.product.name);
+          form.append("price",this.product.price);
+          form.append("instock",this.product.instock);
+          form.append("qty",this.product.qty);
+          form.append("detail",this.product.detail);
+          form.append("category",this.product.category);
+          form.append("sellerid", localStorage.getItem('userid'))
+          const response=await axios.post('http://localhost:3000/postProduct', form)
+          this.log = response.data.message
+          if(response.data.message){
+            this.form.hide();
+          }          
+      }
+    }
     
 }
 </script>

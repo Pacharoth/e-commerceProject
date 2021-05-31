@@ -1,14 +1,6 @@
 const {Schema,model} = require('mongoose');
 const productModel = new Schema({
-    categories:{
-        type:Schema.Types.ObjectId,
-        ref:'categories',
-    },
-    sellers:{
-        type:Schema.Types.ObjectId,
-        ref:'sellers'
-    },
-    productName:{
+    name:{
         type:String,
         required:true,
     },
@@ -16,15 +8,15 @@ const productModel = new Schema({
         type:String,
         
     },
-    description:{
+    detail:{
         type:String,
     },
     discount:{
         type:Number,
         default:0,
     },
-    quantity:{
-        type:Number.isInteger(),
+    qty:{
+        type:Number,
         default:0,
     },
     img:[
@@ -35,6 +27,17 @@ const productModel = new Schema({
     price:{
         type:Number,
         default:0,
+    },
+    instock:{
+        type:Date
+    },
+    categories:{
+        type: Schema.Types.ObjectId,
+        ref:'categories'
+    },
+    sellers:{
+        type:Schema.Types.ObjectId,
+        ref:'sellers'
     }
 })
 const product = model("products",productModel);

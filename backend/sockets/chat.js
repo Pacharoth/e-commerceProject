@@ -3,6 +3,25 @@ const chat =require('../models/chatModel');
 const chatList=(io,socket)=>{
     socket.on("getchats",async id=>{
         var users = await room.find({users:id}).populate('chat').populate('users');
+        users= users.filter(element=>{
+                var auser=[]
+                var count=0;
+            for (var i in element.users){
+                if(element.users[i]._id==id){
+                    count++;
+                }else{
+                    element.users[1]={}
+                    element.users[i]= element.users[i];
+                }
+                if(count>=2){
+                    auser=element.users[i];
+                    element.users[1]={}
+                    element.users[0]=auser;
+                }
+            }
+            
+            return element;
+        })
         socket.join(id);
         socket.emit("listchats",users);
     })
@@ -10,7 +29,6 @@ const chatList=(io,socket)=>{
 const chatData = (io,socket)=>{
     socket.on('get-chat', async data=>{
         const chat = await findOrCreateChat(data);
-        console.log(chat);
         if(data.roomId){
             socket.join(data.roomId); //join room
         }else{

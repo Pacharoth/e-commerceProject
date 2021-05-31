@@ -13,10 +13,10 @@ const authStore = {
         }
     },
     mutations:{
-        setStatus(state,text){
+        SET_STATUS(state,text){
             state.status=text
         },
-        setSession(state,{userid,user,role,email}){
+        SET_SESSION(state,{userid,user,role,email}){
             state.isAuthenticate={
                 userid,
                 user,
@@ -27,14 +27,14 @@ const authStore = {
     },
     actions:{
         setStatus({commit},text){
-            commit('setStatus',text);
+            commit('SET_STATUS',text);
         },
         setSession({commit},result){
             try{
                 var responses = result.data!==null;
                 if(responses){
                     let response=result.data
-                    commit('setSession',{
+                    commit('SET_SESSION',{
                         userid:response.userId,
                         user:response.username,
                         role:response.userRole,
@@ -42,7 +42,7 @@ const authStore = {
                     }); 
                 }
             }catch(err){
-                commit('setSession',{user:'',role:'',email:'',userid:''});
+                commit('SET_SESSION',{user:'',role:'',email:'',userid:''});
             }
             
         }

@@ -6,13 +6,13 @@ const notificationStore={
         }
     },
     mutations:{
-        changeContent(state,text){
+        CHANGE_CONTENT(state,text){
             state.active = text
         }
     },
     actions:{
-        changeContent(context,text){
-            context.commit('changeContent',text);
+        changeContent({commit},text){
+            commit('CHANGE_CONTENT',text);
         }
     },
     getters:{

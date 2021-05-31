@@ -12,6 +12,7 @@ const categoryRoutes =require('./routers/category');
 const customerRoutes = require('./routers/customer');
 const sellerRoutes = require('./routers/seller');
 const chatRoutes = require('./routers/chat');
+const customerHomeRoute = require('./routers/customerHome')
 const server=require('http').createServer(app);
 const {chatData,chatList}= require('./sockets/chat');
 
@@ -64,6 +65,7 @@ app.use(session({
 }));
 const port = 3000;
 exports.portlisten=port;
+app.use(customerHomeRoute)
 app.use(user);
 app.use(feedbackRoutes);
 app.use(categoryRoutes);
