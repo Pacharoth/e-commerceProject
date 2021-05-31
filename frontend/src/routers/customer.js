@@ -71,9 +71,10 @@ const customerRouter = {
             }
         },
         {
-            path:'productdetail',
+            path:'productdetail/:id',
             name:'productdetail',
             component:ProductDetail,
+            props:true
         },
         {
             path:'profile',

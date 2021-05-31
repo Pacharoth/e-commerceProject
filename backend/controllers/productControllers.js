@@ -2,7 +2,6 @@ const product = require('../models/productModel');
 const categoryModel = require('../models/categoryModel')
 const seller = require('../models/sellerModel')
 const fs = require('fs');
-const { findById } = require('../models/sellerModel');
 exports.getProducts=async(req,res)=>{
     var aseller =await seller.find().populate({
         path:'users',
@@ -85,4 +84,13 @@ exports.updateProduct = async(req,res)=>{
     catch(err){
         res.json({save:false})
     }
+}
+exports.listProduct = async(req,res) =>{
+    const result = await product.find().populate("categories");
+    res.json(result);
+}
+
+exports.getProByID = async(req,res)=>{
+    const result = await product.findById(req.params.id);
+    res.json(result);
 }
