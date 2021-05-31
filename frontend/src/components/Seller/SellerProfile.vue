@@ -21,9 +21,46 @@
           </div>
           <div class="row">
             <div class="col">
-              <button @click="modal.show()" class="btn pink" type="button">
+              <button @click="modalProfile.show()" class="btn pink" type="button">
                 Change Password
               </button>
+              <div class="modal fade" id="example" tabindex="-1" ref="modalProfile" role="dialog" aria-labelledby="exampleLabel" aria-hidden="false">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title header" id="exampleModalLabel">Change Password</h5>
+                    <button type="button" class="close" @click="modalProfile.hide()" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <form @submit.prevent="validate()" ref="form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                      <div v-if="log != ''" class="alert alert-success" role="alert">
+                        {{log}}
+                      </div>
+                      <div class="form-group">
+                        <div v-if="notMatch.current != '' " class="notMatch">{{notMatch.current}}</div>
+                        <label for="currentPwd">Current Password</label>
+                        <input v-model="pwd.current" type="password" class="form-control" id="currentPwd" placeholder="Current Password" name="CurrentPwd">
+                      </div>
+                    <div class="form-group">
+                      <label for="newPwd">New Password</label>
+                      <input v-model="pwd.nw" type="password" class="form-control" id="newPwd" placeholder="New Password" name="newPwd">
+                    </div>
+                    <div class="form-group">
+                      <div v-if="notMatch.nw!=''" class="notMatch">{{notMatch.nw}}</div>
+                      <label for="confirm">Cofirm Password</label>
+                      <input v-model="pwd.confirm" type="password" class="form-control" id="confirm" placeholder="Confirm Password" name="confirm">
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" @click="modalProfile.hide()" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn opt">Change</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -67,22 +104,46 @@
 <script>
 import axios from 'axios'
 import {Modal} from 'bootstrap';
+// import bcrypt from 'bcrypt';
 export default {
     title:'Seller Profile',
     name:'SellerProfile',
     data(){
       return{
         modal:null,
+        modalProfile:null,
         seller:{},
         user:{},
+        pwd:{},
+        notMatch:{},
+        log:''
       }
     },
     async mounted(){
      this.modal=new Modal(this.$refs.modal);
+     this.modalProfile=new Modal(this.$refs.modalProfile);
      const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
      this.seller = seller.data
      this.user = seller.data.users
-     console.log("seller profile",this.user)
+     console.log(this.seller)
+     console.log(this.user)
+    //  console.log("seller profile",this.user)
+    //  console.log('pwd',this.pwd)
+
+    },
+    methods:{
+      async validate(){
+        if(this.pwd.nw != this.pwd.confirm){
+          this.notMatch.confirm = 'Confirm password is not match !'
+        }
+        const res = await axios.put('http://localhost:3000/changePwd/'+localStorage.getItem('userid'),this.pwd)
+        console.log('change result',res.data)
+        if(res.data.err == true){
+          this.notMatch.current = res.data.message
+        }
+
+        
+      }
     }
 
     
@@ -98,6 +159,9 @@ export default {
 #profilepic{
   background-color: #d60265;
   color: #d60265;
+}
+.notMatch{
+  color: red;
 }
 .header {
   color: #d60265;
