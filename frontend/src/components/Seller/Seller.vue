@@ -91,6 +91,7 @@
 <script>
 import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
+
 export default {
     name:'Seller',
     

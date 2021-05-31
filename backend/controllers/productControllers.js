@@ -16,6 +16,7 @@ exports.getProducts=async(req,res)=>{
 }
 exports.postProduct = async (req,res)=>{
     const{productname,price,instock,qty,sellerid,category,detail} = req.body;
+    console.log(req.body)
     const file = req.files.file
     if(file){
         var filename='/assets/img/'+file.name;
@@ -37,10 +38,14 @@ exports.postProduct = async (req,res)=>{
             }
         })
         aseller = aseller.filter(element=>element.users!==null);
-        console.log(aseller)
+        // console.log(aseller)
         newProduct.sellers = aseller[0]._id;
         newProduct.categories = cate[0]._id;
-        await newProduct.save()
+        console.log('newproduct',newProduct)
+        await newProduct.save().then(result =>{console.log('result',result)})
+        .catch(err =>{
+            console.log('err',err)
+        })
         res.json({'message':'New prodcut is created'})
     }else{
         res.json({'message':"Can't create product"})
