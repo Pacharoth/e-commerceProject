@@ -1,26 +1,21 @@
-const {Schema,model} = require('mongoose');
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const feedbackSchema = new Schema({
-    text:{
-        type: String, 
-        required: true
-    },
-    postAt: {       //datetime
-        type: String,
-        required: true
-    },
-    customerId: {
-        type: String,
-        required: true
-    },
-    status: {   //status represent reply 
-        type: String,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    }
+  content: {
+    type: String,
+    required: true
+  },
+  user: {
+    type: String,
+    required: true
+  },
+  postedAt: {
+    type: String,
+    required: true
+  },
+  
 }, {collection: 'feedback'});
 
-module.exports = model('Feedback', feedbackSchema);
+module.exports = mongoose.model('Feedback', feedbackSchema);

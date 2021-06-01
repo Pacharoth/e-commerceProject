@@ -109,7 +109,6 @@ export default {
     .small-product{
         width: 60%;
         margin-left: 20%;
-
     }
     .flex{
         display: flex;
@@ -175,7 +174,6 @@ export default {
         background-color: #D60265;
         font-weight: bold;
         border-radius: 50%;
-
         // padding-left: 3%;
         // padding-right: 3%;
         // padding-top: 2%;

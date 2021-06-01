@@ -12,9 +12,9 @@
             </div>
             
             <div class="column2">
-               <p class="info1">Amazing</p>
-               <p class="info1">Amazing@gmail.com</p>
-               <p class="info1">+855112211</p>
+               <p class="info1">{{user.username}}</p>
+               <p class="info1">{{user.email}}</p>
+               <p class="info1">{{customers.phoneNumber}}</p>
               
             </div>
         </div>
@@ -22,9 +22,24 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
     title:'Profile',
     name:'view_profile',
+    data(){
+        return{
+            customers: {},
+            user: {},
+        }
+    },
+    async mounted() {
+       // const customers = await axios.get("http://localhost:3000/getcustomer/"+localStorage.getItem('userid'))
+        const customers = await axios.get("http://localhost:3000/getcustomer")
+        console.log(localStorage.getItem('userId'))
+        this.customers = customers.data
+        this.user = this.customers.users
+        console.log("customer profile", this.user)
+    },
 }
 </script>
 <style lang="scss" scoped>
