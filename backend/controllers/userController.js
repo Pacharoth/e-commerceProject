@@ -96,8 +96,9 @@ exports.forgetPassword = async(req,res)=>{
     ).catch(err=>res.json({account:false}))
 }
 exports.resetPassword = async(req,res)=>{
-    const salt = bcrypt.genSalt(10);
+    const salt = bcrypt.genSaltSync(10);
     const response =await user.findOne({_id:req.params.id})
+
     response.password =  bcrypt.hashSync(req.body.password,salt);
     try{
         await response.save()
