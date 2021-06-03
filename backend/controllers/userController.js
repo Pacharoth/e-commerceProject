@@ -11,6 +11,7 @@ exports.transport = nodemailer.createTransport({
 });
 const { registerUser } = require('../utils/registerUser');
 const role = require('../models/roleModel');
+const customer = require('../models/customerModel');
 exports.login = async(req,res)=>{
     const request = req.body;
     await user.findOne({email:request.email}).populate('roles').exec()
@@ -95,8 +96,9 @@ exports.forgetPassword = async(req,res)=>{
     ).catch(err=>res.json({account:false}))
 }
 exports.resetPassword = async(req,res)=>{
-    const salt = bcrypt.genSalt(10);
+    const salt = bcrypt.genSaltSync(10);
     const response =await user.findOne({_id:req.params.id})
+
     response.password =  bcrypt.hashSync(req.body.password,salt);
     try{
         await response.save()
@@ -106,13 +108,26 @@ exports.resetPassword = async(req,res)=>{
     }
 
 }
+
 exports.findUser = async(req,res)=>{
     console.log(req.body)
     const response=await user.find({email:req.body.email});
     res.json(response);
 }
+
 exports.findUserById = async (req,res)=>{
     console.log(req.body);
     const response = await user.find({_id:req.params.id});
     res.json(response);
+}
+
+exports.getCustomerByID = async (req,res)=>{
+    var customers = await customer.findOne().populate({
+        path:'users',
+        match:{
+            _id:req.params.id
+        }
+    })
+    console.log("customer ",customers);
+    res.json(customers)
 }

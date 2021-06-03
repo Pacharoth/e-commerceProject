@@ -36,7 +36,7 @@
                 <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
                 <span> {{product.qty}} pieces available</span>
                 <div>
-                    <button href="" class="buynow mt-3 ">Buy Now</button>
+                    <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link>
                     <a href="http://localhost:8080/shoppingcart" class=" addtocart mt-3 ml-3">Add to Cart</a>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
@@ -109,7 +109,6 @@ export default {
     .small-product{
         width: 60%;
         margin-left: 20%;
-
     }
     .flex{
         display: flex;
@@ -175,7 +174,6 @@ export default {
         background-color: #D60265;
         font-weight: bold;
         border-radius: 50%;
-
         // padding-left: 3%;
         // padding-right: 3%;
         // padding-top: 2%;

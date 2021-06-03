@@ -61,7 +61,6 @@ export default {
         Notification
     },
     setup() {
-    
         const store= useStore(); //this.$store
         const modal = ref(null); //this.$ref.modal
         const nav =ref(null); //this.$ref.nav

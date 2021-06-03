@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
+const feedbackController = require('../controllers/feedbackController')
 
-router.get('/feedback', (req, res) => {
-    console.log('feedback customer')
-})
+router.post('/feedbacks', feedbackController.createFeedback);
+router.get('/feedbacks', feedbackController.getFeedbacks);
 
-module.exports = router;
+module.exports = router

@@ -74,12 +74,14 @@ export default {
         const search = ref("");
         const searchData=ref(false);
         const listChat = ref([]);
-        const chatlist= computed(()=>store.getters['chat/getChatList']);
         const socket = ref(null);
         const chatSocket =ref([]);
         const id =ref("");
         //computed
+        const user = computed(()=>store.getters['auth/getSession'])
         const role = computed(()=>store.getters['role/getRoles'])
+        const chatlist= computed(()=>store.getters['chat/getChatList']);
+
 
         onBeforeMount(()=>{
             const s = io(localhost);
@@ -90,8 +92,9 @@ export default {
         })
         watchEffect(()=>{
             if(socket.value==null) return socket.value;
-            id.value=localStorage.getItem('userid');
-            socket.value.emit('getchats',localStorage.getItem('userid'))
+            id.value=user.value.userid
+            socket.value.emit('getchats',user.value.userid)
+
         })
         watchEffect(()=>{
             if(socket.value==null) return socket.value;

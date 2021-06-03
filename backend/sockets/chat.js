@@ -28,16 +28,27 @@ const chatList=(io,socket)=>{
 }
 const chatData = (io,socket)=>{
     socket.on('get-chat', async data=>{
-        const chat = await findOrCreateChat(data);
+        console.log(data)
+        const chats = await findOrCreateChat(data);
         if(data.roomId){
             socket.join(data.roomId); //join room
         }else{
-            console.log(chat[0].roomChat._id);
-            socket.join(chat[0].roomChat._id);
+            data.roomId = chats[0].roomChat._id
+            socket.join(chats[0].roomChat._id);
         }
-        socket.emit("load-chat",chat); //getData in that room
+        console.log(chats)
+        socket.emit("load-chat",chats); //getData in that room
+        socket.emit("getchats",data.ownerId);
         socket.on("send-changes",deta=>{
-            socket.broadcast.to(deta.roomChat._id).emit('receive-chats',deta);//broadcast in room
+            socket.broadcast.to(data.roomId).emit('receive-chats',deta);//broadcast in room
+        })
+        socket.on('save-chat',async data=>{
+            var achat  = new chat({
+                roomChat:data.roomId,
+                status:"read",
+                chatAt:new Date,
+                users:data.ownerId,
+            })
         })
 
     })

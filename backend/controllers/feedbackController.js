@@ -1,26 +1,24 @@
 const Feedback = require('../models/feedbackCustomer');
 
+exports.getFeedbacks = (req, res) => {
+  Feedback.find({}, (err, feedbacks) => {
+    if(err)
+      console.log(err)
+    res.json(feedbacks)  
+  })
+}
+
 exports.createFeedback = (req, res) => {
+  const feedback = new Feedback({
+    content: req.body.content,
+    user: "kong",
+    postedAt: "2021-05-18",
+   // postedAt: new Date().toISOString()
+  })
+  feedback.save().then(result => {
     console.log('feedback is created')
-    
-    const text = req.body.text;
-    const postAt = new Date.toISOString();
-    const customerId = req.body.customerId;
-    const status = req.body.status;
-    const name = req.body.name;
-    
-    console.log('status ', status)
-    const feedback = new Feedback({
-        text: text,
-        postAt: postAt,
-        customerId: customerId,
-        status: status,
-        name: name
-    });
-    feedback.save().then(result => {
-        console.log('feedback was created');
-        res.json({"message": "success", "data": result});
-    }).catch(err => {
-        console.log(err);
-    })
+    res.json({ "message": "New feedback was created.", "data": result });
+  }).catch(err => {
+    console.log(err);
+  })
 }
