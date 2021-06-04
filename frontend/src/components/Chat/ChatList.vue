@@ -93,7 +93,8 @@ export default {
         watchEffect(()=>{
             if(socket.value==null) return socket.value;
             id.value=user.value.userid
-            socket.value.emit('getchats',user.value.userid)
+            if(user.value.userid)
+                socket.value.emit('getchats',{userid:user.value.userid})
 
         })
         watchEffect(()=>{

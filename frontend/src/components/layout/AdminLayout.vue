@@ -78,7 +78,12 @@ export default {
         }
         function showChatList(){showChatLists(store)}
         function showNotification(){showNotifications(store)}
-        function logout(){logouts(store)}
+        function logout(){
+            store.dispatch('chat/changeList','');
+            store.dispatch('notification/changeContent','');
+            logouts(store);
+            
+        }
         return{
             //data
             nav,

@@ -74,8 +74,6 @@ export default {
                     user.value={}
                     password.value=""
                     router.push({path:'/'});
-
-                   
                 }
             }
         }

@@ -58,6 +58,7 @@ export default {
             color.value="rgb(66, 207, 66)";
             chat_status.value="online"
             if(socket.value==null) return
+            
             socket.value.emit('get-chat',{
                 userId:chatData.value.userId,
                 ownerId:user.value.userid,
@@ -68,7 +69,7 @@ export default {
             return ()=>{
                 socket.value.off('load-chat');
             }
-        },[socket,chatData,user]);
+        });
         onUnmounted(()=>{
             socket.value.disconnect();
         })
@@ -85,29 +86,23 @@ export default {
         });
         watchEffect(()=>{
             if(socket.value==null) return
-            socket.value.on('recieve-chats',async deta=>{
-                msg.value.push(deta);
-                getdata.value=deta
-            })
-        },[socket,msg])
+        })
         watchEffect(()=>{
-            if(socket.value==null) return
-            const interval = setInterval(()=>{
-                socket.value.on('save-chat',getdata.value);
-            },2000)
-            return clearInterval(interval);
         })
         //computed
         const chatData=computed(()=>store.getters['chat/getChat']);
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
         const user = computed(()=>store.getters['auth/getSession'])
+        watchEffect(()=>{
+            console.log(chatData.value)
+        })
         //method
         const message =()=>{
             if(socket.value==null) return;
            if(chat.value.scrollHeight>0){
-                chat.value.scrollTop=chat.value.scrollHeight+64
+                chat.value.scrollTop=chat.value.scrollHeight+64;
             }
-            socket.value.emit('send-changes',mess.value);
+            socket.value.emit('send-changes',{user:user.value.userid,message:mess.value});
             mess.value=""
         }
         const closeChat = ()=>{
@@ -126,6 +121,7 @@ export default {
             mess,
             socket,
             chat,
+            user,
             //computed
             status,
             chatcontent,
@@ -134,6 +130,7 @@ export default {
             message,
             closeChat,
             loadStatus,
+            getdata
 
         }
     },
