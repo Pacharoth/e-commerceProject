@@ -5,9 +5,13 @@ const chatStore={
             contentChat:"",
             chatButton:"",
             chat:{},
+            chatList:[],
         }
     },
     getters:{
+        getList(state){
+            return state.chatList;
+        },
         getChatContent(state){
             return state.contentChat;
         },
@@ -27,6 +31,9 @@ const chatStore={
         },
         PUT_TO_CHAT(state,data){
             state.chat=data;
+        },
+        UPDATE_CHAT_LIST(state,data){
+            state.chatList = data;
         }
     },
     actions: {
@@ -38,6 +45,9 @@ const chatStore={
         },
         putToChat({commit},data){
             commit("PUT_TO_CHAT",data);
+        },
+        updateChatList({commit},data){
+            commit("UPDATE_CHAT_LIST",data);
         }
     },
 }

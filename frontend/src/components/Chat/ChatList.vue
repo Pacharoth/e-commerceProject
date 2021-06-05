@@ -13,13 +13,14 @@
                 <input type="text" v-model="search" @click="changeToSearchUser" class="form-control search-user" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'">
             </div>
             <div class="list-user" v-if="searchData">
+                <template v-for="chat in listChat" >
                 <button class="users btn" 
                 @click="popChat({
                     ownerId:chat._id,
                     username:chat.username,
                     role:chat.roles.name
                 })" 
-                v-for="chat in listChat" :key="chat">
+                v-if="chat._id!==user.userid" :key="chat">
                     <img src="../../assets/logo.png" alt="">
                     <div class="chat-time">
                         <div class="chat">
@@ -27,23 +28,23 @@
                         </div>
                         <div class="status" :style="{'background-color':color}"></div>
                     </div>
-                </button>
+                </button>    
+                </template>
+                
             </div>
             <div class="list-user" v-else>
-                <button class="users btn" @click="popChat" v-for="chat in chatSocket" :key="chat">
+                <button class="users btn" @click="popChat({
+                    ownerId:chat.users[0]._id,
+                    username:chat.users[0].username,
+                    role:role.filter(element=>element._id===chat.users[0].roles)[0].name,
+                })" v-for="chat in chatSocket" :key="chat">
                     <img src="../../assets/logo.png" alt="">
                     <div class="chat-time">
-                        <div class="chat" v-for="user in chat.users" :key="user">
-                            <!-- <span >Pizza (seller)</span>
-                            
-                            <span class="text-chat">hello world</span> -->
-                            <template v-if="Object.keys(user).length!==0">
+                        <div class="chat" >
                                 <span v-for="i in role" :key="i">
-                                    <template v-if="user.roles===i._id">{{user.username}} ({{i.name}})</template>
+                                    <template v-if="chat.users[0].roles===i._id">{{chat.users[0].username}} ({{i.name}})</template>
                                 </span>
-                                <span class="text-chat">{{chat.chat[chat.chat.length-1].content}}</span>
-                            </template>
-                            
+                                <span class="text-chat" v-if="chat.chat[chat.chat.length-1]">{{chat.chat[chat.chat.length-1].content}}</span>
                         </div>
                         <div class="status" :style="{'background-color':color}"></div>
                     </div>
@@ -59,7 +60,7 @@
     </Suspense>
 </template>
 <script>
-import { computed, onBeforeMount, ref, watchEffect } from '@vue/runtime-core';
+import { computed, onBeforeMount, onMounted, ref, watchEffect } from '@vue/runtime-core';
 import Chat from './Chat';
 import ChatLoading from './ChatLoading.vue';
 import { useStore } from 'vuex';
@@ -90,18 +91,22 @@ export default {
                 s.disconnect();
             }
         })
-        watchEffect(()=>{
+        onMounted(()=>{
             if(socket.value==null) return socket.value;
             id.value=user.value.userid
             if(user.value.userid)
-                socket.value.emit('getchats',{userid:user.value.userid})
-
+                socket.value.emit('getchats',{user:user.value.userid});
+          
         })
-        watchEffect(()=>{
+        onMounted(()=>{
             if(socket.value==null) return socket.value;
-            socket.value.on('listchats',data=>{
+            socket.value.on('listchats',async data=>{
+                console.log(data);
                 chatSocket.value=data;
             })
+            return()=>{
+                socket.value.off('listchats');
+            }
         })
         watchEffect(()=>{
             window.ononline=()=>{
@@ -117,7 +122,7 @@ export default {
         })
         //method
         const popChat = (data)=>{
-            const {role,ownerId,username,roomId}=data
+            const {role,ownerId,username}=data
             store.dispatch('chat/changeContent','active');
             store.dispatch('chat/changeList','');
             if(searchData){
@@ -129,7 +134,6 @@ export default {
             }else{
                 store.dispatch('chat/putToChat',{
                     userId:ownerId,
-                    roomId:roomId,
                     username:username,
                     role:role,
                 })
@@ -155,6 +159,7 @@ export default {
             popChat,
             searchUser,
             changeToSearchUser,
+            user
         }
     },
     data(){
