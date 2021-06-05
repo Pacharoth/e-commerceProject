@@ -51,7 +51,8 @@ import { ref } from '@vue/reactivity';
 import { computed, onMounted } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import {showChatLists,showNotifications} from '../../hook/effect';
-import {logouts} from '../../utils/FormValidation'
+import {localhost, logouts} from '../../utils/FormValidation'
+import { io } from 'socket.io-client';
 export default {
     title:'Admin',
     name:"AdminLayout",
@@ -65,10 +66,15 @@ export default {
         const modal = ref(null); //this.$ref.modal
         const nav =ref(null); //this.$ref.nav
         const sidebar = ref(null); 
-        
+        const socket = ref(null);
         const user = computed(()=>store.getters['auth/getSession'])
         onMounted(()=>{
             var modal=new Modal(modal)
+            const s = io(localhost);
+            socket.value=s;
+            return()=>{
+                socket.disconnect();
+            }
         })
         function loadSideBar(){
             let nes  =nav.value.classList;
@@ -76,7 +82,10 @@ export default {
             let side = sidebar.value.classList;
             side.contains('active')?side.remove('active'):side.add('active');
         }
-        function showChatList(){showChatLists(store)}
+        function showChatList(){
+            showChatLists(store)
+            socket.value.emit("getchats",{user:user.value.userid})
+        }
         function showNotification(){showNotifications(store)}
         function logout(){
             store.dispatch('chat/changeList','');

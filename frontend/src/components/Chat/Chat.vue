@@ -5,7 +5,7 @@
                     <img src="../../assets/logo.png" alt="">
                 <div class="chat-status">
                     <div class="chat-text" >
-                        <span >{{chatData.username}} ({{chatData.role}})</span>
+                        <span >{{chatData.username}} ({{chatData.role}}) {{writing}}</span>
                         <span v-if="status=='online'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> active</span>
                         <span v-else-if="status=='offline'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> offline</span>
                     </div>
@@ -16,18 +16,18 @@
         <div class="content-all-chat">
             <div ref="chat" class="chatting">
                 <slot v-for="msgs in msg" :key="msgs" class="content-chatting">
-                    <div class="admin active" v-if="msgs.ownerId==user.userid" >
-                        <span>{{msgs.message}}</span>
+                    <div class="admin active" v-if="msgs.users._id==user.userid" >
+                        <span>{{msgs.content}}</span>
                     </div>
-                    <div class="admin" v-else >
+                    <div class="admin" v-else-if="msgs.users._id!=user.userid" >
                         <img src="../../assets/logo.png" alt="">
-                        <span>{{msgs.message}}</span>
+                        <span>{{msgs.content}}</span>
                     </div>          
-                    <div v-if="writing">{{writing}}</div>
 
                 </slot>
-
             </div>
+        
+
         </div>
         <form class="input-message" @submit.prevent="message">
             <button class="btn"> <em class="bi bi-mic"></em></button>
@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-import { computed, onBeforeMount, onUnmounted,ref, watch} from '@vue/runtime-core'
+import { computed,ref, watch} from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import {io} from 'socket.io-client';
 
@@ -49,7 +49,7 @@ export default {
         const store = useStore();
         const data = ref();
         const chat_status = ref("");
-        const msg = ref([""]);
+        const msg = ref([]);
         const color = ref("");
         const mess = ref("");
         const socket =ref();
@@ -61,14 +61,12 @@ export default {
         const chatData=computed(()=>store.getters['chat/getChat']);
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
         const user = computed(()=>store.getters['auth/getSession'])
-        onBeforeMount(()=>{
-            const s = io('http://localhost:3000');
-            socket.value=s;
 
-        })
+        const s = io('http://localhost:3000');
+        socket.value=s;
         watch(mess,()=>{
             if(mess.value!=""){
-                socket.value.emit("writing","Typing Data");
+                socket.value.emit("writing","Typing Data...");
             }else{
                 socket.value.emit("writing","");
             }
@@ -78,30 +76,31 @@ export default {
             }
             socket.value.on("recieve-writing",handler);
         })
-        watch(user,()=>{
-            socket.value.on("onstatus",user.value.userid);
-
-        })
         watch(chatData,()=>{
+            socket.value=io("http://localhost:3000");
             socket.value.emit('get-chat',{
                 userId:chatData.value.userId,
                 ownerId:user.value.userid,
             });
+            chat.value.scrollTop=chat.value.scrollHeight-chat.value.clientHeight;
+
             color.value="rgb(66, 207, 66)";
             chat_status.value="online";
+        
             socket.value.on("recieve-changes",async data=>{
-                if(chat.value.scrollHeight>0){
-                    chat.value.scrollTop=chat.value.scrollHeight;
-                    console.log(chat.value.scrollTop);
-                    if(data.message){
-                     msg.value.push(data);
-
-                    }    
-                }
+                console.log(data.users._id)
+               
+                if(data.content!==""){
+                    msg.value.push(data);
+                } 
                 
             })
             socket.value.once('load-chats',msgs=>{
                 roomId.value=msgs.roomId;
+                const {chat} = msgs;
+                if(chat){
+                    msg.value=chat;
+                }
             })
             const handler = data=>{
                 writing.value=data;
@@ -111,37 +110,30 @@ export default {
             return()=>{
                 socket.value.off("recieve-writing");
                 socket.value.off('load-chats');
+                socket.value.off("recieve-changes");
             }
         })
-  
-        onUnmounted(()=>{
-            socket.value.disconnect();
-        })
-      
-        //watch effect
-        // watchEffect(()=>{  
-        //     window.ononline=()=>{
-        //         color.value="rgb(66, 207, 66)";
-        //         chat_status.value="online";
-        //     }
-        //     window.onoffline=()=>{
-        //         color.value = "rgba(112, 112, 112, 0.664)";
-        //         chat_status.value="offline";
-        //     }
-        // });
-        //method
         const message =()=>{
             
             if(socket.value==null) return;
+            if(chat.value.scrollHeight>0){
+                    chat.value.scrollTop=chat.value.scrollHeight;
+                    console.log(chat.value.scrollTop);   
+            }
             socket.value.emit('send-changes',{
-                ownerId:user.value.userid,
-                message:mess.value,
+                users:{
+                    _id:user.value.userid
+                },
+                content:mess.value,
             });
             mess.value=""
         }
         const closeChat = ()=>{
             store.dispatch('chat/changeContent','')
             store.dispatch('chat/putToChat',{});
+            socket.value.disconnect();
+            socket.value=s;
+            
         };
         const loadStatus=()=>{}
 

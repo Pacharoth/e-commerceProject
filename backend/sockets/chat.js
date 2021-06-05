@@ -39,16 +39,35 @@ const chatData = (io,socket)=>{
     socket.on('get-chat', async data=>{
         const roomOrchat= await findOrCreateChat(data);
         // socket.join(roomOrchat.roomId);
+        console.log(roomOrchat)
         var {roomId} = roomOrchat;
         if(roomId!==""){
             socket.join(roomId.toString());
+
             socket.emit("load-chats",roomOrchat);
             socket.on("writing",async data=>{
                 socket.broadcast.to(roomId.toString()).emit("recieve-writing",data);
             })
             socket.on("send-changes",async data=>{
                 console.log(data);
-                io.to(roomId.toString()).emit("recieve-changes",data);
+                io.in(roomId.toString()).emit("recieve-changes",data);
+                const saveRoom = await room.find({_id:roomId}).populate('chat').populate('users');
+                if(saveRoom.length>0){
+                    const chats = new chat({
+                        users:data.users._id,
+                        roomChat:saveRoom[0]._id,
+                        content:data.content,
+                        chatAt:new Date,
+                    });
+                    saveRoom[0].chat.push(chats);
+                    await saveRoom[0].save();
+                    await chats.save();
+                }
+                
+            })
+
+            socket.on("save-changes",async data=>{
+
             })
         }
        
