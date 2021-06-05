@@ -1,5 +1,5 @@
-const room=require("../models/RoomChat");
-const chat =require('../models/chatModel');
+const room=require("../models/RoomChat"),
+    chat =require('../models/chatModel');
 const chatList=(io,socket)=>{
     socket.on("getchats",async id=>{
         console.log(id);
@@ -53,15 +53,17 @@ const chatData = (io,socket)=>{
                 io.in(roomId.toString()).emit("recieve-changes",data);
                 const saveRoom = await room.find({_id:roomId}).populate('chat').populate('users');
                 if(saveRoom.length>0){
-                    const chats = new chat({
-                        users:data.users._id,
-                        roomChat:saveRoom[0]._id,
-                        content:data.content,
-                        chatAt:new Date,
-                    });
-                    saveRoom[0].chat.push(chats);
-                    await saveRoom[0].save();
-                    await chats.save();
+                   if(data.content!==""){
+                        const chats = new chat({
+                            users:data.users._id,
+                            roomChat:saveRoom[0]._id,
+                            content:data.content,
+                            chatAt:new Date,
+                        });
+                        saveRoom[0].chat.push(chats);
+                        await saveRoom[0].save();
+                        await chats.save();
+                   }
                 }
                 
             })

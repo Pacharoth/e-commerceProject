@@ -1,24 +1,24 @@
-const express =require('express');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const cookieParser =require('cookie-parser');
-const fileUpload = require('express-fileupload');
-const cors = require('cors');
-const app = express();
-const bodyParser = require("body-parser");
-const user = require('./routers/User');
-const feedbackRoutes = require('./routers/feedbackRouter');
-const categoryRoutes =require('./routers/category');
-const customerRoutes = require('./routers/customer');
-const sellerRoutes = require('./routers/seller');
-const chatRoutes = require('./routers/chat');
-const customerHomeRoute = require('./routers/customerHome')
-const server=require('http').createServer(app);
-const {chatData,chatList}= require('./sockets/chat');
+const express =require('express'),
+mongoose = require('mongoose'),
+session = require('express-session'),
+cookieParser =require('cookie-parser'),
+fileUpload = require('express-fileupload'),
+cors = require('cors'),
+app = express(),
+bodyParser = require("body-parser"),
+user = require('./routers/User'),
+feedbackRoutes = require('./routers/feedbackRouter'),
+categoryRoutes =require('./routers/category'),
+customerRoutes = require('./routers/customer'),
+sellerRoutes = require('./routers/seller'),
+chatRoutes = require('./routers/chat'),
+customerHomeRoute = require('./routers/customerHome'),
+server=require('http').createServer(app),
+{chatData,chatList}= require('./sockets/chat'),
 
-const roleRoutes = require('./routers/role');
-const productRouter = require('./routers/product');
-const io = require('socket.io')(server,{
+roleRoutes = require('./routers/role'),
+productRouter = require('./routers/product'),
+io = require('socket.io')(server,{
   cors:{
     origin:[
       "http://localhost:8080",
@@ -63,7 +63,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
-const port = 3000;
+port = 3000;
 exports.portlisten=port;
 app.use(customerHomeRoute)
 app.use(user);

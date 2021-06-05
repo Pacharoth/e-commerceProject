@@ -30,9 +30,9 @@
 
         </div>
         <form class="input-message" @submit.prevent="message">
-            <button class="btn"> <em class="bi bi-mic"></em></button>
-            <input v-model="mess"  type="text" class="form-control send"  placeholder="Aa">
-            <button class="btn"><em class="bi bi-play"></em></button>
+            <button class="btn" @click="onVoice" ref="voice"> <em class="bi bi-mic"></em></button>
+            <input v-model="mess" ref="disable" type="text" class="form-control send"  placeholder="Aa">
+            <button class="btn" ><em class="bi bi-play"></em></button>
         </form>
     </div>
 </template>
@@ -41,11 +41,14 @@ import { computed,ref, watch} from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import {io} from 'socket.io-client';
 
+
 export default {
     name:'Chat',
     props:['id'],
     setup() {
         //data
+        const voice =ref(null);
+        const disable =ref(null);
         const store = useStore();
         const data = ref();
         const chat_status = ref("");
@@ -136,9 +139,37 @@ export default {
             
         };
         const loadStatus=()=>{}
-
+        const onVoice = ()=>{
+            var chunk=[]
+            if(navigator.mediaDevices){
+                navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+                    let mediaRecord = new MediaRecorder(stream);
+                    const voices =  voice.value.classList
+                    if(voices.contains('active')){
+                        voices.remove('active');
+                        disable.value.disabled=false;
+                        mediaRecord.start();
+                        console.log(mediaRecord.state);
+                        
+                    }else{
+                        voices.add('active');
+                        disable.value.disabled=true;
+                        mediaRecord.stop();
+                    }
+                    mediaRecord.ondataavailable=(e)=>{
+                        chunk.push(e);
+                    }
+                    mediaRecord.onstop = ()=>{
+                        let blob = new Blob(chunk,{'type':'audio/mp3'});
+                        let form= new FormData();
+                        form.append("voice",blob);
+                        console.log(blob)
+                    }
+                })
+            }
+        }
+        
         const status = computed(()=>chat_status.value);
-
         return{
             data,
             chat_status,
@@ -148,6 +179,9 @@ export default {
             socket,
             chat,
             user,
+            voice,
+            onVoice,
+            disable,
             //computed
             status,
             chatcontent,
@@ -280,23 +314,21 @@ export default {
                 
                 }
             }
+            .active
+            {
+                background: #eeeeee;
+                color: black;
+                box-shadow: $shadow_1;
+            }
             button{
                 border-radius: 50%;
                 color: $blue_color;
-                i{
-                    &:focus{
-                        color: grey;
-                    }
-                    
-                }
-                &:focus{
-                    box-shadow: none;
-                    background: #eeeeee;
-                    color: black;
-                }
+                box-shadow: none;
+                
                 &:hover{
                     background: #eeeeee;
                     color: black;
+                    box-shadow: $shadow_1;
                 }
             }
         }
@@ -317,11 +349,12 @@ export default {
                 }
                 &::-webkit-scrollbar{   
                     width: 10px;
-                &:hover{
-                        background-color:rgb(250, 241, 241) ;
-                    }
+                    &:hover{
+                            background-color:rgb(250, 241, 241) ;
+                        }
                 }
                 &::-webkit-scrollbar-thumb{
+                    width: 10px;
                     &:hover{
                     background-color: rgb(212, 209, 209);
                     height: 20px;

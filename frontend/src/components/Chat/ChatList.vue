@@ -94,10 +94,10 @@ export default {
         onMounted(()=>{
             if(socket.value==null) return socket.value;
             id.value=user.value.userid
-            socket.value.emit('getchats',{user:user.value.userid})
-            // const interval=setInterval(()=>socket.value.emit('getchats',{user:user.value.userid}),5000);
+            // socket.value.emit('getchats',{user:user.value.userid})
+            const interval=setInterval(()=>socket.value.emit('getchats',{user:user.value.userid}),2000);
             return()=>{
-                // clearInterval(interval);
+                clearInterval(interval);
             }
         })
         onMounted(()=>{
