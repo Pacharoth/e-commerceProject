@@ -106,15 +106,6 @@ export default {
                         msg.value.push(data);
                     }
                 })
-                // let audio_url = window.URL.createObjectURL(blob);
-                // let audio  = new Audio(audio_url)
-                // audio.setAttribute('control',1);
-                // audio.autoplay=true
-                // audio.style.display="flex";
-                // console.log(chat.value);
-                // audioT.value=true
-                // append.value.appendChild(audio);
-                // src.value.push(audio_url);
                 chunk.value=[];
             }
         })

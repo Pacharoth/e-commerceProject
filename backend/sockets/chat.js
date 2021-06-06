@@ -134,8 +134,9 @@ async function findOrCreateChat(data){
                 roomUser = new room({
                     users:[userId,ownerId],
                 })
-                
-                return await roomUser.save();
+                console.log(roomUser);
+                await roomUser.save();
+                return {roomId:roomUser._id,roomUser};
             }
         }else{
             return {chat:await chat.find({roomChat:roomUser[0]._id}).populate('users'),roomId:roomUser[0]._id};
