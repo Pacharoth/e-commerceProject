@@ -1,5 +1,6 @@
 const room=require("../models/RoomChat"),
-    chat =require('../models/chatModel');
+    chat =require('../models/chatModel'),
+    fs = require('fs');
 const chatList=(io,socket)=>{
     socket.on("getchats",async id=>{
         console.log(id);
@@ -68,8 +69,11 @@ const chatData = (io,socket)=>{
                 
             })
 
-            socket.on("save-changes",async data=>{
-
+            socket.on("send-voices",async data=>{
+                fs.appendFile('./public/assets/voice/voice.mp3',data,(err)=>{
+                    console.log(err);
+                })
+                console.log(data);
             })
         }
        

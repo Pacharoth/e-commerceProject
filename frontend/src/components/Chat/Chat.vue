@@ -22,9 +22,14 @@
                     <div class="admin" v-else-if="msgs.users._id!=user.userid" >
                         <img src="../../assets/logo.png" alt="">
                         <span>{{msgs.content}}</span>
-                    </div>          
-
+                    </div>
+                    
                 </slot>
+                <div class="admin active" ref="append" v-for="srcs in src" :key="srcs">
+                    <audio controls v-if="srcs">
+                        <source :src="srcs" type="audio/mp3">
+                    </audio>
+                </div>
             </div>
         
 
@@ -49,24 +54,60 @@ export default {
         //data
         const voice =ref(null);
         const disable =ref(null);
-        const store = useStore();
-        const data = ref();
-        const chat_status = ref("");
-        const msg = ref([]);
-        const color = ref("");
-        const mess = ref("");
-        const socket =ref();
-        const chat=ref(null)
-        const getdata =ref("");
-        const writing=ref("");
-        const roomId =ref("");
+        const store = useStore(),
+        audioT=ref(false),
+        data = ref(),
+        append =ref(null),
+        chat_status = ref(""),
+        msg = ref([]),
+        color = ref(""),
+        mess = ref(""),
+        socket =ref(),
+        chat=ref(null),
+        getdata =ref(""),
+        writing=ref(""),
+        roomId =ref(""),
+        mediaRecord = ref(null),
+        chunk=ref([]),
+        src=ref([]);
+        const s = io('http://localhost:3000');
+        socket.value=s;
+        if(navigator.mediaDevices){
+        navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+            mediaRecord.value = new window.MediaRecorder(stream);
+                        mediaRecord.value.ondataavailable=(e)=>{
+                chunk.value.push(e.data);
+            }   
+            console.log(mediaRecord.value.state)
+            mediaRecord.value.onstop=(e)=>{
+                console.log(e.data);
+                let blob = new Blob(chunk.value,{'type':'audio/mp3'});
+                console.log(blob)
+                console.log(chunk)
+                
+                let form= new FormData();
+                form.append("voice",blob);
+                socket.value.emit("send-voices",blob)
+                let audio_url = window.URL.createObjectURL(blob);
+                // let audio  = new Audio(audio_url)
+                // audio.setAttribute('control',1);
+                // audio.autoplay=true
+                // audio.style.display="flex";
+                // console.log(chat.value);
+                // audioT.value=true
+                // append.value.appendChild(audio);
+                src.value.push(audio_url);
+                chunk.value=[];
+            }
+        })
+        }
+    
         //computed
         const chatData=computed(()=>store.getters['chat/getChat']);
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
         const user = computed(()=>store.getters['auth/getSession'])
 
-        const s = io('http://localhost:3000');
-        socket.value=s;
+
         watch(mess,()=>{
             if(mess.value!=""){
                 socket.value.emit("writing","Typing Data...");
@@ -139,33 +180,19 @@ export default {
             
         };
         const loadStatus=()=>{}
+        
         const onVoice = ()=>{
-            var chunk=[]
-            if(navigator.mediaDevices){
-                navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-                    let mediaRecord = new MediaRecorder(stream);
-                    const voices =  voice.value.classList
-                    if(voices.contains('active')){
-                        voices.remove('active');
-                        disable.value.disabled=false;
-                        mediaRecord.start();
-                        console.log(mediaRecord.state);
-                        
-                    }else{
-                        voices.add('active');
-                        disable.value.disabled=true;
-                        mediaRecord.stop();
-                    }
-                    mediaRecord.ondataavailable=(e)=>{
-                        chunk.push(e);
-                    }
-                    mediaRecord.onstop = ()=>{
-                        let blob = new Blob(chunk,{'type':'audio/mp3'});
-                        let form= new FormData();
-                        form.append("voice",blob);
-                        console.log(blob)
-                    }
-                })
+            const voices =  voice.value.classList
+            if(voices.contains('active')){
+                voices.remove('active');
+                disable.value.disabled=false;   
+                mediaRecord.value.stop();                 
+            }else{
+                voices.add('active');
+                disable.value.disabled=true;
+                mediaRecord.value.start();
+                console.log(mediaRecord.value.state);
+
             }
         }
         
@@ -191,7 +218,11 @@ export default {
             closeChat,
             loadStatus,
             getdata,
-            writing
+            writing,
+            mediaRecord,
+            audioT,
+            append,
+            src
 
         }
     },
