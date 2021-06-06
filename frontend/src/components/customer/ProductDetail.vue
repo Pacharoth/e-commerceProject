@@ -36,8 +36,8 @@
                 <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
                 <span> {{product.qty}} pieces available</span>
                 <div>
-                    <button href="" class="buynow mt-3 ">Buy Now</button>
-                    <a href="http://localhost:8080/shoppingcart" class=" addtocart mt-3 ml-3">Add to Cart</a>
+                    <button class="buynow mt-3 ">Buy Now</button>
+                    <router-link :to="'/shoppingcart/'+product._id" class=" addtocart mt-3 ml-3">Add to Cart</router-link>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">

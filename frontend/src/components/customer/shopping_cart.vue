@@ -100,10 +100,10 @@
 
                     <!--right part-->
                     <div class="column2">
-                        Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
+                        <!-- {{product.detail}} -->
 
                         <p>Size: L <span>Color: Gray</span></p> 
-                        <p style="font-weight: bold;">$10</p>
+                        <p style="font-weight: bold;">$</p>
                         <!--quantity part-->
                         <div class="flex-container">
                             <div>x1</div>
@@ -124,8 +124,23 @@
 </template>
 
 <script>
+import { ref, toRefs } from '@vue/reactivity'
+import { watchEffect } from '@vue/runtime-core';
+import axios from 'axios';
 export default {
     name: 'shopping_cart',
+    props:["id"],
+    setup(props){
+        const {id}= toRefs(props);
+        const product = ref({})
+        watchEffect(async()=>{
+            const response =await axios.get("http://localhost:3000/shoppingcart/"+id.value);
+            console.log(response.data);
+            product.value=response.data;
+
+            console.log(product.value)
+        })
+    }
 }
 </script>
 
