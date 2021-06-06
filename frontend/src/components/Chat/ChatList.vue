@@ -44,7 +44,14 @@
                                 <span v-for="i in role" :key="i">
                                     <template v-if="chat.users[0].roles===i._id">{{chat.users[0].username}} ({{i.name}})</template>
                                 </span>
-                                <span class="text-chat" v-if="chat.chat[chat.chat.length-1]">{{chat.chat[chat.chat.length-1].content}}</span>
+                                <span class="text-chat" v-if="chat.chat[chat.chat.length-1]">
+                                    <template v-if="mp3.test(chat.chat[chat.chat.length-1].content)">
+                                        voice
+                                    </template>
+                                    <template v-else>
+                                        {{chat.chat[chat.chat.length-1].content}}
+                                    </template>
+                                </span>
                         </div>
                         <div class="status" :style="{'background-color':color}"></div>
                     </div>
@@ -78,11 +85,12 @@ export default {
         const socket = ref(null);
         const chatSocket =ref([]);
         const id =ref("");
+        const mp3 = ref(null);
         //computed
         const user = computed(()=>store.getters['auth/getSession'])
         const role = computed(()=>store.getters['role/getRoles'])
         const chatlist= computed(()=>store.getters['chat/getChatList']);
-
+        mp3.value=/.*\.mp3/
 
         onBeforeMount(()=>{
             const s = io(localhost);
@@ -161,7 +169,8 @@ export default {
             popChat,
             searchUser,
             changeToSearchUser,
-            user
+            user,
+            mp3,
         }
     },
     data(){

@@ -1,6 +1,7 @@
 const room=require("../models/RoomChat"),
     chat =require('../models/chatModel'),
-    fs = require('fs');
+    fs = require('fs'),
+    uuid =require('uuid');
 const chatList=(io,socket)=>{
     socket.on("getchats",async id=>{
         console.log(id);
@@ -18,8 +19,6 @@ const chatList=(io,socket)=>{
                
                 if(element.users[i]._id==id.user){
                     count++;
-                  
-
                 }else{
                     auser=element.users[i];
                     element.users[0]= auser;
@@ -70,10 +69,16 @@ const chatData = (io,socket)=>{
             })
 
             socket.on("send-voices",async data=>{
-                fs.appendFile('./public/assets/voice/voice.mp3',data,(err)=>{
+                fs.appendFile(`./public/assets/voice/${uuid.v4()}.mp3`,data.content,(err)=>{
                     console.log(err);
                 })
-                console.log(data);
+               
+                console.log(fs.readFileSync('./public/assets/voice/voice.mp3'));
+                io.in(roomId.toString()).emit("reData",'/assets/voice/voice.mp3');
+                
+                if(fs.existsSync("./public/assets/voice/voice")){
+                    console.log("exists");
+                }
             })
         }
        

@@ -16,10 +16,10 @@
         <div class="content-all-chat">
             <div ref="chat" class="chatting">
                 <slot v-for="msgs in msg" :key="msgs" class="content-chatting">
-                    <div class="admin active" v-if="msgs.users._id==user.userid" >
+                    <div class="admin active" v-if="msgs.users._id==user.userid&&mp3.test(msgs.content)==false" >
                         <span>{{msgs.content}}</span>
                     </div>
-                    <div class="admin" v-else-if="msgs.users._id!=user.userid" >
+                    <div class="admin" v-else-if="msgs.users._id!=user.userid&&mp3.test(msgs.content)==false" >
                         <img src="../../assets/logo.png" alt="">
                         <span>{{msgs.content}}</span>
                     </div>
@@ -45,7 +45,7 @@
 import { computed,ref, watch} from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import {io} from 'socket.io-client';
-
+import { localhost } from '../../utils/FormValidation';
 
 export default {
     name:'Chat',
@@ -69,6 +69,7 @@ export default {
         roomId =ref(""),
         mediaRecord = ref(null),
         chunk=ref([]),
+        mp3=ref(null),
         src=ref([]);
         const s = io('http://localhost:3000');
         socket.value=s;
@@ -87,7 +88,16 @@ export default {
                 
                 let form= new FormData();
                 form.append("voice",blob);
-                socket.value.emit("send-voices",blob)
+                socket.value.emit("send-voices",{
+                    users:{
+                        _id:user.value.userid
+                    },
+                    content:blob
+                })
+                socket.value.on('reData', async data=>{
+                    console.log(data);
+                    checkAudio(localhost+data);
+                })
                 let audio_url = window.URL.createObjectURL(blob);
                 // let audio  = new Audio(audio_url)
                 // audio.setAttribute('control',1);
@@ -101,7 +111,16 @@ export default {
             }
         })
         }
-    
+        mp3.value=/.*\.mp3/
+        async function checkAudio(audioSrc){
+            let mp3 = /.*\.mp3/
+            if(mp3.test(audioSrc)){
+                
+               return true
+            }else{
+                return false;
+            }
+        }
         //computed
         const chatData=computed(()=>store.getters['chat/getChat']);
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
@@ -133,7 +152,7 @@ export default {
         
             socket.value.on("recieve-changes",async data=>{
                 console.log(data.users._id)
-               
+                
                 if(data.content!==""){
                     msg.value.push(data);
                 } 
@@ -161,8 +180,8 @@ export default {
             
             if(socket.value==null) return;
             if(chat.value.scrollHeight>0){
-                    chat.value.scrollTop=chat.value.scrollHeight;
-                    console.log(chat.value.scrollTop);   
+                chat.value.scrollTop=chat.value.scrollHeight;
+                console.log(chat.value.scrollTop);   
             }
             socket.value.emit('send-changes',{
                 users:{
@@ -222,7 +241,8 @@ export default {
             mediaRecord,
             audioT,
             append,
-            src
+            src,
+            mp3
 
         }
     },
