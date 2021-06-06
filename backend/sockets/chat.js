@@ -47,42 +47,48 @@ const chatData = (io,socket)=>{
             socket.emit("load-chats",roomOrchat);
             socket.on("writing",async data=>{
                 socket.broadcast.to(roomId.toString()).emit("recieve-writing",data);
+            
             })
             socket.on("send-changes",async data=>{
                 console.log(data);
                 io.in(roomId.toString()).emit("recieve-changes",data);
-                const saveRoom = await room.find({_id:roomId}).populate('chat').populate('users');
-                if(saveRoom.length>0){
-                   if(data.content!==""){
-                        const chats = new chat({
-                            users:data.users._id,
-                            roomChat:saveRoom[0]._id,
-                            content:data.content,
-                            chatAt:new Date,
-                        });
-                        saveRoom[0].chat.push(chats);
-                        await saveRoom[0].save();
-                        await chats.save();
-                   }
-                }
+                await saveChat(data,roomId);
                 
             })
-
             socket.on("send-voices",async data=>{
-                fs.appendFile(`./public/assets/voice/${uuid.v4()}.mp3`,data.content,(err)=>{
-                    console.log(err);
-                })
-               
-                console.log(fs.readFileSync('./public/assets/voice/voice.mp3'));
-                io.in(roomId.toString()).emit("reData",'/assets/voice/voice.mp3');
-                
-                if(fs.existsSync("./public/assets/voice/voice")){
-                    console.log("exists");
-                }
+                const path = `/assets/voice/${uuid.v4()}.mp3`
+                fs.appendFile("./public"+path,data.content,async (err)=>{
+                    if(err){
+                        console.log(err)
+                    }else{
+                        data.content = path
+                        console.log(data);
+                        io.in(roomId.toString()).emit("recieve-changes",data);
+                        await saveChat(data,roomId);
+                    }
+                })                 
+              
             })
+           
         }
        
     })
+}
+async function saveChat(data,roomId){
+    const saveRoom = await room.find({_id:roomId}).populate('chat').populate('users');
+    if(saveRoom.length>0){
+        if(data.content!==""){
+            const chats = new chat({
+                users:data.users._id,
+                roomChat:saveRoom[0]._id,
+                content:data.content,
+                chatAt:new Date,
+            });
+            saveRoom[0].chat.push(chats);
+            await saveRoom[0].save();
+            await chats.save();
+        }
+    }
 }
 /*room Chat
 users:[{

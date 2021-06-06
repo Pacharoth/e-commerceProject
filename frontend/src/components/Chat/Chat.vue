@@ -16,36 +16,47 @@
         <div class="content-all-chat">
             <div ref="chat" class="chatting">
                 <slot v-for="msgs in msg" :key="msgs" class="content-chatting">
-                    <div class="admin active" v-if="msgs.users._id==user.userid&&mp3.test(msgs.content)==false" >
-                        <span>{{msgs.content}}</span>
+                    <div class="admin active" v-if="msgs.users._id==user.userid" >
+                            <template v-if="mp3.test(msgs.content)">
+                                <audio controls>
+                                    <source :src="'http://localhost:3000'+msgs.content" type="audio/mp3">
+                                </audio>
+                            </template>
+                            <template v-else>
+                                <span>{{msgs.content}}</span>
+                            </template>
                     </div>
-                    <div class="admin" v-else-if="msgs.users._id!=user.userid&&mp3.test(msgs.content)==false" >
+                    <div class="admin" v-else-if="msgs.users._id!=user.userid" >
                         <img src="../../assets/logo.png" alt="">
-                        <span>{{msgs.content}}</span>
+                        <template v-if="mp3.test(msgs.content)">
+                            <audio controls>
+                                <source :src="'http://localhost:3000'+msgs.content" type="audio/mp3">
+                            </audio>
+                        </template>
+                        <template v-else>
+                            <span>{{msgs.content}}</span>
+                        </template>
                     </div>
                     
                 </slot>
-                <div class="admin active" ref="append" v-for="srcs in src" :key="srcs">
-                    <audio controls v-if="srcs">
-                        <source :src="srcs" type="audio/mp3">
-                    </audio>
-                </div>
+                
             </div>
         
 
         </div>
-        <form class="input-message" @submit.prevent="message">
+        <div class="input-message" >
             <button class="btn" @click="onVoice" ref="voice"> <em class="bi bi-mic"></em></button>
-            <input v-model="mess" ref="disable" type="text" class="form-control send"  placeholder="Aa">
-            <button class="btn" ><em class="bi bi-play"></em></button>
-        </form>
+            <form action="" class="d-flex" @submit.prevent="message">
+                <input v-model="mess" ref="disable" type="text" class="form-control send"  placeholder="Aa">
+                <button class="btn" ><em class="bi bi-play"></em></button>
+            </form>
+        </div>
     </div>
 </template>
 <script>
 import { computed,ref, watch} from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import {io} from 'socket.io-client';
-import { localhost } from '../../utils/FormValidation';
 
 export default {
     name:'Chat',
@@ -72,6 +83,7 @@ export default {
         mp3=ref(null),
         src=ref([]);
         const s = io('http://localhost:3000');
+        mp3.value=/.*\.mp3/
         socket.value=s;
         if(navigator.mediaDevices){
         navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
@@ -83,11 +95,6 @@ export default {
             mediaRecord.value.onstop=(e)=>{
                 console.log(e.data);
                 let blob = new Blob(chunk.value,{'type':'audio/mp3'});
-                console.log(blob)
-                console.log(chunk)
-                
-                let form= new FormData();
-                form.append("voice",blob);
                 socket.value.emit("send-voices",{
                     users:{
                         _id:user.value.userid
@@ -95,10 +102,11 @@ export default {
                     content:blob
                 })
                 socket.value.on('reData', async data=>{
-                    console.log(data);
-                    checkAudio(localhost+data);
+                    if(data.content!==""){
+                        msg.value.push(data);
+                    }
                 })
-                let audio_url = window.URL.createObjectURL(blob);
+                // let audio_url = window.URL.createObjectURL(blob);
                 // let audio  = new Audio(audio_url)
                 // audio.setAttribute('control',1);
                 // audio.autoplay=true
@@ -106,21 +114,12 @@ export default {
                 // console.log(chat.value);
                 // audioT.value=true
                 // append.value.appendChild(audio);
-                src.value.push(audio_url);
+                // src.value.push(audio_url);
                 chunk.value=[];
             }
         })
         }
-        mp3.value=/.*\.mp3/
-        async function checkAudio(audioSrc){
-            let mp3 = /.*\.mp3/
-            if(mp3.test(audioSrc)){
-                
-               return true
-            }else{
-                return false;
-            }
-        }
+     
         //computed
         const chatData=computed(()=>store.getters['chat/getChat']);
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
@@ -145,7 +144,10 @@ export default {
                 userId:chatData.value.userId,
                 ownerId:user.value.userid,
             });
-            chat.value.scrollTop=chat.value.scrollHeight-chat.value.clientHeight;
+           if(chat.value.scrollHeight>0){
+                chat.value.scrollTop=chat.value.scrollHeight;
+                console.log(chat.value.scrollTop);   
+            }
 
             color.value="rgb(66, 207, 66)";
             chat_status.value="online";
@@ -205,13 +207,14 @@ export default {
             if(voices.contains('active')){
                 voices.remove('active');
                 disable.value.disabled=false;   
-                mediaRecord.value.stop();                 
+                mediaRecord.value.stop();   
+                socket.value.emit("writing","voice.....")      
             }else{
                 voices.add('active');
                 disable.value.disabled=true;
                 mediaRecord.value.start();
                 console.log(mediaRecord.value.state);
-
+                socket.value.emit("writing","")
             }
         }
         
@@ -353,8 +356,11 @@ export default {
             display: flex;
             padding: 2%;
             width: 100%;
+            form{
+                width: 100%;
+            }
             .send{
-                width: 80%;
+                width: 90%;
                 border-radius: 50px ;
                 margin-left: 2%;
                 margin-right: 2%;
