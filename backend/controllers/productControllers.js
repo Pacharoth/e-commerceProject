@@ -99,3 +99,10 @@ exports.getProByID = async(req,res)=>{
     const result = await product.findById(req.params.id);
     res.json(result);
 }
+
+exports.getProInCart = async(req,res)=>{
+    const result = await product.findById(req.params.id).populate('sellers');
+    res.json(result);
+}
+
+//http://localhost:3000/assets/pic.png
