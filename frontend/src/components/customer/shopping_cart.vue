@@ -7,103 +7,22 @@
             <div class="row1-one">
                 <p style="color: #D60265;">
                     <i style="font-size:24px" class="fa">&#xf058;</i>
-                    Clothy Shop
+                    {{product.sellers.company}}
                 </p>
                 <div class="row1">
                     <!--left part-->
                     <div class="column1">
                         <span>
-                            <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
+                            <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"></i><img width="120" height="120" style="margin-left:5%" :src="'http://localhost:3000'+product.img" alt="">
                         </span>
                     </div>
 
                     <!--right part-->
                     <div class="column2">
-                        Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-
+                        <!-- Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket  -->
+                        {{product.detail}}
                         <p>Size: L <span>Color: Gray</span></p>
-                        <p style="font-weight: bold;">$10</p>
-                        <!--quantity part-->
-                        <div class="flex-container">
-                            <div>x1</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--second part-->
-            <div class="row1-two">
-                <div class="small-row1">
-                    <p style="color: #D60265;">
-                        <i style="font-size:24px" class="fa">&#xf058;</i>
-                        Clothy Shop
-                    </p>
-                    <div class="row1">
-                        <!--left part-->
-                        <div class="column1">
-                            <span>
-                                <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
-                            </span>
-                        </div>
-    
-                        <!--right part-->
-                        <div class="column2">
-                            Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-    
-                            <p>Size: L <span>Color: Gray</span></p>
-                            <p style="font-weight: bold;">$10</p>
-                            <!--quantity part-->
-                            <div class="flex-container">
-                                <div>x1</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="small-row2">
-                    <div class="row1">
-                         <!--left part-->
-                        <div class="column1">
-                            <span>
-                                <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
-                            </span>
-                        </div>
-    
-                        <!--right part-->
-                        <div class="column2">
-                            Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-    
-                            <p>Size: L <span>Color: Gray</span></p>
-                            <p style="font-weight: bold;">$10</p>
-                            <!--quantity part-->
-                           <div class="flex-container">
-                                <div>x1</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--third part-->
-            <div class="row1-third">
-                <p style="color: #D60265;">
-                    <i style="font-size:24px" class="fa">&#xf058;</i>
-                    Clothy Shop
-                </p>
-                <div class="row1">
-                    <!--left part-->
-                    <div class="column1">
-                        <span>
-                            <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"><img src="" alt=""></i>
-                        </span>
-                    </div>
-
-                    <!--right part-->
-                    <div class="column2">
-                        Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket 
-
-                        <p>Size: L <span>Color: Gray</span></p> 
-                        <p style="font-weight: bold;">$10</p>
+                        <p style="font-weight: bold;">${{product.price}}</p>
                         <!--quantity part-->
                         <div class="flex-container">
                             <div>x1</div>
@@ -124,8 +43,26 @@
 </template>
 
 <script>
+import { ref, toRefs } from '@vue/reactivity'
+import { watchEffect } from '@vue/runtime-core';
+import axios from 'axios';
 export default {
     name: 'shopping_cart',
+    props:["id"],
+    setup(props){
+        const {id}= toRefs(props);
+        const product = ref({})
+        watchEffect(async()=>{
+            const response =await axios.get("http://localhost:3000/shoppingcart/"+id.value);
+            console.log(response.data);
+            product.value=response.data;
+
+            console.log(product.value)
+        })
+        return{
+            product,
+        }
+    }
 }
 </script>
 

@@ -2,13 +2,13 @@
     <div class="category-modal" :class="display" @click="redirectAdmin" ref="model">
         <div class="category-content">
             <div class="search">
-                <form v-if="status=='search'">
-                    <input type="text" class=" search-category"  placeholder="&#xf002; Search Categories" v-model="name" style="font-family: Arial, 'Font Awesome 5 Free'">
+                <form v-if="status=='search'" @submit.prevent="searchCategoriesV">
+                    <input type="text" class=" search-category" @change="searchCategoriesV" placeholder="&#xf002; Search Categories" v-model="name" style="font-family: Arial, 'Font Awesome 5 Free'">
                 </form>
-                <form action="" v-if="status=='add'" @submit.prevent="addCategory">               
+                <form v-if="status=='add'" @submit.prevent="addCategory">               
                     <input type="text"  class="search-category" placeholder="&#xf022; Add Categories" v-model="name" style="font-family: Arial, 'Font Awesome 5 Free'">
                 </form>
-                <form action="" v-if="status=='update'" @submit.prevent="updateCategory(id)">
+                <form v-if="status=='update'" @submit.prevent="updateCategory(id)">
                     <input type="text"  class="search-category" placeholder="&#xf022; Update Category" v-model="name" style="font-family: Arial, 'Font Awesome 5 Free'">
                 </form>
             </div>
@@ -30,7 +30,7 @@
 import axios from 'axios'
 import router from '../../routers/route'
 import { ref } from '@vue/reactivity'
-import { onMounted, watchEffect } from '@vue/runtime-core'
+import { onMounted } from '@vue/runtime-core'
 import {searchCategories,addACategory,updateACategory,getACategory,deleteACategory} from'../../hook/category'
 let localhost= 'http://localhost:3000'
 export default {
@@ -55,10 +55,7 @@ export default {
             }
             getCategory();
         })
-        watchEffect(async()=>{
-            await searchCategories(name,category,err)
-        })
-
+        
         //method
         function redirectAdmin(event){
             if(event.target ==model.value){
@@ -77,7 +74,9 @@ export default {
         function getCategory(ids){getACategory(ids,category,id,status,name);}
         async function updateCategory(ids){await updateACategory(ids,name,category,id,status,err);}
         async function addCategory(){await addACategory(name,category,err)}
-
+        async function searchCategoriesV(){
+            await searchCategories(name,category,err)
+        }
         return{
             //data
             err,
@@ -94,6 +93,7 @@ export default {
             deleteCategory,
             getCategory,
             addCategory,
+            searchCategoriesV,
         }
     },
 }

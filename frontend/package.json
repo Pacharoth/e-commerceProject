@@ -17,6 +17,7 @@
     "chart.js": "^3.1.0",
     "chartjs": "^0.3.24",
     "core-js": "^3.6.5",
+    "fs": "^0.0.1-security",
     "jspdf": "^2.3.1",
     "mock-aws-s3": "^4.0.2",
     "nock": "^13.0.11",

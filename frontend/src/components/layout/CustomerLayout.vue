@@ -56,11 +56,33 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { showChatLists, showNotifications } from '../../hook/effect'
+import { logouts } from '../../utils/FormValidation'
 
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
 export default {
     name:"CustomerLayout",
+    setup() {
+        const store = useStore()
+        function showChatList(){
+            showChatLists(store);
+        }
+        function showNotification(){
+            showNotifications(store);
+        }
+        function logout(){
+            logouts(store);
+            store.dispatch('chat/changeList','');
+            store.dispatch('notification/changeContent','');
+        }
+        return{
+            showChatList,
+            showNotification,
+            logout
+        }
+    },
     data() {
         return {
             modal:null,
@@ -81,34 +103,14 @@ export default {
             const slidedown = this.$refs.dropdown.classList
             slidedown.contains("show")?slidedown.remove('show'):slidedown.add('show');
         },
-        showChatList(){
-            const store = this.$store
-            if(!store.getters['chat/getChatList']){
-                store.dispatch('chat/changeList','active');
-            }else{
-                store.dispatch('chat/changeList','');
-            }
-        },
         setStatus(status){
             const store = this.$store
             store.dispatch('auth/setStatus',status);
-        },
-        showNotification(){
-            const store = this.$store;
-            if(!store.getters['notification/getContent']){
-                store.dispatch('notification/changeContent','active');
-            }else{
-                store.dispatch('notification/changeContent','')
-            }
         },
         showSearch(){
             const search = this.$refs.search.classList
             search.contains('active')?search.remove('active'):search.add('active')
         },
-        logout(){
-            localStorage.clear();
-            this.$store.dispatch('auth/setSession',null)
-        }
     },
     mounted() {
         // this.carousel = new Carousel(this.$refs.Carousel);

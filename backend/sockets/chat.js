@@ -1,17 +1,27 @@
-const room=require("../models/RoomChat");
-const chat =require('../models/chatModel');
+const room=require("../models/RoomChat"),
+    chat =require('../models/chatModel'),
+    fs = require('fs'),
+    uuid =require('uuid');
 const chatList=(io,socket)=>{
     socket.on("getchats",async id=>{
-        var users = await room.find({users:id}).populate('chat').populate('users');
+        console.log(id);
+        var users = await room.find({users:{
+            _id:id.user
+        }}).populate('chat').populate('users');
         users= users.filter(element=>{
                 var auser=[]
                 var count=0;
+                element.status="";
+                element.user=""
+                element.status="online";
+                element.user= id.user.toString();
             for (var i in element.users){
-                if(element.users[i]._id==id){
+               
+                if(element.users[i]._id==id.user){
                     count++;
                 }else{
-                    element.users[1]={}
-                    element.users[i]= element.users[i];
+                    auser=element.users[i];
+                    element.users[0]= auser;
                 }
                 if(count>=2){
                     auser=element.users[i];
@@ -19,81 +29,120 @@ const chatList=(io,socket)=>{
                     element.users[0]=auser;
                 }
             }
-            
+
             return element;
         })
-        socket.join(id);
-        socket.emit("listchats",users);
+        socket.emit('listchats',users)
     })
 }
 const chatData = (io,socket)=>{
     socket.on('get-chat', async data=>{
-        console.log(data)
-        const chats = await findOrCreateChat(data);
-        if(data.roomId){
-            socket.join(data.roomId); //join room
-        }else{
-            data.roomId = chats[0].roomChat._id
-            socket.join(chats[0].roomChat._id);
-        }
-        console.log(chats)
-        socket.emit("load-chat",chats); //getData in that room
-        socket.emit("getchats",data.ownerId);
-        socket.on("send-changes",deta=>{
-            socket.broadcast.to(data.roomId).emit('receive-chats',deta);//broadcast in room
-        })
-        socket.on('save-chat',async data=>{
-            var achat  = new chat({
-                roomChat:data.roomId,
-                status:"read",
-                chatAt:new Date,
-                users:data.ownerId,
-            })
-        })
+        const roomOrchat= await findOrCreateChat(data);
+        // socket.join(roomOrchat.roomId);
+        console.log(roomOrchat)
+        var {roomId} = roomOrchat;
+        if(roomId!==""){
+            socket.join(roomId.toString());
 
+            socket.emit("load-chats",roomOrchat);
+            socket.on("writing",async data=>{
+                socket.broadcast.to(roomId.toString()).emit("recieve-writing",data);
+            
+            })
+            socket.on("send-changes",async data=>{
+                console.log(data);
+                io.in(roomId.toString()).emit("recieve-changes",data);
+                await saveChat(data,roomId);
+                
+            })
+            socket.on("send-voices",async data=>{
+                const path = `/assets/voice/${uuid.v4()}.mp3`
+                fs.appendFile("./public"+path,data.content,async (err)=>{
+                    if(err){
+                        console.log(err)
+                    }else{
+                        data.content = path
+                        console.log(data);
+                        io.in(roomId.toString()).emit("recieve-changes",data);
+                        await saveChat(data,roomId);
+                    }
+                })                 
+              
+            })
+           
+        }
+       
     })
 }
-async function findOrCreateChat(data){
-    var {userId,ownerId,roomId,content}=data;
-    console.log(userId,ownerId,roomId)
-    const roomid= await room.find({users:[ownerId,userId]});
-    if(roomid.length>0&&content!==undefined){
-        roomId=roomid[0]._id
-        const newChat = new chat({
-            users:ownerId,
-            roomChat:roomId,
-            content:content,
-            chatAt:new Date,
-        })
-        roomid[0].chat.push(newChat);
-        await roomid[0].save();
-        await newChat.save()
-        return await chat.find({_id:newChat._id}).populate('users').populate('roomChat');
-    }else if(content!==undefined){
-        if(data.roomId ===null|| data.roomId===undefined){
-            const newRoom =new room({
-                users:[
-                    userId,
-                    ownerId,
-                ],
-            });
-            const newChat= new chat({
-                roomChat:newRoom._id,
-                users:ownerId,
-                content:content,
+async function saveChat(data,roomId){
+    const saveRoom = await room.find({_id:roomId}).populate('chat').populate('users');
+    if(saveRoom.length>0){
+        if(data.content!==""){
+            const chats = new chat({
+                users:data.users._id,
+                roomChat:saveRoom[0]._id,
+                content:data.content,
                 chatAt:new Date,
             });
-            newRoom.chat.push(newChat);
-            await newRoom.save();
-            await newChat.save();
-            const newChats = await chat.find({_id:newChat._id}).populate('users').populate('roomChat');
-            return newChats;
+            saveRoom[0].chat.push(chats);
+            await saveRoom[0].save();
+            await chats.save();
         }
     }
-    else{
-        roomId=roomid[0]._id;
-        const chatMessage=await chat.find({roomChat:roomId}).populate('users').populate('roomChat');
-        if(chatMessage) return chatMessage;
+}
+/*room Chat
+users:[{
+    type:Schema.Types.ObjectId,
+    ref:'users',
+}],
+chat:[{
+    type:Schema.Types.ObjectId,
+    ref:'chat',
+}]*/
+/*chat
+    users:{
+        type:Schema.Types.ObjectId,
+        ref:'users',
+    }
+    ,
+    roomChat:{
+        type:Schema.Types.ObjectId,
+        ref:'roomChat',
+    },
+    content:{
+        type:String,
+    },
+    chatAt:{
+        type:Date,
+        required:true
+    },
+    status:{
+        type:String,
+        default:'unread',
+    },
+
+*/
+async function findOrCreateChat(data){
+    var {userId,ownerId,message} = data;
+    if(userId!=undefined){
+        var roomUser = await room.find({$and:[
+            {users:userId},
+            {users:ownerId}
+        ]})
+        if(roomUser.length<=0){
+            if(userId!=null){
+                roomUser = new room({
+                    users:[userId,ownerId],
+                })
+                console.log(roomUser);
+                await roomUser.save();
+                return {roomId:roomUser._id,roomUser};
+            }
+        }else{
+            return {chat:await chat.find({roomChat:roomUser[0]._id}).populate('users'),roomId:roomUser[0]._id};
+        }
+    }else{
+        return{roomId:""}
     }
 }
 module.exports={

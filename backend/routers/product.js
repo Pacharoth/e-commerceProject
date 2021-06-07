@@ -7,4 +7,5 @@ productRouter.delete('/product/:id',productController.deleteProduct);
 productRouter.put('/product/:id',productController.updateProduct);
 productRouter.get('/listProduct',productController.listProduct);
 productRouter.get('/productdetail/:id',productController.getProByID);
+productRouter.get('/shoppingcart/:id',productController.getProInCart);
 module.exports = productRouter

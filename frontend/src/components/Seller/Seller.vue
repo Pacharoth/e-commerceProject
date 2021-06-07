@@ -89,11 +89,32 @@
 
 </template>
 <script>
+import { useStore } from 'vuex';
+import { showChatLists, showNotifications } from '../../hook/effect';
+import { logouts } from '../../utils/FormValidation';
 import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
 export default {
     name:'Seller',
-    
+    setup() {
+      const store = useStore();
+      function showChatList(){
+        showChatLists(store);
+      }
+      function showNotification(){
+        showNotifications(store);
+      }
+      function logout(){
+        logouts(store);
+        store.dispatch('chat/changeList','');
+        store.dispatch('notification/changeContent','');
+      }
+      return{
+        showChatList,
+        showNotification,
+        logout,
+      }
+    },
     data() {
       return {
         user:{},
@@ -116,26 +137,9 @@ export default {
         const dropdownProfile = this.$refs.profile.classList;
         dropdownProfile.contains('show')?dropdownProfile.remove('show'):dropdownProfile.add('show');
       },
-      showNotification(){
-            const store = this.$store;
-            if(!store.getters['notification/getContent']){
-                store.dispatch('notification/changeContent','active');
-            }else{
-                store.dispatch('notification/changeContent','')
-            }
-        },
-      logout(){
-        localStorage.clear()
-        this.$store.dispatch('auth/setSession',null);
-      },
-      showChatList(){
-        const store = this.$store
-            if(!store.getters['chat/getChatList']){
-                store.dispatch('chat/changeList','active');
-            }else{
-                store.dispatch('chat/changeList','');
-            }
-        },
+    
+     
+    
     },
 }
 </script>

@@ -37,7 +37,7 @@
                 <span> {{product.qty}} pieces available</span>
                 <div>
                     <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link>
-                    <a href="http://localhost:8080/shoppingcart" class=" addtocart mt-3 ml-3">Add to Cart</a>
+                    <router-link :to="'/shoppingcart/'+product._id" class=" addtocart mt-3 ml-3">Add to Cart</router-link>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">
