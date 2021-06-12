@@ -31,10 +31,10 @@
                 </div>
                 <p>Quantity:</p>
                 
-                <button class="btn qty shadow "><i class="fas fa-minus"></i></button>
-                <span> 1 </span>
-                <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
-                <span> {{product.qty}} pieces available</span>
+                <button class="btn qty shadow " @click="decre()"><i class="fas fa-minus"></i></button>
+                <span> {{qty}} </span>
+                <button class="btn qty shadow " @click="incr"><i class="fas fa-plus"></i></button>
+                <span> {{product.qty - qty}} pieces available</span>
                 <div>
                     <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link>
                     <router-link :to="'/shoppingcart/'+product._id" class=" addtocart mt-3 ml-3">Add to Cart</router-link>
@@ -56,6 +56,11 @@ export default {
     title:'Product Detail',
     name:'ProductDetail',
     props:["id"],
+    data(){
+        return{
+            qty:1,
+        }
+    },
     setup(props) {
         const color = ref(null);
         const {id}= toRefs(props);
@@ -84,9 +89,17 @@ export default {
     async mounted(){
 
     },
-    watch:{
-
+    methods:{
+        incr(){
+            this.qty++;
+        },
+        decre(){
+            if(this.qty>1){
+                this.qty--;
+            }
+        }
     }
+
 }
 </script>
 <style lang="scss" scoped>
