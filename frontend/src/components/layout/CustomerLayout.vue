@@ -63,15 +63,17 @@ import {ref} from '@vue/reactivity'
 
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
-import { watch } from '@vue/runtime-core'
+import { watch,computed } from '@vue/runtime-core'
 import router from '../../routers/route'
-import axios from 'axios';
-import {localhost} from '../../utils/FormValidation.js';
+
+// import axios from 'axios';
+// import {localhost} from '../../utils/FormValidation.js';
 export default {
     name:"CustomerLayout",
     setup() {
         const searchname = ref("");
-        const store = useStore()
+        const store = useStore();
+        const searchproduct =computed(()=>store.getters['customer/searchProduct',searchname.value])
         function showChatList(){
             showChatLists(store);
         }
@@ -85,16 +87,18 @@ export default {
         }
         watch(searchname,async()=>{
             router.push({name:'customerlistproduct',query:{q:searchname.value}});
-            await axios.get(localhost+"search/product?q="+searchname.value).then(result=>{
-                console.log(result);
-            });
+       
+            store.dispatch('searchProduct',searchproduct.value);
+
         })
       
         return{
             showChatList,
             showNotification,
             logout,
-            searchname
+            searchname,
+            searchproduct,
+
         }
     },
     data() {
@@ -126,9 +130,7 @@ export default {
             search.contains('active')?search.remove('active'):search.add('active')
         },
     },
-    mounted() {
-        // this.carousel = new Carousel(this.$refs.Carousel);
-    },
+   
     
 }
 </script>
@@ -138,6 +140,7 @@ export default {
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css';
     @import 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css';
+    
     .name{
         color: #D60265;
     }

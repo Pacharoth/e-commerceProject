@@ -71,6 +71,7 @@ app.use(user);
 app.use(feedbackRoutes);
 app.use(categoryRoutes);
 app.use(customerRoutes);
+
 app.use(sellerRoutes);
 app.use(chatRoutes)
 app.use(roleRoutes);

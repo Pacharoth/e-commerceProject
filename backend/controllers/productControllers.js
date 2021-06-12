@@ -11,7 +11,6 @@ exports.getProducts=async(req,res)=>{
     });
     aseller = aseller.filter(element=>element.users!==null);
     const products = await product.find({sellers:aseller[0].id}).populate('categories')
-    // console.log('got from db', products);
     res.json(products);
 }
 exports.postProduct = async (req,res)=>{

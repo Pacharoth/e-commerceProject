@@ -30,18 +30,32 @@
 
         <div class="container-fluid">
             <div class="product-listing">
-            <router-link :to="'/productdetail/'+pro._id" class=" cart" v-for="pro in product" :key="pro">
-                <div class="card" style="">
-                <img :src="'http://localhost:3000/'+pro.img[0]" class="card-img-top imgcard" alt="...">
-                <div class="discount" >{{pro.discount}}% DISCOUNT</div>
-                <div class="card-body">
-                    <h6>{{pro.name}}</h6>
-                    <p class="card-text detail">{{pro.detail}}</p>
-                    <span class="dis_price">{{pro.price}}$</span> <span class="price"></span>
-                </div>
-                </div>
-            </router-link>
-
+            <slot v-if="productSearch.length<=0">
+                <router-link :to="'/productdetail/'+pro._id" class=" cart" v-for="pro in product" :key="pro">
+                    <div class="card" style="">
+                    <img :src="'http://localhost:3000/'+pro.img[0]" class="card-img-top imgcard" alt="...">
+                    <div class="discount" >{{pro.discount}}% DISCOUNT</div>
+                    <div class="card-body">
+                        <h6>{{pro.name}}</h6>
+                        <p class="card-text detail">{{pro.detail}}</p>
+                        <span class="dis_price">{{pro.price}}$</span> <span class="price"></span>
+                    </div>
+                    </div>
+                </router-link>
+            </slot>
+            <slot v-else>
+                <router-link :to="'/productdetail/'+pro._id" class=" cart" v-for="pro in productSearch" :key="pro">
+                    <div class="card" style="">
+                    <img :src="'http://localhost:3000/'+pro.img[0]" class="card-img-top imgcard" alt="...">
+                    <div class="discount" >{{pro.discount}}% DISCOUNT</div>
+                    <div class="card-body">
+                        <h6>{{pro.name}}</h6>
+                        <p class="card-text detail">{{pro.detail}}</p>
+                        <span class="dis_price">{{pro.price}}$</span> <span class="price"></span>
+                    </div>
+                    </div>
+                </router-link>
+            </slot>
             </div>
         </div>
 
@@ -78,7 +92,7 @@ export default {
         return{
             modal:null,
             carousel:null,
-            product:[]
+            // product:[]
         }
     },
     components:{
@@ -87,14 +101,19 @@ export default {
     async mounted(){
         const response = await axios.get("http://localhost:3000/listProduct");
         console.log(response.data);
-        this.product = response.data;
+        this.$store.dispatch("customer/loadProduct",response.data);
+    },
+    computed:{  
+        product(){
+            return this.$store.getters['customer/getAllProducts'];
+        },
+        productSearch(){
+            return this.$store.getters['customer/getProductSearch'];
+        }
     },
     methods:{
   
     },
-  
-
-
 }
 </script>
 <style  scoped>
