@@ -10,10 +10,8 @@
                         </button>
                     </div>
                     <div class="p-2 bd-highlight d-flex justify-content-between">
-
-                         <input type="text" ref="search" v-model="searchname"  class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
+                        <input type="text" ref="search" v-model="searchname"  class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
                         <button class="btn search p-0" @click="showSearch" ><em class="fas fa-search" ></em></button>
-
                     </div>
                     
                     <div class="p-2 bd-highlight">
@@ -40,7 +38,7 @@
                     <div class="p-2 bd-highlight">
                         <router-link v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'" 
                         to="/shoppingcart" class=" cart">
-                            <em class="fas fa-shopping-cart"></em>
+                            <em class="fas fa-shopping-cart"></em>      
                         </router-link>
                     </div>
                 </div>
@@ -58,22 +56,25 @@
 <script>
 import { useStore } from 'vuex'
 import { showChatLists, showNotifications } from '../../hook/effect'
-import { logouts } from '../../utils/FormValidation'
+import { localhost, logouts } from '../../utils/FormValidation'
 import {ref} from '@vue/reactivity'
 
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
-import { watch,computed } from '@vue/runtime-core'
-import router from '../../routers/route'
+import { watch} from '@vue/runtime-core'
+
+import axios from 'axios'
+import { useRoute, useRouter } from 'vue-router'
 
 // import axios from 'axios';
 // import {localhost} from '../../utils/FormValidation.js';
 export default {
     name:"CustomerLayout",
     setup() {
+        const router=useRoute()
+        const route = useRouter();
         const searchname = ref("");
         const store = useStore();
-        const searchproduct =computed(()=>store.getters['customer/searchProduct',searchname.value])
         function showChatList(){
             showChatLists(store);
         }
@@ -86,10 +87,10 @@ export default {
             store.dispatch('notification/changeContent','');
         }
         watch(searchname,async()=>{
-            router.push({name:'customerlistproduct',query:{q:searchname.value}});
-       
-            store.dispatch('searchProduct',searchproduct.value);
-
+            route.push({name:'customerlistproduct',query:{q:searchname.value}});
+            const response=await axios.get(localhost+"/search/product?q="+router.query.q);
+            store.dispatch('customer/searchProduct',response.data);
+            console.log(response)
         })
       
         return{
@@ -97,7 +98,6 @@ export default {
             showNotification,
             logout,
             searchname,
-            searchproduct,
 
         }
     },

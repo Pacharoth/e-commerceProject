@@ -61,7 +61,6 @@ export default {
         const {id}= toRefs(props);
         const product = ref({})
         onMounted(()=>{
-
             console.log(color.value.children[0]);
         })
         //watch change  
@@ -174,10 +173,6 @@ export default {
         background-color: #D60265;
         font-weight: bold;
         border-radius: 50%;
-        // padding-left: 3%;
-        // padding-right: 3%;
-        // padding-top: 2%;
-        // padding-bottom: 2%;
     }
     .cmt{
         @extend .form-control;

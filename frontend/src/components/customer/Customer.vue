@@ -85,6 +85,7 @@
 // import {Modal} from 'bootstrap';
 import Categorydropdown from './Categorydropdown'
 import axios from 'axios'
+import { localhost } from '../../utils/FormValidation'
 export default {
     title:'Homepage ',
     name:"Customer",
@@ -102,6 +103,11 @@ export default {
         const response = await axios.get("http://localhost:3000/listProduct");
         console.log(response.data);
         this.$store.dispatch("customer/loadProduct",response.data);
+        var query = this.$route.query.q
+        if(query){
+            var responseSearch =await axios.get(localhost+"/search/product?q="+query);
+            this.$store.dispatch('customer/searchProduct',responseSearch.data);
+        }
     },
     computed:{  
         product(){

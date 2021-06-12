@@ -77,7 +77,7 @@ app.use(chatRoutes)
 app.use(roleRoutes);
 app.use(searchRouter);
 app.use(productRouter)
-mongoose.connect('mongodb+srv://user1:user123@cluster0.vjtms.mongodb.net/e-commerceProject?retryWrites=true&w=majority',{
+mongoose.connect('mongodb://localhost:27017/e-commerceProject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{
   
   useNewUrlParser: true,
   useUnifiedTopology: true,

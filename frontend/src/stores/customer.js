@@ -88,14 +88,6 @@ const customerStore={
         getAllProducts(state){
             return state.customerProduct;
         },
-        searchProduct:(state)=>(name)=>{
-            
-
-            console.log(state.customerProduct.filter(element=>element.name.toLowerCase().indexOf(name)>-1));
-            return state.customerProduct.filter(element=>(element.name.toLowerCase().indexOf(name)>-1
-            ||element.categories.name.toLowerCase().indexOf(name)>-1
-            ));
-        },
         getProductSearch(state){
             return state.productSearch;
         }
