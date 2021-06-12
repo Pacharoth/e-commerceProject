@@ -172,7 +172,7 @@ export default {
         .productpage{
             box-shadow: $shadow_1;
             border-radius: 5px;
-            padding: 4  % 2% 2% 2%;
+            padding:2%;
             background: white;
         }
     }

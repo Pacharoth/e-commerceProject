@@ -76,7 +76,7 @@
             </a>
             <div class="dropdown-menu profile" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
-                <a class="dropdown-item header" href="#">Setting</a>
+                <router-link to="/" class="dropdown-item header" >Homepage</router-link>
                 <router-link class="dropdown-item header" @click="logout" to="/">Log out</router-link>
             </div>
             </li>

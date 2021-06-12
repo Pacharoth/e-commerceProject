@@ -70,9 +70,14 @@ exports.updateProduct = async(req,res)=>{
         var file = req.files.img;
         var filename='/assets/img/'+file.name;
         var pathSave='./public'+filename;
-        fs.unlinkSync('./public'+aproduct.img[0]);
+        try{
+            fs.unlinkSync('./public'+aproduct.img[0]);
+        }catch(err){
+            console.log(err);
+        }
         await file.mv(pathSave)
-        aproduct.img[0]=filename;
+        aproduct.img=filename;
+        console.log(aproduct.img)
     }
     aproduct.name = name;
     aproduct.detail=detail;
@@ -84,6 +89,7 @@ exports.updateProduct = async(req,res)=>{
     aproduct.categories =cate._id;
     try{
         await aproduct.save()
+        console.log(aproduct);
         res.json({save:true});
     }
     catch(err){

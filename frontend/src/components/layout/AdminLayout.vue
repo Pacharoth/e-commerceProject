@@ -18,6 +18,7 @@
                     <button class="btn avatar"> <span class="name">{{user.user}}</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
+            
             <chat-list/>
             <notification/>
             <router-view></router-view>
