@@ -26,6 +26,7 @@ const customerRouter = {
             name:'customerlistproduct',
             path:'homepage',
             component:Customer,
+            props:true,
         },
         {
             path:'edituser',

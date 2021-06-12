@@ -18,6 +18,7 @@ server=require('http').createServer(app),
 
 roleRoutes = require('./routers/role'),
 productRouter = require('./routers/product'),
+searchRouter = require('./routers/search'),
 io = require('socket.io')(server,{
   cors:{
     origin:[
@@ -72,9 +73,11 @@ app.use(categoryRoutes);
 app.use(customerRoutes);
 app.use(sellerRoutes);
 app.use(chatRoutes)
-app.use(roleRoutes)
+app.use(roleRoutes);
+app.use(searchRouter);
 app.use(productRouter)
-mongoose.connect('mongodb://localhost:27017/e-commerceProject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{
+mongoose.connect('mongodb+srv://user1:user123@cluster0.vjtms.mongodb.net/e-commerceProject?retryWrites=true&w=majority',{
+  
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

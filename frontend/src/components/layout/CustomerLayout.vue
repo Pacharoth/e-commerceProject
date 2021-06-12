@@ -11,7 +11,7 @@
                     </div>
                     <div class="p-2 bd-highlight d-flex justify-content-between">
 
-                         <input type="text" ref="search"  class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
+                         <input type="text" ref="search" v-model="searchname"  class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
                         <button class="btn search p-0" @click="showSearch" ><em class="fas fa-search" ></em></button>
 
                     </div>
@@ -59,12 +59,18 @@
 import { useStore } from 'vuex'
 import { showChatLists, showNotifications } from '../../hook/effect'
 import { logouts } from '../../utils/FormValidation'
+import {ref} from '@vue/reactivity'
 
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
+import { watch } from '@vue/runtime-core'
+import router from '../../routers/route'
+import axios from 'axios';
+import {localhost} from '../../utils/FormValidation.js';
 export default {
     name:"CustomerLayout",
     setup() {
+        const searchname = ref("");
         const store = useStore()
         function showChatList(){
             showChatLists(store);
@@ -77,10 +83,18 @@ export default {
             store.dispatch('chat/changeList','');
             store.dispatch('notification/changeContent','');
         }
+        watch(searchname,async()=>{
+            router.push({name:'customerlistproduct',query:{q:searchname.value}});
+            await axios.get(localhost+"search/product?q="+searchname.value).then(result=>{
+                console.log(result);
+            });
+        })
+      
         return{
             showChatList,
             showNotification,
-            logout
+            logout,
+            searchname
         }
     },
     data() {
