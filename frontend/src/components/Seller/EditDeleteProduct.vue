@@ -136,8 +136,13 @@ export default {
             if(response.data.save){
                 this.products= this.product.filter(element=>{
                 if(element._id===data._id){
-                    element=data
-                    element.img[0]='/assets/img/'+form.get('img').name
+                    element.name=data.name
+                    element.category = data.category
+                    element.qty  =data.qty;
+                    element.price =data.price
+                    if(form.get('img').name){
+                        element.img[0]='/assets/img/'+form.get('img').name
+                    }
                     element.instock = newDate;
                 }
                 return element;

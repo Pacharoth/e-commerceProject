@@ -70,6 +70,3 @@ exports.changePwd = async (req,res)=>{
         
     }
 }
-// exports.getSeller = async(req,res)=>{
-//     const id 
-// }
