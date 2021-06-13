@@ -67,7 +67,7 @@
     </Suspense>
 </template>
 <script>
-import { computed, onBeforeMount, onMounted, ref, watchEffect } from '@vue/runtime-core';
+import { computed, onBeforeMount, onMounted, ref, watch, watchEffect } from '@vue/runtime-core';
 import Chat from './Chat';
 import ChatLoading from './ChatLoading.vue';
 import { useStore } from 'vuex';
@@ -104,13 +104,18 @@ export default {
             id.value=user.value.userid
             var interval=null
             interval=setInterval(()=>{
-                if(user.value.userid)
-                    socket.value.emit('getchats',{user:user.value.userid})
+            if(user.value.userid)
+                socket.value.emit('getchats',{user:user.value.userid})
             },2000);
             
             return()=>{
                 clearInterval(interval);
             }
+        })
+        watch(user,()=>{
+            if(user.value.userid)
+                socket.value.emit('getchats',{user:user.value.userid});
+           
         })
         onMounted(()=>{
             if(socket.value==null) return socket.value;

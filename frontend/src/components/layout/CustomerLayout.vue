@@ -56,22 +56,17 @@
 <script>
 import { useStore } from 'vuex'
 import { showChatLists, showNotifications } from '../../hook/effect'
-import { localhost, logouts } from '../../utils/FormValidation'
+import { logouts } from '../../utils/FormValidation'
 import {ref} from '@vue/reactivity'
 
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
 import { watch} from '@vue/runtime-core'
-
-import axios from 'axios'
-import { useRoute, useRouter } from 'vue-router'
-
-// import axios from 'axios';
-// import {localhost} from '../../utils/FormValidation.js';
+import {searchProduct} from '../../utils/search';
+import {  useRouter } from 'vue-router'
 export default {
     name:"CustomerLayout",
     setup() {
-        const router=useRoute()
         const route = useRouter();
         const searchname = ref("");
         const store = useStore();
@@ -87,10 +82,7 @@ export default {
             store.dispatch('notification/changeContent','');
         }
         watch(searchname,async()=>{
-            route.push({name:'customerlistproduct',query:{q:searchname.value}});
-            const response=await axios.get(localhost+"/search/product?q="+router.query.q);
-            store.dispatch('customer/searchProduct',response.data);
-            console.log(response)
+            await searchProduct({store,value:searchname.value,route});
         })
       
         return{

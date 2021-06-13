@@ -123,7 +123,7 @@ chat:[{
 
 */
 async function findOrCreateChat(data){
-    var {userId,ownerId,message} = data;
+    var {userId,ownerId} = data;
     if(userId!=undefined){
         var roomUser = await room.find({$and:[
             {users:userId},

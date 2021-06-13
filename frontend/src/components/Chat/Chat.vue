@@ -144,12 +144,11 @@ export default {
             chat_status.value="online";
         
             socket.value.on("recieve-changes",async data=>{
+                socket.value.emit('getchats',{user:user.value.userid});
                 console.log(data.users._id)
-                
                 if(data.content!==""){
                     msg.value.push(data);
                 } 
-                
             })
             socket.value.once('load-chats',msgs=>{
                 roomId.value=msgs.roomId;
@@ -183,6 +182,7 @@ export default {
                 content:mess.value,
             });
             mess.value=""
+
         }
         const closeChat = ()=>{
             store.dispatch('chat/changeContent','')

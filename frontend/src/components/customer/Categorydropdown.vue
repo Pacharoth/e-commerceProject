@@ -13,21 +13,23 @@
 </template>
 <script>
 import axios from 'axios'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { localhost } from '../../utils/FormValidation'
+import { searchProduct } from '../../utils/search'
+import { ref } from '@vue/reactivity'
+import { watch } from '@vue/runtime-core'
 export default {
     name:'Categorydropdown',
     setup() {
         const store =useStore()
-        const route = useRoute();   
-        const router = useRouter();
+        const route = useRouter();
+        const search = ref("");
         async function getCategory(data){
-            router.push({name:'customerlistproduct',query:{q:data}});
-            const response=await axios.get(localhost+"/search/product?q="+route.query.q);
-            console.log(route.query.q);
-            store.dispatch('customer/searchProduct',response.data);
+            search.value=data;
         }
+        watch(search,async()=>{
+            await searchProduct({store,value:search.value,route})
+        })
         return{
             getCategory,
         }
