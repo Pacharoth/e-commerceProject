@@ -19,6 +19,7 @@ server=require('http').createServer(app),
 roleRoutes = require('./routers/role'),
 productRouter = require('./routers/product'),
 searchRouter = require('./routers/search'),
+shoppingRouter=require('./routers/shoppingcart');
 io = require('socket.io')(server,{
   cors:{
     origin:[
@@ -71,7 +72,7 @@ app.use(user);
 app.use(feedbackRoutes);
 app.use(categoryRoutes);
 app.use(customerRoutes);
-
+app.use(shoppingRouter);
 app.use(sellerRoutes);
 app.use(chatRoutes)
 app.use(roleRoutes);

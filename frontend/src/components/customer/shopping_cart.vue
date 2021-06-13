@@ -4,28 +4,28 @@
         <h3 class="header">Shopping Card</h3>
 
             <!--first part-->
-            <div class="row1-one">
+            <div class="row1-one" v-for="products in product" :key="products">
                 <p style="color: #D60265;">
                     <i style="font-size:24px" class="fa">&#xf058;</i>
-                    {{product.sellers.company}}
+                    {{products.sellers.company}}
                 </p>
                 <div class="row1">
                     <!--left part-->
                     <div class="column1">
                         <span>
-                            <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"></i><img width="120" height="120" style="margin-left:5%" :src="'http://localhost:3000'+product.img" alt="">
+                            <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"></i><img width="120" height="120" style="margin-left:5%" :src="'http://localhost:3000'+products.products.img" alt="">
                         </span>
                     </div>
 
                     <!--right part-->
                     <div class="column2">
                         <!-- Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket  -->
-                        {{product.detail}}
+                        {{products.products.detail}}
                         <p>Size: L <span>Color: Gray</span></p>
-                        <p style="font-weight: bold;">${{product.price}}</p>
+                        <p style="font-weight: bold;">${{products.products.price-(products.products.discount*products.products.price/100)}}</p>
                         <!--quantity part-->
                         <div class="flex-container">
-                            <div>x1</div>
+                            <div>x{{products.quantity}}</div>
                         </div>
                     </div>
                 </div>
@@ -43,24 +43,34 @@
 </template>
 
 <script>
-import { ref, toRefs } from '@vue/reactivity'
-import { watchEffect } from '@vue/runtime-core';
+import { ref } from '@vue/reactivity'
+import { computed, onMounted, watchEffect } from '@vue/runtime-core';
 import axios from 'axios';
+import { useStore } from 'vuex';
+import { localhost } from '../../utils/FormValidation';
 export default {
     name: 'shopping_cart',
-    props:["id"],
-    setup(props){
-        const {id}= toRefs(props);
-        const product = ref({})
+    title:'Shopping Cart',
+    setup(){
+        const store = useStore()
+        const product = ref([])
+        const user =computed(()=>store.getters['auth/getSession'])
+        onMounted(async()=>{
+            loadData();
+        })
         watchEffect(async()=>{
-            const response =await axios.get("http://localhost:3000/shoppingcart/"+id.value);
+            const response =await axios.get(localhost+"/shoppingcart/"+user.value.userid);
             console.log(response.data);
             product.value=response.data;
-
-            console.log(product.value)
         })
+        async function loadData(){
+            const response =await axios.get(localhost+"/shoppingcart/"+user.value.userid);
+            console.log(response.data);
+            product.value=response.data;
+        }
         return{
             product,
+            user
         }
     }
 }
@@ -90,9 +100,11 @@ export default {
         margin-bottom: 3%;
     }
     .row1-one{
+        background-color: white;
+        margin-bottom:2% ;
         width: 80%;
         margin-left: 15%;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1),0 8px 16px rgba(0,0,0,0.1);
         padding: 15px;
     }
     .row1-two{

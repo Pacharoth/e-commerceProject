@@ -101,7 +101,7 @@ exports.listProduct = async(req,res) =>{
 }
 
 exports.getProByID = async(req,res)=>{
-    const result = await product.findById(req.params.id);
+    const result = await product.findById(req.params.id).populate("sellers");
     res.json(result);
 }
 

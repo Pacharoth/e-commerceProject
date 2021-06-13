@@ -61,7 +61,7 @@ const customerRouter = {
             }
         },
         {
-            path:'shoppingcart/:id',
+            path:'shoppingcart/',
             name:'shoppingcart',
             component:shopping_cart,
             beforeEnter: (to, from, next) => {
@@ -70,7 +70,6 @@ const customerRouter = {
                 if(to.name=='shoppingcart'&&isAuthenticate )next()
                 else next({name:'customerlistproduct'});
             },
-            props:true
         },
         {
             path:'productdetail/:id',

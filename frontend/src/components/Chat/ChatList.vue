@@ -103,10 +103,14 @@ export default {
             if(socket.value==null) return socket.value;
             id.value=user.value.userid
             var interval=null
+            if(user.value.userid){
             interval=setInterval(()=>{
-            if(user.value.userid)
-                socket.value.emit('getchats',{user:user.value.userid})
-            },2000);
+                if(user.value.userid)
+                    socket.value.emit('getchats',{user:user.value.userid})
+                },2000);
+            }else{
+                clearInterval(interval);
+            }
             
             return()=>{
                 clearInterval(interval);

@@ -16,7 +16,7 @@
             <div class="col-md-6 ">
                 <h3>{{product.name}}</h3>
                 <p class="decription">{{product.detail}}</p>
-                <p class="price">{{product.price}}$</p>
+                <p class="price">{{product.price-(product.price*product.discount/100)}}$</p>
                 <p>Size:</p>
                 <div class="size mb-3" ref="color">
                     <button class="border shadow " @click="changeColor(0)">M</button>
@@ -31,13 +31,17 @@
                 </div>
                 <p>Quantity:</p>
                 
-                <button class="btn qty shadow "><i class="fas fa-minus"></i></button>
-                <span> 1 </span>
-                <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
-                <span> {{product.qty}} pieces available</span>
+                <button class="btn qty shadow " @click="decre()"><i class="fas fa-minus"></i></button>
+                <span> {{qty}} </span>
+                <button class="btn qty shadow " @click="incr(product.qty)"><i class="fas fa-plus"></i></button>
+                <span> {{product.qty - qty}} pieces available</span>
                 <div>
                     <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link>
-                    <router-link :to="'/shoppingcart/'+product._id" class=" addtocart mt-3 ml-3">Add to Cart</router-link>
+                    <button @click="postShoppingCart({
+                       qty:qty,
+                       product,
+
+                    })" class=" addtocart mt-3 ml-3">Add to Cart</button>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">
@@ -50,16 +54,27 @@
 </template>
 <script>
 import { ref, toRefs } from '@vue/reactivity'
-import { onMounted, watchEffect } from '@vue/runtime-core';
+import { computed, onMounted, watchEffect } from '@vue/runtime-core';
 import axios from 'axios';
+import { localhost } from '../../utils/FormValidation';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 export default {
     title:'Product Detail',
     name:'ProductDetail',
     props:["id"],
+    data(){
+        return{
+            qty:1,
+        }
+    },
     setup(props) {
         const color = ref(null);
         const {id}= toRefs(props);
-        const product = ref({})
+        const product = ref({});
+        const store = useStore();
+        const router = useRouter()
+        const user = computed(()=>store.getters['auth/getSession'])
         onMounted(()=>{
             console.log(color.value.children[0]);
         })
@@ -74,18 +89,34 @@ export default {
             let colors = color.value.children[number].classList;
             colors.contains('active')?colors.remove('active'):colors.add('active');
         }
+        async function postShoppingCart(data){
+            const response = await axios.post(localhost+"/shoppingcart",{data,customers:user.value.userid});
+            if(response.data.save){
+                router.push({name:"shoppingcart"});
+                
+            }
+        }
         return{
             color,
             changeColor,
             product,
+            postShoppingCart,
         }
     },
     async mounted(){
 
     },
-    watch:{
-
+    methods:{
+        incr(product){
+            if(this.qty<product)this.qty++;
+        },
+        decre(){
+            if(this.qty>1){
+                this.qty--;
+            }
+        }
     }
+
 }
 </script>
 <style lang="scss" scoped>
