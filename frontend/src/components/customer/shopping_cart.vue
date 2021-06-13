@@ -33,9 +33,9 @@
 
             <!--last part-->
             <div class="last">
-                <p>Total: $10 
-                    <span><button type="submit" class="btn1">Check Out</button></span>
-                </p>
+                <span class="">Total: ${{total}}</span> 
+                <!-- <span><button type="submit" class="btn btn1">Check Out</button></span> -->
+                <span ref="paypal" class="paypal"></span>
             </div>
 
         </div>
@@ -44,33 +44,43 @@
 
 <script>
 import { ref } from '@vue/reactivity'
-import { computed, onMounted, watchEffect } from '@vue/runtime-core';
+import { computed, onMounted } from '@vue/runtime-core';
 import axios from 'axios';
 import { useStore } from 'vuex';
 import { localhost } from '../../utils/FormValidation';
+import {insertPayPal} from '../../utils/paypal'
 export default {
     name: 'shopping_cart',
     title:'Shopping Cart',
     setup(){
+        const paypal = ref(null)
         const store = useStore()
         const product = ref([])
         const user =computed(()=>store.getters['auth/getSession'])
+        const total = ref(0);
         onMounted(async()=>{
             loadData();
-        })
-        watchEffect(async()=>{
-            const response =await axios.get(localhost+"/shoppingcart/"+user.value.userid);
-            console.log(response.data);
-            product.value=response.data;
+            insertPayPal(paypal);
+            
         })
         async function loadData(){
+            total.value=0;
             const response =await axios.get(localhost+"/shoppingcart/"+user.value.userid);
             console.log(response.data);
             product.value=response.data;
+            for(var aproduct in product.value){
+                var aProduct=product.value[aproduct].products
+                var quantity = product.value[aproduct].quantity
+                var discount =aProduct.discount*aProduct.price/100
+                console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
+                total.value = total.value+(quantity*(aProduct.price-discount))
+            }
         }
         return{
             product,
-            user
+            user,
+            total,
+            paypal,
         }
     }
 }
@@ -122,16 +132,23 @@ export default {
         margin-left: 15%;
     }
     .last{
-        float: right;
-        margin: 3%;
-        padding: 10px;
+        display: flex;
+        align-items: center;    
+        width: 100%;
+        justify-content: flex-end;
+        padding-right:5% ;
+        margin-bottom: 2%;
     }
-    .btn1{
+    .paypal{
+        margin-left: 2%;
+    }
+    .btn1,.btn1:hover{
+        border: none;
         background-color: #D60265;
         color: white;
-        padding: 15px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
     }
+   
     .flex-container {
         display: flex;
         float: right;
