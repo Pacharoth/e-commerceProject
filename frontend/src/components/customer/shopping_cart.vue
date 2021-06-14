@@ -48,7 +48,7 @@ import { computed, onMounted } from '@vue/runtime-core';
 import axios from 'axios';
 import { useStore } from 'vuex';
 import { localhost } from '../../utils/FormValidation';
-import {insertPayPal} from '../../utils/paypal'
+import {insertPayPalCustomer} from '../../utils/paypal'
 export default {
     name: 'shopping_cart',
     title:'Shopping Cart',
@@ -60,7 +60,11 @@ export default {
         const total = ref(0);
         onMounted(async()=>{
             loadData();
-            insertPayPal(paypal);
+            insertPayPalCustomer({
+                total:total,
+                product:product,
+                paypal:paypal
+            });
             
         })
         async function loadData(){
