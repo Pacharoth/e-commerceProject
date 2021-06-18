@@ -43,6 +43,13 @@ exports.getPastOrder = async(req,res)=>{
     
 }
 exports.getReceipt = async(req,res)=>{
-    const receipt = orderModel.findById(req.params.id).populate('sellers').populate('products').populate('selles').populate('users');
+    const receipt = await orderModel.findOne({_id:req.params.id}).populate('users').populate({
+        path:'product',
+        populate:[
+            {path:'sellers'},
+            {path:'products'}
+        ],
+    })
+    console.log(receipt)
     res.json(receipt);
 }
