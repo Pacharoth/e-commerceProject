@@ -15,7 +15,7 @@ chatRoutes = require('./routers/chat'),
 customerHomeRoute = require('./routers/customerHome'),
 server=require('http').createServer(app),
 {chatData,chatList}= require('./sockets/chat'),
-
+router = require('./routers/router'),
 roleRoutes = require('./routers/role'),
 productRouter = require('./routers/product'),
 searchRouter = require('./routers/search'),
@@ -67,7 +67,7 @@ app.use(session({
 }));
 port = 3000;
 exports.portlisten=port;
-app.use(customerHomeRoute)
+// app.use(customerHomeRoute)
 app.use(user);
 app.use(feedbackRoutes);
 app.use(categoryRoutes);
@@ -77,7 +77,8 @@ app.use(sellerRoutes);
 app.use(chatRoutes)
 app.use(roleRoutes);
 app.use(searchRouter);
-app.use(productRouter)
+app.use(productRouter);
+app.use(router);
 mongoose.connect('mongodb://localhost:27017/e-commerceProject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{
   
   useNewUrlParser: true,

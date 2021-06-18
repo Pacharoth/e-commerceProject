@@ -89,9 +89,10 @@ const customerRouter = {
             }
         },
         {
-            path:'receipt',
+            path:'receipt/:id',
             name:'receipt',
             component:receipt,
+            props:true
         },
 
     ],

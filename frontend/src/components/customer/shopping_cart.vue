@@ -30,9 +30,9 @@
                     </div>
                 </div>
             </div>
-
+            
             <!--last part-->
-            <div class="last">
+            <div class="last" v-if="total!==0">
                 <span class="">Total: ${{total}}</span> 
                 <!-- <span><button type="submit" class="btn btn1">Check Out</button></span> -->
                 <span ref="paypal" class="paypal"></span>
@@ -49,21 +49,24 @@ import axios from 'axios';
 import { useStore } from 'vuex';
 import { localhost } from '../../utils/FormValidation';
 import {insertPayPalCustomer} from '../../utils/paypal'
+import {  useRouter } from 'vue-router';
 export default {
     name: 'shopping_cart',
     title:'Shopping Cart',
     setup(){
-        const paypal = ref(null)
-        const store = useStore()
-        const product = ref([])
-        const user =computed(()=>store.getters['auth/getSession'])
-        const total = ref(0);
+        const paypal = ref(null),
+        store = useStore(),
+        product = ref([]),
+        router  = useRouter(),
+        user =computed(()=>store.getters['auth/getSession']),
+        total = ref(0);
         onMounted(async()=>{
             loadData();
             insertPayPalCustomer({
                 total:total,
                 product:product,
-                paypal:paypal
+                paypal:paypal,
+                router:router,
             });
             
         })

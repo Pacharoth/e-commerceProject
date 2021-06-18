@@ -1,3 +1,5 @@
+import axios from 'axios';
+import {localhost} from '../utils/FormValidation';
 const insertPayPalCustomer = async(datas)=>{
   console.log(datas);
     const script = document.createElement('script');
@@ -27,7 +29,14 @@ const insertPayPalCustomer = async(datas)=>{
           },
           onApprove:async(data,actions)=>{
             const order = await actions.order.capture();
-            console.log(data,order);
+            console.log(datas.product.value,order);
+
+            const response=await axios.post(localhost+'/receipt',datas.product.value);
+            if(response.data.err){
+              console.log(response.data.err);
+            }else{
+              datas.router.push({name:'receipt',params:{id:response.data._id}})
+            }
           }
         }).render(datas.paypal.value);
     })

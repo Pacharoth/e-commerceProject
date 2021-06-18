@@ -72,6 +72,7 @@ export default {
         const color = ref(null);
         const {id}= toRefs(props);
         const product = ref({});
+        const error = ref("");
         const store = useStore();
         const router = useRouter()
         const user = computed(()=>store.getters['auth/getSession'])
@@ -93,7 +94,8 @@ export default {
             const response = await axios.post(localhost+"/shoppingcart",{data,customers:user.value.userid});
             if(response.data.save){
                 router.push({name:"shoppingcart"});
-                
+            }else{
+                error.value ="Can not be purchased";
             }
         }
         return{

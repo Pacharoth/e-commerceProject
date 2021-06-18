@@ -45,8 +45,21 @@
     </form>
 </template>
 <script>
+import { ref, toRefs } from '@vue/reactivity'
+import { onMounted } from '@vue/runtime-core';
+import axios from 'axios';
+import { localhost } from '../../utils/FormValidation';
 export default {
-    
+    props:['id'],
+    title:"Receipt",
+    setup(props) {
+        const {id} = toRefs(props);
+        const receipt = ref({});
+        onMounted(async()=>{
+            const response = await axios.get(localhost+"/receipt/"+id);
+            receipt.value = response.data;
+        })
+    }
 }
 </script>
 <style scoped>
