@@ -4,7 +4,7 @@ const room=require("../models/RoomChat"),
     uuid =require('uuid');
 const chatList=(io,socket)=>{
     socket.on("getchats",async id=>{
-        console.log(id);
+        // console.log(id);
         var users = await room.find({users:{
             _id:id.user
         }}).populate('chat').populate('users');
@@ -39,7 +39,7 @@ const chatData = (io,socket)=>{
     socket.on('get-chat', async data=>{
         const roomOrchat= await findOrCreateChat(data);
         // socket.join(roomOrchat.roomId);
-        console.log(roomOrchat)
+        // console.log(roomOrchat)
         var {roomId} = roomOrchat;
         if(roomId!==""){
             socket.join(roomId.toString());
@@ -50,7 +50,7 @@ const chatData = (io,socket)=>{
             
             })
             socket.on("send-changes",async data=>{
-                console.log(data);
+                // console.log(data);
                 io.in(roomId.toString()).emit("recieve-changes",data);
                 await saveChat(data,roomId);
                 
@@ -62,7 +62,7 @@ const chatData = (io,socket)=>{
                         console.log(err)
                     }else{
                         data.content = path
-                        console.log(data);
+                        // console.log(data);
                         io.in(roomId.toString()).emit("recieve-changes",data);
                         await saveChat(data,roomId);
                     }
@@ -134,7 +134,7 @@ async function findOrCreateChat(data){
                 roomUser = new room({
                     users:[userId,ownerId],
                 })
-                console.log(roomUser);
+                // console.log(roomUser);
                 await roomUser.save();
                 return {roomId:roomUser._id,roomUser};
             }

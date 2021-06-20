@@ -134,13 +134,21 @@ export default {
     methods:{
       async validate(){
         if(this.pwd.nw != this.pwd.confirm){
-          this.notMatch.confirm = 'Confirm password is not match !'
+          this.log=''
+          this.notMatch.nw = 'Confirm password is not match !'
+        }else{
+          this.log=''
+          const res = await axios.put('http://localhost:3000/changePwd/'+localStorage.getItem('userid'),this.pwd)
+          console.log('change result',res.data)
+          if(res.data.err == true){
+            this.notMatch.current = "Password is incorrect"
+          }else{
+            this.notMatch.current = ''
+            this.notMatch.nw =''
+            this.log=res.data.message
+          }
         }
-        const res = await axios.put('http://localhost:3000/changePwd/'+localStorage.getItem('userid'),this.pwd)
-        console.log('change result',res.data)
-        if(res.data.err == true){
-          this.notMatch.current = res.data.message
-        }
+
 
         
       }
