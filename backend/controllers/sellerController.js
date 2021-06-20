@@ -77,6 +77,31 @@ exports.changePwd = async (req,res)=>{
         
     }
 }
-exports.addproImg = (req,res)=>{
+exports.addProImg = async (req,res)=>{
+    const proImg = req.files.proImg
+    console.log("req body add img", req.files.proImg)
+    const sell = await seller.findOne().populate({
+        path:'users',
+        match:{
+            _id:req.params.id
+        }
+    })  
 
+    if(proImg){
+        var filename='/assets/img/profile/'+proImg.name;
+        var pathSave='./public'+filename
+        await proImg.mv(pathSave)
+        let userSeller =await user.findById(sell.users._id)
+        userSeller.img =filename
+        try {
+            await userSeller.save()
+            console.log('saved proImg',userSeller.img)
+            res.json({message:"profile Img is added"})
+        } catch (error) {
+            console.log('err is catched found when saving',error)
+        }
+    }
+    
+    
+    // res.json({message:"proimg arrived server"})
 }

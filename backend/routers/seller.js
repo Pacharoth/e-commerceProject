@@ -7,4 +7,5 @@ router.post('/admin/seller',sellerController.registerSeller);
 router.get('/admin/seller',pagination(seller),sellerController.getSellers);
 router.get('/getSeller/:id', sellerController.getSellerByID)
 router.put('/changePwd/:id',sellerController.changePwd)
+router.put('/addProImg/:id',sellerController.addProImg)
 module.exports = router

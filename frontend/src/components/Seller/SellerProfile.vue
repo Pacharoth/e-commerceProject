@@ -77,18 +77,18 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title header" id="exampleModalLabel">Add Profile Image</h5>
+                    <h5 class="modal-title header" id="exampleModalLabel">Update Profile Image</h5>
                     <button type="button" class="close" @click="modal.hide()" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form ref="form" enctype="multipart/form-data">
+                  <form ref="form" @submit.prevent="addImg()" enctype="multipart/form-data">
                     <div class="modal-body">
-                      <input ref="img" class="form-control" type="file" id="profilepic" name="profiepic" />
+                      <input class="form-control" type="file" id="proImg" name="proImg" />
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
-                      <button type="submit" class="btn opt">Add</button>
+                      <button type="submit" class="btn opt" >Update</button>
                     </div>
                   </form>
                 </div>
@@ -132,6 +132,14 @@ export default {
 
     },
     methods:{
+
+      async addImg(){
+         const img = new FormData(this.$refs.form)
+         console.log("ref img form: ",img)
+         console.log("img profile", img.get("proImg"))
+         const res = await axios.put('http://localhost:3000/addProImg/'+localStorage.getItem('userid'),img)
+         console.log(res)
+      },
       async validate(){
         if(this.pwd.nw != this.pwd.confirm){
           this.log=''
@@ -148,9 +156,6 @@ export default {
             this.log=res.data.message
           }
         }
-
-
-        
       }
     }
 
