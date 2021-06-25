@@ -52,18 +52,18 @@ exports.listProfileCustomer = async(req,res)=>{
     res.json(acustomer);
 }
 exports.postProfile = async(req,res)=>{
-    var user =await user.find({_id:req.body.user});
-    user.email = req.body.email;
-    user.username =req.body.username;
+    var auser =await user.findOne({_id:req.params.id});
+    auser.email = req.body.email;
+    auser.username =req.body.username;
     try{
-        await user.save();      
+        await auser.save();      
     }catch(err){
-        res.json({err:true,error:err});
+        res.json({err:true,result:"Can't save to database"});
     }
     var acustomer = await customer.find().populate({
         path:"users",
         match:{
-            "_id":req.body.user
+            _id:req.params.id
         }
     });
     acustomer = acustomer.filter(element=>element.users!==null);
@@ -71,14 +71,17 @@ exports.postProfile = async(req,res)=>{
     res.json(acustomer);
 }
 exports.setNewPassword=async(req,res)=>{
-    const salt = bcrypt.genSalt(10);
+    const salt = bcrypt.genSaltSync(10);
+    console.log(req.params.id)
     const response =await user.findOne({_id:req.params.id})
-    if(response.user){
+    console.log(response);
+    if(response._id){
        var passwords= await bcrypt.compare(req.body.current,response.password);
+       console.log(passwords);
        if(passwords){
-            response.password =  bcrypt.hashSync(req.body.password,salt);
+            response.password =  bcrypt.hashSync(req.body.newpassword,salt);
             try{
-                await response.save()
+                await response.save();
                 res.json({result:"Password has been reset",err:false});
             }catch(err){
                 res.json({result:"cannot reset password",err:true});
@@ -86,5 +89,7 @@ exports.setNewPassword=async(req,res)=>{
        }else{
            res.json({result:"Current Password is not matched",err:false});
        }
+    }else{
+        res.json({result:"Account doesn't have so please try again later",err:true});
     }
 }

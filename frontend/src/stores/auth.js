@@ -23,11 +23,17 @@ const authStore = {
                 role,
                 email,
             }
+        },
+        updateSession(state,data){
+            state.isAuthenticate={...state.isAuthenticate,data};
         }
     },
     actions:{
         setStatus({commit},text){
             commit('SET_STATUS',text);
+        },
+        updateSession({commit},result){
+            commit
         },
         setSession({commit},result){
             try{

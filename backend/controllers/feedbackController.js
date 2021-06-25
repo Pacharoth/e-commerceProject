@@ -1,4 +1,4 @@
-const Feedback = require('../models/FeedbackCustomer');
+const Feedback = require('../models/feedbackCustomer');
 
 exports.getFeedbacks = (req, res) => {
   Feedback.find({}, (err, feedbacks) => {
