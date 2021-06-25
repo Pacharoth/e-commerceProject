@@ -9,6 +9,8 @@ exports.transport = nodemailer.createTransport({
         pass:"narutonaraku01@P",
     }
 });
+
+
 const { registerUser } = require('../utils/registerUser');
 const role = require('../models/roleModel');
 const customer = require('../models/customerModel');
@@ -40,9 +42,11 @@ exports.login = async(req,res)=>{
         return res.status(400).json({err:"Err Backend!",emailErr:true});
     })
 }
+
 exports.registerCustomer = async(req,res)=>{
     await registerUser(req,res,"customer");
 }
+
 exports.logout = async(req,res)=>{
     if(req.session.userId){
         req.session.destroy();
@@ -52,6 +56,7 @@ exports.logout = async(req,res)=>{
         return res.status(400).json({success:false});
     }
 }
+
 exports.getSession = async(req,res)=>{
     if(req.session){
         return res.status(200).json(req.session);
@@ -61,12 +66,15 @@ exports.getSession = async(req,res)=>{
         return res.status(400).json({"error":true});
     }
 }
+
 exports.getUser=async(req,res)=>{
     await user.find().populate('roles').then(result=>res.json(result));
 }
+
 exports.registerAnyRole = async(req,res)=>{
     await registerUser(req,res,req.body.role);
 }
+
 exports.forgetPassword = async(req,res)=>{
     const header = req.hostname
     const protocol = req.protocol
@@ -78,7 +86,7 @@ exports.forgetPassword = async(req,res)=>{
                     from:myemail,
                     to:req.body.email,
                     subject:"Reset Password",
-                    html:`<h1>Welcome to Awesome</h1>
+                    html:`<h1>Welcome to Amazing Shop</h1>
                         <p>Please click link below to reset password<br></p>
                         <a href="${protocol}://${header}:8080/resetpassword/${result._id}">here</a>`
                 }).then(result=>{
@@ -95,6 +103,7 @@ exports.forgetPassword = async(req,res)=>{
         }
     ).catch(err=>res.json({account:false}))
 }
+
 exports.resetPassword = async(req,res)=>{
     const salt = bcrypt.genSalt(10);
     const response =await user.findOne({_id:req.params.id})
@@ -133,6 +142,19 @@ exports.getCustomerByID = async (req,res)=>{
     res.json(customers)
 }
 
-exports.editCustomerByID = async (req, res) => {
+exports.updateCustomerByID = async (req, res) => {
     console.log(req.param.id)
+    console.log(req.body)
+    const {email, username, phoneNumber, password} = req.body
+    const acustomer = await customer.findById(req.params._id);
+    acustomer.email = email;
+    acustomer.username = username;
+    acustomer.phoneNumber = phoneNumber;
+    acustomer.password = password;
+    try{
+        await acustomer.save()
+        res.json({save:true});
+    }catch(err){
+        res.json({save:false})
+    }
 }

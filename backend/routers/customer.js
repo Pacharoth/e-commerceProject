@@ -8,4 +8,7 @@ router.get('/admin/customer',pagination(customer),customerController.getCustomer
 router.put('/admin/customer/:id',customerController.editCustomer);
 router.post('/admin/customer/:id',customerController.getCustomer);
 router.delete('/admin/customer/:id',customerController.deleteCustomer);
+router.get("/profile/:id",customerController.listProfileCustomer);
+router.post('/profile',customerController.postProfile);
+router.post("/setnewpassword",customerController.setNewPassword);
 module.exports = router;

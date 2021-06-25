@@ -1,5 +1,6 @@
 const customer = require("../models/customerModel");
 const user = require("../models/userModel");
+const bcrypt = require("bcrypt")
 exports.getCustomers = async(req,res)=>{
     res.json(res.pagination);
 };
@@ -37,4 +38,53 @@ exports.deleteCustomer = async(req,res)=>{
     console.log(acustomer.users)
     const auser =await user.findOneAndDelete({_id:acustomer.users})
     res.json({delete:"successful"})
+}
+exports.listProfileCustomer = async(req,res)=>{
+    console.log(req.params.id)
+    var acustomer =await customer.find().populate({
+        path:"users",
+        match:{
+            _id:req.params.id
+        }
+    });
+    console.log(acustomer);
+    acustomer= acustomer.filter(element=>element.users!==null);
+    res.json(acustomer);
+}
+exports.postProfile = async(req,res)=>{
+    var user =await user.find({_id:req.body.user});
+    user.email = req.body.email;
+    user.username =req.body.username;
+    try{
+        await user.save();      
+    }catch(err){
+        res.json({err:true,error:err});
+    }
+    var acustomer = await customer.find().populate({
+        path:"users",
+        match:{
+            "_id":req.body.user
+        }
+    });
+    acustomer = acustomer.filter(element=>element.users!==null);
+    acustomer[0].phoneNumber = req.body.phoneNumber;
+    res.json(acustomer);
+}
+exports.setNewPassword=async(req,res)=>{
+    const salt = bcrypt.genSalt(10);
+    const response =await user.findOne({_id:req.params.id})
+    if(response.user){
+       var passwords= await bcrypt.compare(req.body.current,response.password);
+       if(passwords){
+            response.password =  bcrypt.hashSync(req.body.password,salt);
+            try{
+                await response.save()
+                res.json({result:"Password has been reset",err:false});
+            }catch(err){
+                res.json({result:"cannot reset password",err:true});
+            }
+       }else{
+           res.json({result:"Current Password is not matched",err:false});
+       }
+    }
 }

@@ -10,13 +10,13 @@
                     <!--bottom part-->
                     <div class="left1">
                         <label for="email">Email</label><br>
-                        <input type="text" placeholder="" name="email" id="email" required><br>
+                        <input  type="text" placeholder="" name="email" id="email" required v-model="email"><br>
                 
                         <label for="">Username</label><br>
-                        <input type="text" placeholder="" name="username" id="" required><br>
+                        <input type="text" placeholder="" name="username" v-model="username" id="" required><br>
                 
                         <label for="">Mobile Number</label><br>
-                        <input type="text" placeholder="" name="mobile number" id="" required>
+                        <input type="text" placeholder="" name="mobile number" id="" required v-model="phoneNumber">
                     </div>
 
                     <input type="submit" name="" id="" value="Save" class="btn2">
@@ -45,8 +45,28 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { localhost } from '../../utils/FormValidation'
 export default {
     name: 'edit_user',
+    title:"My Profile",
+    data(){
+        return{
+            user:"",
+            dataset:{},
+            username:"",
+            email:"",
+            phoneNumber:"",
+        }
+    },
+    async mounted(){
+        this.user = this.$store.getters["auth/getSession"];
+        var response =await axios.get(localhost+"/profile/"+this.user.userid);
+        this.dataset =response.data[0];
+        this.email = this.dataset.users.email;
+        this.username =this.dataset.users.username;
+        this.phoneNumber = this.dataset.phoneNumber; 
+    }
 }
 </script>
 
