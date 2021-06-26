@@ -116,6 +116,12 @@ export default {
                 alert(response.data.result);
             }else{
               this.setData(response.data[0])
+              this.$store.dispatch("auth/updateSession",{
+                  user:this.username,
+                    email:this.email
+                })
+            localStorage.setItem("username",this.username);
+            localStorage.setItem("useremail",this.email);
               alert("Profile change successful")
             }
         }

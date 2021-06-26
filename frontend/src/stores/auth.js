@@ -24,16 +24,19 @@ const authStore = {
                 email,
             }
         },
-        updateSession(state,data){
-            state.isAuthenticate={...state.isAuthenticate,data};
+        UPDATE_SESSION(state,data){                                                                                                                                                                                                                                                                                                               
+            var {email,user}=data
+            state.isAuthenticate.user =user;
+            state.isAuthenticate.email=email                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
         }
-    },
+    },                                          
     actions:{
         setStatus({commit},text){
             commit('SET_STATUS',text);
         },
         updateSession({commit},result){
-            commit
+            console.log(result)
+            commit("UPDATE_SESSION",result);
         },
         setSession({commit},result){
             try{
