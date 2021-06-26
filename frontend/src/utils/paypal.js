@@ -3,7 +3,7 @@ import {localhost} from '../utils/FormValidation';
 const insertPayPalCustomer = async(datas)=>{
   console.log(datas);
     const script = document.createElement('script');
-    script.src="https://www.paypal.com/sdk/js?client-id=AUpA2RxAkbTSapEIHP7lHT9uiU3TWBCkvCmnI38sqWUsGEitxZwov1eRPYAXcKECuAzjS-luKQH4JymS";
+    script.src="https://www.paypal.com/sdk/js?client-id=Abuh5N_FhP2Q6Px2PdKCevpTg-uaNYYj3Bc7n9eUro4CtNnbLxzJLnvG_WYvV8zOv9xsSz5yI8_tmKDo";
     script.addEventListener("load",function(){
         window.paypal
         .Buttons({
@@ -37,6 +37,9 @@ const insertPayPalCustomer = async(datas)=>{
             }else{
               datas.router.push({name:'receipt',params:{id:response.data._id}})
             }
+          },
+          onError:err=>{
+            console.log(err);
           }
         }).render(datas.paypal.value);
     })

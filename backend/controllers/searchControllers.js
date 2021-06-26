@@ -7,7 +7,7 @@ exports.searchCategory = async(req,res)=>{
 		var response = await product.find().populate('categories');
 		response= response.filter(element=>findElement(element.name,query)||
 									findElement(element.categories.name,query)||
-									findElement(element.detail,query	));
+									findElement(element.detail,query));
 	}
 	res.json(response);
 }

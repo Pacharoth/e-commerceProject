@@ -39,12 +39,14 @@
             </div>
 
         </div>
+        
     </div>
+
 </template>
 
 <script>
 import { ref } from '@vue/reactivity'
-import { computed, onMounted } from '@vue/runtime-core';
+import { computed,  onMounted } from '@vue/runtime-core';
 import axios from 'axios';
 import { useStore } from 'vuex';
 import { localhost } from '../../utils/FormValidation';
@@ -60,9 +62,10 @@ export default {
         router  = useRouter(),
         user =computed(()=>store.getters['auth/getSession']),
         total = ref(0);
+    
         onMounted(async()=>{
-            loadData();
-            insertPayPalCustomer({
+            await  loadData();
+            await insertPayPalCustomer({
                 total:total,
                 product:product,
                 paypal:paypal,
