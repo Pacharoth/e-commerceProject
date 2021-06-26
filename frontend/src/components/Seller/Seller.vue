@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard-container">
-            <nav class="navbar shadow p-3 mb-5 bg-body rounded ">
+      <nav class="navbar shadow p-3 mb-5 bg-body rounded ">
         <router-link to="/seller" class="navbar-brand"><h4 class="header">AmazingShop</h4></router-link>
         <form class="form-inline">
           <input class="form-control mr-sm-2 rounded-pill search" type="search" placeholder="&#xF002; Search"/>
@@ -71,8 +71,10 @@
           </li>
           <li class="nav-item dropdown" @click="showProfile">
             <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
-              <em class="fas fa-user-circle user" style="margin-right: 8%;
-              font-size: 1.5vw;"></em>{{user.username}}
+              <!-- <em class="fas fa-user-circle user" style="margin-right: 8%;
+              font-size: 1.5vw;"></em> -->
+              <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000/'+user.img" alt="">
+              {{user.username}}
             </a>
             <div class="dropdown-menu profile" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
@@ -148,11 +150,11 @@ export default {
     @import '../../assets/sass/maxin';
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
-    .header {
+.header {
   color: #d60265;
 }
 .nav-link:active {
-  background-color: #f165a7;
+  background-color: #c9adba;
 }
 .nav-link:focus {
   background-color: #f165a7;

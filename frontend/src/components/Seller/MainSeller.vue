@@ -122,7 +122,9 @@ export default {
             categories:[{}],
             product:{},
             form:null,
-            log:''
+            log:'',
+            user:{},
+            seller:{}
             
         }
     },
@@ -134,6 +136,9 @@ export default {
          const categories = await axios.get("http://localhost:3000/category")
          this.categories = categories.data
          this.form =new Modal(this.$refs.modal)
+         const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
+         this.seller = seller.data
+         this.user = seller.data.users
     },
     methods:{
         async createProduct(){
@@ -206,9 +211,9 @@ export default {
     justify-content: flex-end; */
     float: right;
     }
-    /* .form-control::placeholder{
+    .form-control::placeholder{
     color: #d60265;
-    } */
+    } 
         .header {
     color: #d60265;
     }

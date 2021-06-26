@@ -96,7 +96,7 @@ exports.addProImg = async (req,res)=>{
         try {
             await userSeller.save()
             console.log('saved proImg',userSeller.img)
-            res.json({message:"profile Img is added"})
+            res.json({message:"profile Img is added",img:filename})
         } catch (error) {
             console.log('err is catched found when saving',error)
         }

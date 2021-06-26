@@ -2,7 +2,7 @@ const sellerStore= {
     namespaced:true,
     state(){
         return{
-            data:[]
+            data:[],
         }
     },
     mutations:{
@@ -20,5 +20,6 @@ const sellerStore= {
             commit('LOAD_SELLER',data);
         }
     }
+    
 }
 export default sellerStore;

@@ -68,7 +68,7 @@
         <div class="col-md-4 data">
           <center>
             <div>Profile Image</div>
-            <img class="rounded mx-auto d-block" src="../../assets/img/profileSeller.jpg" alt="">
+            <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000/'+user.img" alt="">
             <div>
               <button type="button" class="btn pink" @click="modal.show()" data-toggle="modal">Upload New</button>
             </div>
@@ -116,7 +116,8 @@ export default {
         user:{},
         pwd:{},
         notMatch:{},
-        log:''
+        log:'',
+        proImg:''
       }
     },
     async mounted(){
@@ -138,7 +139,8 @@ export default {
          console.log("ref img form: ",img)
          console.log("img profile", img.get("proImg"))
          const res = await axios.put('http://localhost:3000/addProImg/'+localStorage.getItem('userid'),img)
-         console.log(res)
+         this.user.img=res.data.img
+         console.log("res img",res)
       },
       async validate(){
         if(this.pwd.nw != this.pwd.confirm){
@@ -215,7 +217,7 @@ export default {
   color: black;
 }
 .container{
-    color: #d60265;
+    // color: #d60265;
     font-size: 28px;
 }
 .title{
@@ -228,8 +230,6 @@ export default {
 }
 .colon{
     padding-right: 2em;
-
-    
 }
 .data{
     color: black;
@@ -237,6 +237,10 @@ export default {
 .pink{
     background-color: #d60265;
     color: white;
+}
+.profile-img{
+  height: 200px;
+  object-fit: cover;
 }
 
 </style>
