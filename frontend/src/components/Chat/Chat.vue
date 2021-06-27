@@ -2,7 +2,8 @@
     <div class="chat-content" :class="chatcontent">
         <div class="chat-header">
             <button class="btn chat-customize">
-                    <img src="../../assets/logo.png" alt="">
+                    <img v-if="chatData.img!==''" :src="'http://localhost:3000'+chatData.img" alt="">
+                    <img v-else src="../../assets/logo.png" alt="">
                 <div class="chat-status">
                     <div class="chat-text" >
                         <span >{{chatData.username}} ({{chatData.role}}) {{writing}}</span>

@@ -28,11 +28,12 @@ exports.login = async(req,res)=>{
                         res.cookie('username',result.username,{expire:3600*24*1000})
                         res.cookie('logged-time',new Date().toISOString(),{expire:3600*1000*24});
                         const roles = result.roles
-                        const [email,userRole,userId,username]=[result.email,roles.name,result._id,result.username]
+                        const [email,userRole,userId,username,img]=[result.email,roles.name,result._id,result.username,result.img]
                         req.session.email=email
                         req.session.userRole=userRole
                         req.session.userId =userId
                         req.session.username =username
+                        req.session.img = img
                         console.log(req.session)
                         return res.status(200).json(req.session);
                     }else{

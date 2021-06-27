@@ -68,7 +68,7 @@
         <div class="col-md-4 data">
           <center>
             <div>Profile Image</div>
-            <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000/'+user.img" alt="">
+            <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000'+user.img" alt="">
             <div>
               <button type="button" class="btn pink" @click="modal.show()" data-toggle="modal">Upload New</button>
             </div>
@@ -140,7 +140,10 @@ export default {
          console.log("img profile", img.get("proImg"))
          const res = await axios.put('http://localhost:3000/addProImg/'+localStorage.getItem('userid'),img)
          this.user.img=res.data.img
+         localStorage.setItem("img",res.data.img);
+         this.$store.dispatch("auth/updateImg",res.data.img)
          console.log("res img",res)
+         this.modal.hide();
       },
       async validate(){
         if(this.pwd.nw != this.pwd.confirm){
@@ -156,6 +159,7 @@ export default {
             this.notMatch.current = ''
             this.notMatch.nw =''
             this.log=res.data.message
+            this.modal.hide();
           }
         }
       }

@@ -70,11 +70,13 @@
             </a>          
           </li>
           <li class="nav-item dropdown" @click="showProfile">
+            
             <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
               <!-- <em class="fas fa-user-circle user" style="margin-right: 8%;
               font-size: 1.5vw;"></em> -->
-              <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000/'+user.img" alt="">
-              {{user.username}}
+              <img class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+
+              {{user.user}}
             </a>
             <div class="dropdown-menu profile" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
@@ -119,16 +121,22 @@ export default {
     },
     data() {
       return {
-        user:{},
+        // user:{},
       }
     },
     components:{
         ChatList,
         Notification
     },
+    computed:{
+      user(){
+        return this.$store.getters['auth/getSession'];
+      }
+    },
     mounted() {
-      this.user.username= localStorage.getItem("username");
-      this.user.userid = localStorage.getItem("userid");
+      // this.user.username= localStorage.getItem("username");
+      
+      // this.user.userid = localStorage.getItem("userid");
     },
     methods: {
       showDropdown(){
@@ -152,6 +160,13 @@ export default {
     @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
 .header {
   color: #d60265;
+}
+.profile-img{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: $shadow_1;
+  
 }
 .nav-link:active {
   background-color: #c9adba;

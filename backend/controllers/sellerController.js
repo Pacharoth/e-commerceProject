@@ -86,7 +86,12 @@ exports.addProImg = async (req,res)=>{
             _id:req.params.id
         }
     })  
+    try{
+        fs.unlinkSync('./public'+userSeller.img);
 
+    }catch(err){
+        console.log(err);
+    }
     if(proImg){
         var filename='/assets/img/profile/'+proImg.name;
         var pathSave='./public'+filename

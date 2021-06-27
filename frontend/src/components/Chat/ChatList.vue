@@ -18,10 +18,13 @@
                 @click="popChat({
                     ownerId:chat._id,
                     username:chat.username,
-                    role:chat.roles.name
+                    role:chat.roles.name,
+                    img:(chat.img)?chat.img:'',
                 })" 
                 v-if="chat._id!==user.userid" :key="chat">
-                    <img src="../../assets/logo.png" alt="">
+                    <img v-if="chat.img" :src="'http://localhost:3000'+chat.img" alt="">
+
+                    <img v-else src="../../assets/logo.png" alt="">
                     <div class="chat-time">
                         <div class="chat">
                             <span >{{chat.username}} ({{chat.roles.name}})</span>
@@ -37,8 +40,10 @@
                     ownerId:chat.users[0]._id,
                     username:chat.users[0].username,
                     role:role.filter(element=>element._id===chat.users[0].roles)[0].name,
+                    img:(chat.users[0].img)?chat.users[0].img:'',
                 })" v-for="chat in chatSocket" :key="chat">
-                    <img src="../../assets/logo.png" alt="">
+                    <img v-if="chat.users[0].img" :src="'http://localhost:3000'+chat.users[0].img" alt="">
+                    <img v-else src="../../assets/logo.png" alt="">
                     <div class="chat-time">
                         <div class="chat" >
                                 <span v-for="i in role" :key="i">
@@ -145,7 +150,7 @@ export default {
         })
         //method
         const popChat = (data)=>{
-            const {role,ownerId,username}=data
+            const {role,ownerId,username,img}=data
             store.dispatch('chat/changeContent','active');
             store.dispatch('chat/changeList','');
             if(searchData){
@@ -153,12 +158,14 @@ export default {
                     userId:ownerId,
                     username:username,
                     role:role,
+                    img:img,
                 });
             }else{
                 store.dispatch('chat/putToChat',{
                     userId:ownerId,
                     username:username,
                     role:role,
+                    img:img,
                 })
             }
         }
