@@ -24,7 +24,7 @@
                   <slot v-for="products in receipt.product.length" :key="products">
                   <tr>
                     <th>{{receipt.product[products-1].products.name}}</th>
-                    <td scope="row">{{receipt.product[products-1].products.detail}}</td>
+                    <td class="detail">{{receipt.product[products-1].products.detail}}</td>
                     <td>{{receipt.product[products-1].sellers.company}}</td>
                     <td>{{receipt.product[products-1].quantity}}</td>
                     <td>{{receipt.product[products-1].products.discount}}</td>
@@ -73,7 +73,7 @@ export default {
         });
         function generatePDF(){
            var pdf = new jsPDF('p','pt','A3');
-           pdf.internal.pageSize.width=700;
+           pdf.internal.pageSize.width=640;
             pdf.html(form.value,{
                 filename:"Receipt_"+orderDate.value
             }).save()
@@ -109,6 +109,12 @@ export default {
     }
     .description{
         color: #D60265;
+    }
+    .detail{
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 100px;
     }
     .total{
         align-items: center;

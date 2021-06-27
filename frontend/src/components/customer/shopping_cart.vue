@@ -6,14 +6,21 @@
             <!--first part-->
             <div class="row1-one" v-for="products in product" :key="products">
                 <p style="color: #D60265;">
-                    <i style="font-size:24px" class="fa">&#xf058;</i>
+                    <span class="round">
+                        <input class="checkBox" type="checkbox" id="checkbox" />
+                    </span>    
                     {{products.sellers.company}}
+                    <button class="btn" style="color: red; float: right;"><i class="fas fa-times"></i></button>
                 </p>
                 <div class="row1">
                     <!--left part-->
                     <div class="column1">
                         <span>
-                            <i class="fa fa-check-circle" style="font-size:24px;color:#D60265"></i><img width="120" height="120" style="margin-left:5%" :src="'http://localhost:3000'+products.products.img" alt="">
+                            <span class="round">
+                                <input class="checkBox" type="checkbox" id="checkbox" />
+                                <!-- <label for="checkbox"></label> -->
+                            </span>                               
+                             <img class="smallImg" :src="'http://localhost:3000'+products.products.img" alt="">
                         </span>
                     </div>
 
@@ -25,7 +32,9 @@
                         <p style="font-weight: bold;">${{products.products.price-(products.products.discount*products.products.price/100)}}</p>
                         <!--quantity part-->
                         <div class="flex-container">
-                            <div>x{{products.quantity}}</div>
+                            <button class="btn btn-outline-secondary mr-2" ><i class="fas fa-minus"></i></button>
+                            <div class="btn btn-outline-secondary ">x{{products.quantity}}</div>
+                            <button class="btn btn-outline-secondary ml-2" ><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -53,6 +62,7 @@ import {  useRouter } from 'vue-router';
 export default {
     name: 'shopping_cart',
     title:'Shopping Cart',
+    
     setup(){
         const paypal = ref(null),
         store = useStore(),
@@ -61,8 +71,8 @@ export default {
         user =computed(()=>store.getters['auth/getSession']),
         total = ref(0);
         onMounted(async()=>{
-            loadData();
-            insertPayPalCustomer({
+            await loadData();
+            await insertPayPalCustomer({
                 total:total,
                 product:product,
                 paypal:paypal,
@@ -89,7 +99,22 @@ export default {
             total,
             paypal,
         }
-    }
+    },
+    // data(){
+    //     return{
+    //         qty: products.quantity,
+    //     }
+    // },
+    // methods:{
+    //     incr(){
+    //         this.qty++;
+    //     },
+    //     decre(){
+    //         if(this.qty>1){
+    //             this.qty--;
+    //         }
+    //     }
+    // }
 }
 </script>
 
@@ -170,4 +195,10 @@ export default {
         border: 1px solid black;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+    .smallImg{
+        height: 120px ;
+        object-fit: cover;
+        margin-left:7% ;
+    }
+
 </style>

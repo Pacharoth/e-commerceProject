@@ -36,7 +36,7 @@
                 <button class="btn qty shadow " @click="incr(product.qty)"><i class="fas fa-plus"></i></button>
                 <span> {{product.qty - qty}} pieces available</span>
                 <div>
-                    <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link>
+                    <!-- <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link> -->
                     <button @click="postShoppingCart({
                        qty:qty,
                        product,
@@ -137,10 +137,14 @@ export default {
      .img{
         width: 80%;
         margin: auto;
+        height: 500px;
+        object-fit: cover;
     }
     .small-product{
         width: 60%;
         margin-left: 20%;
+        height: 100px;
+        object-fit: cover;
     }
     .flex{
         display: flex;
