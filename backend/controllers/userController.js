@@ -20,8 +20,11 @@ exports.login = async(req,res)=>{
     .then(result=>{
         if(result){
             bcrypt.compare(request.password,result.password).then(
-                passwordMatch=>{
+                async passwordMatch=>{
+                    console.log("req pwd: ",request.password)
+                    console.log("match: ", passwordMatch)
                     if(passwordMatch){
+            
                         res.cookie('username',result.username,{expire:3600*24*1000})
                         res.cookie('logged-time',new Date().toISOString(),{expire:3600*1000*24});
                         const roles = result.roles

@@ -68,7 +68,7 @@
         <div class="col-md-4 data">
           <center>
             <div>Profile Image</div>
-            <img class="rounded mx-auto d-block" src="../../assets/img/profileSeller.jpg" alt="">
+            <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000/'+user.img" alt="">
             <div>
               <button type="button" class="btn pink" @click="modal.show()" data-toggle="modal">Upload New</button>
             </div>
@@ -77,18 +77,18 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title header" id="exampleModalLabel">Add Profile Image</h5>
+                    <h5 class="modal-title header" id="exampleModalLabel">Update Profile Image</h5>
                     <button type="button" class="close" @click="modal.hide()" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form ref="form" enctype="multipart/form-data">
+                  <form ref="form" @submit.prevent="addImg()" enctype="multipart/form-data">
                     <div class="modal-body">
-                      <input ref="img" class="form-control" type="file" id="profilepic" name="profiepic" />
+                      <input class="form-control" type="file" id="proImg" name="proImg" />
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
-                      <button type="submit" class="btn opt">Add</button>
+                      <button type="submit" class="btn opt" >Update</button>
                     </div>
                   </form>
                 </div>
@@ -116,7 +116,8 @@ export default {
         user:{},
         pwd:{},
         notMatch:{},
-        log:''
+        log:'',
+        proImg:''
       }
     },
     async mounted(){
@@ -132,17 +133,31 @@ export default {
 
     },
     methods:{
+
+      async addImg(){
+         const img = new FormData(this.$refs.form)
+         console.log("ref img form: ",img)
+         console.log("img profile", img.get("proImg"))
+         const res = await axios.put('http://localhost:3000/addProImg/'+localStorage.getItem('userid'),img)
+         this.user.img=res.data.img
+         console.log("res img",res)
+      },
       async validate(){
         if(this.pwd.nw != this.pwd.confirm){
-          this.notMatch.confirm = 'Confirm password is not match !'
+          this.log=''
+          this.notMatch.nw = 'Confirm password is not match !'
+        }else{
+          this.log=''
+          const res = await axios.put('http://localhost:3000/changePwd/'+localStorage.getItem('userid'),this.pwd)
+          console.log('change result',res.data)
+          if(res.data.err == true){
+            this.notMatch.current = "Password is incorrect"
+          }else{
+            this.notMatch.current = ''
+            this.notMatch.nw =''
+            this.log=res.data.message
+          }
         }
-        const res = await axios.put('http://localhost:3000/changePwd/'+localStorage.getItem('userid'),this.pwd)
-        console.log('change result',res.data)
-        if(res.data.err == true){
-          this.notMatch.current = res.data.message
-        }
-
-        
       }
     }
 
@@ -202,7 +217,7 @@ export default {
   color: black;
 }
 .container{
-    color: #d60265;
+    // color: #d60265;
     font-size: 28px;
 }
 .title{
@@ -215,8 +230,6 @@ export default {
 }
 .colon{
     padding-right: 2em;
-
-    
 }
 .data{
     color: black;
@@ -224,6 +237,10 @@ export default {
 .pink{
     background-color: #d60265;
     color: white;
+}
+.profile-img{
+  height: 200px;
+  object-fit: cover;
 }
 
 </style>
