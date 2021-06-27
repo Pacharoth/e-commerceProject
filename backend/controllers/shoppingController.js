@@ -1,4 +1,4 @@
-const product = require("../models/productModel.js");
+const productModel = require("../models/productModel.js");
 const shoppingModel = require("../models/shoppingCart.js")
 
 
@@ -47,7 +47,21 @@ exports.getShoppingCart= async (req,res)=>{
     var result = result.filter(element=>element.users!==null)
     res.json(result)
 }
-
+exports.updateShopping = async(req,res)=>{
+    var shopping = await shoppingModel.findOne({_id:req.params.id});
+    if(req.body.qty){
+        shopping.quantity = req.body.qty;
+    }
+    if(req.body.status){
+        shopping.status = req.body.status;
+    }
+    try{
+        await shopping.save();
+        res.json({result:true})
+    }catch(err){
+        console.log(err);
+    }
+}
 // sellers:{
 //     type: Schema.Types.ObjectId,
 //     ref:"sellers",

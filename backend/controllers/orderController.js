@@ -30,7 +30,7 @@ exports.getReceiptCustomer = async(req,res)=>{
         )
         try{
             await order.save();
-            shoppingOrproduct = await shoppingModel.deleteMany({users:users._id})
+            shoppingOrproduct = await shoppingModel.deleteMany({users:users._id,status:"checked"})
             console.log("success");
             res.json(order);
         }catch(error){
