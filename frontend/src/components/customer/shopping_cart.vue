@@ -10,7 +10,10 @@
                         <!-- <input v-if="" class="checkBox" type="checkbox" id="checkbox" /> -->
                     </span>    
                     {{product[products-1].sellers.company}}
-                    <button class="btn" style="color: red; float: right;"><i class="fas fa-times"></i></button>
+                    <button @click="deleteProduct(
+                        product[products-1]._id
+                        )"
+                     class="btn" style="color: red; float: right;"><i class="fas fa-times"></i></button>
                 </p>
                 <div class="row1">
                     <!--left part-->
@@ -105,6 +108,28 @@ export default {
             });
             
         })
+        async function deleteProduct(id){
+           console.log(id,"delete")
+            var response = await axios.delete(localhost+"/shopping/"+id);
+            if(response.data.result){
+                product.value=product.value.filter(element=>element._id!=id);
+            }
+            // product.value=product.value.filter(element=>element._id!=id);
+
+            if(product.value.length>0){
+                total.value=0;
+                for(var aproduct in product.value){
+                    var aProduct=product.value[aproduct].products
+                    var quantity = product.value[aproduct].quantity
+                    var discount =aProduct.discount*aProduct.price/100
+                    console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
+                    total.value = total.value+(quantity*(aProduct.price-discount))
+                }
+            }else{
+                total.value=0;
+            }
+            
+        }
         async function changeStatus(index,id){
             console.log(product.value[index].status)
             if(product.value[index].status=="checked")updateProduct("unchecked",index,id);
@@ -121,6 +146,14 @@ export default {
                 }
                 else if(typeof(value)==='number') {
                     product.value[index].quantity=value;
+                }
+                total.value=0;
+                for(var aproduct in product.value){
+                    var aProduct=product.value[aproduct].products
+                    var quantity = product.value[aproduct].quantity
+                    var discount =aProduct.discount*aProduct.price/100
+                    console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
+                    total.value = total.value+(quantity*(aProduct.price-discount))
                 }
             }
 
@@ -159,6 +192,7 @@ export default {
             increaseProduct,
             decreaseProduct,
             changeStatus,
+            deleteProduct,
         }
     },
 }

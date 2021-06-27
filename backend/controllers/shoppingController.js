@@ -64,6 +64,21 @@ exports.updateShopping = async(req,res)=>{
         res.json({result:false})
     }
 }
+exports.deleteShopping = async(req,res)=>{
+    try{
+        var deleteShopping=await shoppingModel.findByIdAndDelete(req.params.id);
+        console.log(deleteShopping);
+        if(deleteShopping){
+            res.json({result:true})
+        }else{
+            res.json({result:false});
+        }
+    }catch(err){
+        console.log(err);
+        res.json({result:false})
+    }
+
+}
 // sellers:{
 //     type: Schema.Types.ObjectId,
 //     ref:"sellers",
