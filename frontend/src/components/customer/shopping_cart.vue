@@ -4,12 +4,12 @@
         <h3 class="header">Shopping Card</h3>
 
             <!--first part-->
-            <div class="row1-one" v-for="products in product" :key="products">
+            <div class="row1-one" v-for="products in product.length" :key="products">
                 <p style="color: #D60265;">
                     <span class="round">
                         <!-- <input v-if="" class="checkBox" type="checkbox" id="checkbox" /> -->
                     </span>    
-                    {{products.sellers.company}}
+                    {{product[products-1].sellers.company}}
                     <button class="btn" style="color: red; float: right;"><i class="fas fa-times"></i></button>
                 </p>
                 <div class="row1">
@@ -17,25 +17,37 @@
                     <div class="column1">
                         <span>
                             <span class="round">
-                                <input v-if="products.status=='checked'" class="checkBox" type="checkbox" checked id="checkbox" />
+                                <input v-if="product[products-1].status=='checked'" class="checkBox" type="checkbox" checked id="checkbox" />
                                 <input v-else class="checkBox" type="checkbox" checked id="checkbox" />
                                 <!-- <label for="checkbox"></label> -->
                             </span>                               
-                             <img class="smallImg" :src="'http://localhost:3000'+products.products.img" alt="">
+                             <img class="smallImg" :src="'http://localhost:3000'+product[products-1].products.img" alt="">
                         </span>
                     </div>
 
                     <!--right part-->
                     <div class="column2">
                         <!-- Blending uptown chic with downtown cool, the Slater sling pack combines our signature logo print with contrasting leather trim. A removable braided chain strap lends an edgy effect, while a front zip pocket  -->
-                        {{products.products.detail}}
+                        {{product[products-1].products.detail}}
                         <p>Size: L <span>Color: Gray</span></p>
-                        <p style="font-weight: bold;">${{products.products.price-(products.products.discount*products.products.price/100)}}</p>
+                        <p style="font-weight: bold;">${{product[products-1].products.price-(product[products-1].products.discount*product[products-1].products.price/100)}}</p>
                         <!--quantity part-->
                         <div class="flex-container">
-                            <button class="btn btn-outline-secondary mr-2" ><i class="fas fa-minus"></i></button>
-                            <div class="btn btn-outline-secondary ">x{{products.quantity}}</div>
-                            <button class="btn btn-outline-secondary ml-2" ><i class="fas fa-plus"></i></button>
+                            <button @click="decreaseProduct(
+                                product[products-1].quantity,
+                                products-1,
+                                product[products-1]._id,
+                            )" 
+                            class="btn btn-outline-secondary mr-2" ><i class="fas fa-minus"></i></button>
+                            <div class="btn btn-outline-secondary ">x{{product[products-1].quantity}}</div>
+                            <button
+                            @click="increaseProduct(
+                                product[products-1].quantity,
+                                products-1,
+                                product[products-1].products.qty,
+                                product[products-1]._id,
+                            )" 
+                             class="btn btn-outline-secondary ml-2" ><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -85,8 +97,24 @@ export default {
             });
             
         })
-        async function increase(){
-            
+        async function updateProduct(value,index,id){
+            var response = await axios.put(localhost+"/shoppingcart/"+id,{
+                qty:value,
+            });
+            if(response.data.result)product.value[index].quantity=value;
+
+        }
+        async function increaseProduct(value,index,limit,id){
+            console.log("increase")
+            console.log(value,limit)
+            if(value<=limit)value +=1;
+            updateProduct(value,index,id);
+        }
+        async function decreaseProduct(value,index,id){
+            console.log("decrease")
+            if(value>0)value-=1;
+            else value=0
+            updateProduct(value,index,id);
         }
         async function loadData(){
             total.value=0;
@@ -107,24 +135,10 @@ export default {
             total,
             paypal,
             quantity,
-            increase,
+            increaseProduct,
+            decreaseProduct,
         }
     },
-    // data(){
-    //     return{
-    //         qty: products.quantity,
-    //     }
-    // },
-    // methods:{
-    //     incr(){
-    //         this.qty++;
-    //     },
-    //     decre(){
-    //         if(this.qty>1){
-    //             this.qty--;
-    //         }
-    //     }
-    // }
 }
 </script>
 
