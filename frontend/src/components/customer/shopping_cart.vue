@@ -114,17 +114,8 @@ export default {
             if(response.data.result){
                 product.value=product.value.filter(element=>element._id!=id);
             }
-            // product.value=product.value.filter(element=>element._id!=id);
-
             if(product.value.length>0){
-                total.value=0;
-                for(var aproduct in product.value){
-                    var aProduct=product.value[aproduct].products
-                    var quantity = product.value[aproduct].quantity
-                    var discount =aProduct.discount*aProduct.price/100
-                    console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
-                    total.value = total.value+(quantity*(aProduct.price-discount))
-                }
+                calculateTotal();
             }else{
                 total.value=0;
             }
@@ -134,6 +125,16 @@ export default {
             console.log(product.value[index].status)
             if(product.value[index].status=="checked")updateProduct("unchecked",index,id);
             else updateProduct("checked",index,id);
+        }
+        async function calculateTotal(){
+            total.value=0;
+            for(var aproduct in product.value){
+                var aProduct=product.value[aproduct].products
+                var quantity = product.value[aproduct].quantity
+                var discount =aProduct.discount*aProduct.price/100
+                console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
+                total.value = total.value+(quantity*(aProduct.price-discount))
+            }
         }
         async function updateProduct(value,index,id){
             console.log(typeof(value))
@@ -147,16 +148,8 @@ export default {
                 else if(typeof(value)==='number') {
                     product.value[index].quantity=value;
                 }
-                total.value=0;
-                for(var aproduct in product.value){
-                    var aProduct=product.value[aproduct].products
-                    var quantity = product.value[aproduct].quantity
-                    var discount =aProduct.discount*aProduct.price/100
-                    console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
-                    total.value = total.value+(quantity*(aProduct.price-discount))
-                }
             }
-
+            calculateTotal();
         }
         async function increaseProduct(value,index,limit,id){
             console.log("increase")
@@ -171,17 +164,10 @@ export default {
             updateProduct(parseInt(value),index,id);
         }
         async function loadData(){
-            total.value=0;
             const response =await axios.get(localhost+"/shoppingcart/"+user.value.userid);
             console.log(response.data);
             product.value=response.data;
-            for(var aproduct in product.value){
-                var aProduct=product.value[aproduct].products
-                var quantity = product.value[aproduct].quantity
-                var discount =aProduct.discount*aProduct.price/100
-                console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
-                total.value = total.value+(quantity*(aProduct.price-discount))
-            }
+            calculateTotal();
         }
         return{
             product,
