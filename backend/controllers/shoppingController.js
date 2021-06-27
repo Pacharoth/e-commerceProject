@@ -49,17 +49,19 @@ exports.getShoppingCart= async (req,res)=>{
 }
 exports.updateShopping = async(req,res)=>{
     var shopping = await shoppingModel.findOne({_id:req.params.id});
-    if(req.body.qty){
+    if(typeof(req.body.qty)==='number'){
         shopping.quantity = req.body.qty;
     }
-    if(req.body.status){
-        shopping.status = req.body.status;
+    else if(typeof(req.body.qty)==='string'){
+        shopping.status = req.body.qty;
+        console.log(req.body.qty)
     }
     try{
         await shopping.save();
         res.json({result:true})
     }catch(err){
         console.log(err);
+        res.json({result:false})
     }
 }
 // sellers:{

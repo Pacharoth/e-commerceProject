@@ -17,8 +17,16 @@
                     <div class="column1">
                         <span>
                             <span class="round">
-                                <input v-if="product[products-1].status=='checked'" class="checkBox" type="checkbox" checked id="checkbox" />
-                                <input v-else class="checkBox" type="checkbox" checked id="checkbox" />
+                                <input v-if="product[products-1].status=='checked'" @click="changeStatus(
+                                    products-1,
+                                    product[products-1]._id
+                                    )" class="checkBox" type="checkbox" checked id="checkbox" />
+                                <input v-else-if="product[products-1].status=='unchecked'" class="checkBox" type="checkbox"
+                                 @click="changeStatus(
+                                    products-1,
+                                    product[products-1]._id
+                                    )" 
+                                 id="checkbox" />
                                 <!-- <label for="checkbox"></label> -->
                             </span>                               
                              <img class="smallImg" :src="'http://localhost:3000'+product[products-1].products.img" alt="">
@@ -97,24 +105,37 @@ export default {
             });
             
         })
+        async function changeStatus(index,id){
+            console.log(product.value[index].status)
+            if(product.value[index].status=="checked")updateProduct("unchecked",index,id);
+            else updateProduct("checked",index,id);
+        }
         async function updateProduct(value,index,id){
+            console.log(typeof(value))
             var response = await axios.put(localhost+"/shoppingcart/"+id,{
                 qty:value,
             });
-            if(response.data.result)product.value[index].quantity=value;
+            if(response.data.result){
+                if(typeof(value)==='string'){
+                    product.value[index].status=value;
+                }
+                else if(typeof(value)==='number') {
+                    product.value[index].quantity=value;
+                }
+            }
 
         }
         async function increaseProduct(value,index,limit,id){
             console.log("increase")
             console.log(value,limit)
             if(value<=limit)value +=1;
-            updateProduct(value,index,id);
+            updateProduct(parseInt(value),index,id);
         }
         async function decreaseProduct(value,index,id){
             console.log("decrease")
             if(value>0)value-=1;
             else value=0
-            updateProduct(value,index,id);
+            updateProduct(parseInt(value),index,id);
         }
         async function loadData(){
             total.value=0;
@@ -137,6 +158,7 @@ export default {
             quantity,
             increaseProduct,
             decreaseProduct,
+            changeStatus,
         }
     },
 }
