@@ -1,27 +1,33 @@
 const {model,Schema}= require('mongoose');
 const orderModel = new Schema({
-    customerId:{
+    users:{
         type:Schema.Types.ObjectId,
-        ref:'customers',
+        ref:'users',
     },
-    productId:{
-        type:Schema.Types.ObjectId,
-        ref:'products',
-    },
+    product:[
+        {
+            sellers:{
+                type:Schema.Types.ObjectId,
+                ref:'sellers'
+            },
+            products:{
+                type:Schema.Types.ObjectId,
+                ref:'products',
+            },
+            quantity:{
+                type:Number,
+            },
+        },
+    ],
     orderDate:{
         type:Date,
         required:true,
     },
     requiredDate:{
         type:Date,
-        required:true,
     },
     shippedDate:{
         type:Date,
-    },
-    quantityOrder:{
-        type:Number.isInteger(),
-        required:true
     },
     status:{
         type:String,

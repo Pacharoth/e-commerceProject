@@ -23,7 +23,8 @@ const sellerRegister=async(data)=>{
     },3000);
 }
 const getSellers = async(store)=>{
-    const response = await axios.get(localhost+"/admin/seller");
+    const response = await axios.get(localhost+"/admin/seller?page=1&limit=10");
+    console.log(response);
     store.dispatch('seller/loadSeller',response.data);
 }
 export{

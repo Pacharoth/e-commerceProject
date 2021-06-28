@@ -9,6 +9,6 @@ router.put('/admin/customer/:id',customerController.editCustomer);
 router.post('/admin/customer/:id',customerController.getCustomer);
 router.delete('/admin/customer/:id',customerController.deleteCustomer);
 router.get("/profile/:id",customerController.listProfileCustomer);
-router.post('/profile',customerController.postProfile);
-router.post("/setnewpassword",customerController.setNewPassword);
+router.put('/profile/:id',customerController.postProfile);
+router.post("/setnewpassword/:id",customerController.setNewPassword);
 module.exports = router;

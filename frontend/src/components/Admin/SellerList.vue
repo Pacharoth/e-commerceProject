@@ -1,53 +1,34 @@
 <template>
-    <div class="seller-container">
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
-        <router-link to="/admin/seller/sellerdetail" class="seller">
-            <img src="../../assets/logo.png" alt="">
-            <span>Ice cream Store</span>
-        </router-link>
+    <div class="seller-container" >
+       <slot v-for="data in sellers.results" :key="data">
+            <router-link to="/admin/seller/sellerdetail" class="seller" >
+                <img :src="localhosts+data.users.img" v-if="data.users.img" alt="">
+                <img src="../../assets/logo.png" v-else alt="">
+                <span>{{data.company}}</span>
+            </router-link>
+       </slot>
 
     </div>
 </template>
 
 <script>
-import { computed, onMounted } from '@vue/runtime-core';
+import { computed, onMounted, ref } from '@vue/runtime-core';
 import {useStore} from 'vuex';
 import {getSellers} from '../../hook/seller';
+import { localhost } from '../../utils/FormValidation';
 export default {
     title:'Admin Seller',
     name:"SellerList",
     setup() {
         const store = useStore();
         const sellers = computed(()=>store.getters['seller/getSellers']);
-
+        const localhosts =ref(localhost) ;
         onMounted(async()=>{
             await getSellers(store);
         })
         return{
-            sellers
+            sellers,
+            localhosts,
         }
     }
 }

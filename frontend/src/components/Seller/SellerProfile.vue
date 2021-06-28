@@ -21,9 +21,46 @@
           </div>
           <div class="row">
             <div class="col">
-              <button @click="modal.show()" class="btn pink" type="button">
+              <button @click="modalProfile.show()" class="btn pink" type="button">
                 Change Password
               </button>
+              <div class="modal fade" id="example" tabindex="-1" ref="modalProfile" role="dialog" aria-labelledby="exampleLabel" aria-hidden="false">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title header" id="exampleModalLabel">Change Password</h5>
+                    <button type="button" class="close" @click="modalProfile.hide()" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <form @submit.prevent="validate()" ref="form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                      <div v-if="log != ''" class="alert alert-success" role="alert">
+                        {{log}}
+                      </div>
+                      <div class="form-group">
+                        <div v-if="notMatch.current != '' " class="notMatch">{{notMatch.current}}</div>
+                        <label for="currentPwd">Current Password</label>
+                        <input v-model="pwd.current" type="password" class="form-control" id="currentPwd" placeholder="Current Password" name="CurrentPwd">
+                      </div>
+                    <div class="form-group">
+                      <label for="newPwd">New Password</label>
+                      <input v-model="pwd.nw" type="password" class="form-control" id="newPwd" placeholder="New Password" name="newPwd">
+                    </div>
+                    <div class="form-group">
+                      <div v-if="notMatch.nw!=''" class="notMatch">{{notMatch.nw}}</div>
+                      <label for="confirm">Cofirm Password</label>
+                      <input v-model="pwd.confirm" type="password" class="form-control" id="confirm" placeholder="Confirm Password" name="confirm">
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" @click="modalProfile.hide()" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn opt">Change</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -31,7 +68,7 @@
         <div class="col-md-4 data">
           <center>
             <div>Profile Image</div>
-            <img class="rounded mx-auto d-block" src="../../assets/img/profileSeller.jpg" alt="">
+            <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000'+user.img" alt="">
             <div>
               <button type="button" class="btn pink" @click="modal.show()" data-toggle="modal">Upload New</button>
             </div>
@@ -40,18 +77,18 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title header" id="exampleModalLabel">Add Profile Image</h5>
+                    <h5 class="modal-title header" id="exampleModalLabel">Update Profile Image</h5>
                     <button type="button" class="close" @click="modal.hide()" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form ref="form" enctype="multipart/form-data">
+                  <form ref="form" @submit.prevent="addImg()" enctype="multipart/form-data">
                     <div class="modal-body">
-                      <input ref="img" class="form-control" type="file" id="profilepic" name="profiepic" />
+                      <input class="form-control" type="file" id="proImg" name="proImg" />
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
-                      <button type="submit" class="btn opt">Add</button>
+                      <button type="submit" class="btn opt" >Update</button>
                     </div>
                   </form>
                 </div>
@@ -67,23 +104,68 @@
 <script>
 import axios from 'axios'
 import {Modal} from 'bootstrap';
+// import bcrypt from 'bcrypt';
 export default {
     title:'Seller Profile',
     name:'SellerProfile',
     data(){
       return{
         modal:null,
+        modalProfile:null,
         seller:{},
         user:{},
+        pwd:{},
+        notMatch:{},
+        log:'',
+        proImg:''
       }
     },
     async mounted(){
      this.modal=new Modal(this.$refs.modal);
+     this.modalProfile=new Modal(this.$refs.modalProfile);
      const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
      this.seller = seller.data
      this.user = seller.data.users
-     console.log("seller profile",this.user)
+     console.log(this.seller)
+     console.log(this.user)
+    //  console.log("seller profile",this.user)
+    //  console.log('pwd',this.pwd)
+
+    },
+    methods:{
+
+      async addImg(){
+         const img = new FormData(this.$refs.form)
+         console.log("ref img form: ",img)
+         console.log("img profile", img.get("proImg"))
+         const res = await axios.put('http://localhost:3000/addProImg/'+localStorage.getItem('userid'),img)
+         this.user.img=res.data.img
+         localStorage.setItem("img",res.data.img);
+         this.$store.dispatch("auth/updateImg",res.data.img)
+         console.log("res img",res)
+         this.modal.hide();
+      },
+      async validate(){
+        if(this.pwd.nw != this.pwd.confirm){
+          this.log=''
+          this.notMatch.nw = 'Confirm password is not match !'
+        }else{
+          this.log=''
+          const res = await axios.put('http://localhost:3000/changePwd/'+localStorage.getItem('userid'),this.pwd)
+          console.log('change result',res.data)
+          if(res.data.err == true){
+            this.notMatch.current = "Password is incorrect"
+          }else{
+            this.notMatch.current = ''
+            this.notMatch.nw =''
+            this.log=res.data.message
+            this.modal.hide();
+          }
+        }
+      }
     }
+
+    
 }
 </script>
 <style lang="scss" scoped>
@@ -96,6 +178,9 @@ export default {
 #profilepic{
   background-color: #d60265;
   color: #d60265;
+}
+.notMatch{
+  color: red;
 }
 .header {
   color: #d60265;
@@ -136,7 +221,7 @@ export default {
   color: black;
 }
 .container{
-    color: #d60265;
+    // color: #d60265;
     font-size: 28px;
 }
 .title{
@@ -149,8 +234,6 @@ export default {
 }
 .colon{
     padding-right: 2em;
-
-    
 }
 .data{
     color: black;
@@ -158,6 +241,10 @@ export default {
 .pink{
     background-color: #d60265;
     color: white;
+}
+.profile-img{
+  height: 200px;
+  object-fit: cover;
 }
 
 </style>

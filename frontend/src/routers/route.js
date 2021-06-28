@@ -24,6 +24,7 @@ router.beforeEach(async(to,from,next)=>{
         username:localStorage.getItem('username'),
         userRole:localStorage.getItem('userrole'),
         email:localStorage.getItem('useremail'),
+        img:localStorage.getItem('img'),
     }
     if(result.data.userRole!==undefined){
         store.dispatch('auth/setSession',result);

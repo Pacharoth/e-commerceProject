@@ -2,10 +2,11 @@
     <div class="chat-content" :class="chatcontent">
         <div class="chat-header">
             <button class="btn chat-customize">
-                    <img src="../../assets/logo.png" alt="">
+                    <img v-if="chatData.img!==''" :src="'http://localhost:3000'+chatData.img" alt="">
+                    <img v-else src="../../assets/logo.png" alt="">
                 <div class="chat-status">
                     <div class="chat-text" >
-                        <span >{{chatData.username}} ({{chatData.role}})</span>
+                        <span >{{chatData.username}} ({{chatData.role}}) {{writing}}</span>
                         <span v-if="status=='online'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> active</span>
                         <span v-else-if="status=='offline'" class="statususer" :style="{'--color':color}"> <div class="status-user" :style="{'--color':color}"></div> offline</span>
                     </div>
@@ -15,21 +16,46 @@
         </div>
         <div class="content-all-chat">
             <div ref="chat" class="chatting">
-                <div class="admin " v-for="msgs in msg" :key="msgs">
-                    <img src="../../assets/logo.png" alt="">
-                    <span>{{msgs}}</span>
-                </div>
+                <slot v-for="msgs in msg" :key="msgs" class="content-chatting">
+                    <div class="admin active" v-if="msgs.users._id==user.userid" >
+                            <template v-if="mp3.test(msgs.content)">
+                                <audio controls>
+                                    <source :src="'http://localhost:3000'+msgs.content" type="audio/mp3">
+                                </audio>
+                            </template>
+                            <template v-else>
+                                <span>{{msgs.content}}</span>
+                            </template>
+                    </div>
+                    <div class="admin" v-else-if="msgs.users._id!=user.userid" >
+                        <img src="../../assets/logo.png" alt="">
+                        <template v-if="mp3.test(msgs.content)">
+                            <audio controls>
+                                <source :src="'http://localhost:3000'+msgs.content" type="audio/mp3">
+                            </audio>
+                        </template>
+                        <template v-else>
+                            <span>{{msgs.content}}</span>
+                        </template>
+                    </div>
+                    
+                </slot>
+                
             </div>
+        
+
         </div>
-        <form class="input-message" @submit.prevent="message">
-            <button class="btn"> <em class="bi bi-mic"></em></button>
-            <input v-model="mess" type="text" class="form-control send"  placeholder="Aa">
-            <button class="btn"><em class="bi bi-play"></em></button>
-        </form>
+        <div class="input-message" >
+            <button class="btn" @click="onVoice" ref="voice"> <em class="bi bi-mic"></em></button>
+            <form action="" class="d-flex" @submit.prevent="message">
+                <input v-model="mess" ref="disable" type="text" class="form-control send"  placeholder="Aa">
+                <button class="btn" ><em class="bi bi-play"></em></button>
+            </form>
+        </div>
     </div>
 </template>
 <script>
-import { computed, onBeforeMount, onMounted, onUnmounted, ref, watchEffect } from '@vue/runtime-core'
+import { computed,ref, watch} from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import {io} from 'socket.io-client';
 
@@ -38,72 +64,153 @@ export default {
     props:['id'],
     setup() {
         //data
-        const store = useStore();
-        const data = ref();
-        const chat_status = ref("");
-        const msg = ref([]);
-        const color = ref("");
-        const mess = ref("");
-        const socket =ref();
-        const chat=ref(null)
-        onBeforeMount(()=>{
-            const s = io('http://localhost:3000');
-            socket.value=s;
-            return()=>{
-                s.disconnect();
+        const voice =ref(null);
+        const disable =ref(null);
+        const store = useStore(),
+        audioT=ref(false),
+        data = ref(),
+        append =ref(null),
+        chat_status = ref(""),
+        msg = ref([]),
+        color = ref(""),
+        mess = ref(""),
+        socket =ref(),
+        chat=ref(null),
+        getdata =ref(""),
+        writing=ref(""),
+        roomId =ref(""),
+        mediaRecord = ref(null),
+        chunk=ref([]),
+        mp3=ref(null),
+        src=ref([]);
+        const s = io('http://localhost:3000');
+        mp3.value=/.*\.mp3/
+        socket.value=s;
+        if(navigator.mediaDevices){
+        navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+            mediaRecord.value = new window.MediaRecorder(stream);
+                        mediaRecord.value.ondataavailable=(e)=>{
+                chunk.value.push(e.data);
+            }   
+            console.log(mediaRecord.value.state)
+            mediaRecord.value.onstop=(e)=>{
+                console.log(e.data);
+                let blob = new Blob(chunk.value,{'type':'audio/mp3'});
+                socket.value.emit("send-voices",{
+                    users:{
+                        _id:user.value.userid
+                    },
+                    content:blob
+                })
+                socket.value.on('reData', async data=>{
+                    if(data.content!==""){
+                        msg.value.push(data);
+                    }
+                })
+                chunk.value=[];
             }
         })
-        onMounted(()=>{
-            color.value="rgb(66, 207, 66)";
-            chat_status.value="online"
-            if(socket.value==null) return
-            socket.value.on('load-chat',msgs=>{
-                mess.value=""
-                msg.value.push(msgs)
-                
-            })
-            return ()=>{
-                socket.value.off('load-chat');
-            }
-        });
-        onUnmounted(()=>{
-            socket.value.disconnect();
-        })
-        //watch effect
-        watchEffect(()=>{  
-            window.ononline=()=>{
-                color.value="rgb(66, 207, 66)";
-                chat_status.value="online";
-            }
-            window.onoffline=()=>{
-                color.value = "rgba(112, 112, 112, 0.664)";
-                chat_status.value="offline";
-            }
-        });
-        
+        }
+     
         //computed
         const chatData=computed(()=>store.getters['chat/getChat']);
         const chatcontent=computed(()=>store.getters['chat/getChatContent'])
-        //method
-        const message =()=>{
-            if(socket.value==null) return;
-            if(chat.value.scrollHeight>0){
-                chat.value.scrollTop=chat.value.scrollHeight+64
+        const user = computed(()=>store.getters['auth/getSession'])
+
+
+        watch(mess,()=>{
+            if(mess.value!=""){
+                socket.value.emit("writing","Typing Data...");
+            }else{
+                socket.value.emit("writing","");
             }
+
+            const handler = data=>{
+                writing.value=data
+            }
+            socket.value.on("recieve-writing",handler);
+        })
+        watch(chatData,()=>{
+            socket.value=io("http://localhost:3000");
             socket.value.emit('get-chat',{
                 userId:chatData.value.userId,
-                ownerId:localStorage.getItem('userid'),
+                ownerId:user.value.userid,
+            });
+           if(chat.value.scrollHeight>0){
+                chat.value.scrollTop=chat.value.scrollHeight;
+                console.log(chat.value.scrollTop);   
+            }
+
+            color.value="rgb(66, 207, 66)";
+            chat_status.value="online";
+        
+            socket.value.on("recieve-changes",async data=>{
+                socket.value.emit('getchats',{user:user.value.userid});
+                console.log(data.users._id)
+                if(data.content!==""){
+                    msg.value.push(data);
+                } 
+            })
+            socket.value.once('load-chats',msgs=>{
+                roomId.value=msgs.roomId;
+                const {chat} = msgs;
+                if(chat){
+                    msg.value=chat;
+                }
+            })
+            const handler = data=>{
+                writing.value=data;
+            }
+            
+            socket.value.on("recieve-writing",handler);
+            return()=>{
+                socket.value.off("recieve-writing");
+                socket.value.off('load-chats');
+                socket.value.off("recieve-changes");
+            }
+        })
+        const message =()=>{
+            
+            if(socket.value==null) return;
+            if(chat.value.scrollHeight>0){
+                chat.value.scrollTop=chat.value.scrollHeight;
+                console.log(chat.value.scrollTop);   
+            }
+            socket.value.emit('send-changes',{
+                users:{
+                    _id:user.value.userid
+                },
                 content:mess.value,
             });
+            mess.value=""
+
         }
         const closeChat = ()=>{
             store.dispatch('chat/changeContent','')
             store.dispatch('chat/putToChat',{});
+            socket.value.disconnect();
+            socket.value=s;
+            
         };
         const loadStatus=()=>{}
-
+        
+        const onVoice = ()=>{
+            const voices =  voice.value.classList
+            if(voices.contains('active')){
+                voices.remove('active');
+                disable.value.disabled=false;   
+                mediaRecord.value.stop();   
+                socket.value.emit("writing","voice.....")      
+            }else{
+                voices.add('active');
+                disable.value.disabled=true;
+                mediaRecord.value.start();
+                console.log(mediaRecord.value.state);
+                socket.value.emit("writing","")
+            }
+        }
+        
         const status = computed(()=>chat_status.value);
-
         return{
             data,
             chat_status,
@@ -112,6 +219,10 @@ export default {
             mess,
             socket,
             chat,
+            user,
+            voice,
+            onVoice,
+            disable,
             //computed
             status,
             chatcontent,
@@ -120,6 +231,13 @@ export default {
             message,
             closeChat,
             loadStatus,
+            getdata,
+            writing,
+            mediaRecord,
+            audioT,
+            append,
+            src,
+            mp3
 
         }
     },
@@ -230,8 +348,11 @@ export default {
             display: flex;
             padding: 2%;
             width: 100%;
+            form{
+                width: 100%;
+            }
             .send{
-                width: 80%;
+                width: 90%;
                 border-radius: 50px ;
                 margin-left: 2%;
                 margin-right: 2%;
@@ -242,23 +363,21 @@ export default {
                 
                 }
             }
+            .active
+            {
+                background: #eeeeee;
+                color: black;
+                box-shadow: $shadow_1;
+            }
             button{
                 border-radius: 50%;
                 color: $blue_color;
-                i{
-                    &:focus{
-                        color: grey;
-                    }
-                    
-                }
-                &:focus{
-                    box-shadow: none;
-                    background: #eeeeee;
-                    color: black;
-                }
+                box-shadow: none;
+                
                 &:hover{
                     background: #eeeeee;
                     color: black;
+                    box-shadow: $shadow_1;
                 }
             }
         }
@@ -271,28 +390,35 @@ export default {
                 width: 100%;
                 max-height: 100%;
                 bottom: 0;
-                overflow-y: scroll;
-                &::-webkit-resizer{
+                overflow-y: visible;
+                overflow-x: hidden;
+                &::-webkit-scrollbar-button{
+                    height: 10px;
                     width: 10px;
                 }
                 &::-webkit-scrollbar{   
-                width: 10px;
-                &:hover{
-                        background-color:rgb(250, 241, 241) ;
-                    }
+                    width: 10px;
+                    &:hover{
+                            background-color:rgb(250, 241, 241) ;
+                        }
                 }
                 &::-webkit-scrollbar-thumb{
+                    width: 10px;
                     &:hover{
                     background-color: rgb(212, 209, 209);
                     height: 20px;
                     border-radius: 50px;
                     }
                 }
+                &::-webkit-resizer{
+                    height: 50px;
+                }
                 .admin{
                     width: 100%;
                     padding: 2%;
                     display: flex;
                     justify-items: center;
+                    position: relative;
                     &.active{
                         width: 100%;
                         flex-direction: row-reverse;
@@ -304,6 +430,7 @@ export default {
                             color:$blue_color;
                         }
                     }
+                    
                     img{
                         width: 40px;
                         height: 40px;
@@ -317,6 +444,8 @@ export default {
                         border-radius: 50px;
                         padding-left: 4%;
                         padding-right:4% ;
+                        padding-top: 1%;
+                        padding-bottom: 1%;
                         margin-left: 2%;
                         box-shadow: $shadow_1;
                         font-size: 14px;

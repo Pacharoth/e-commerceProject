@@ -2,7 +2,6 @@ const product = require('../models/productModel');
 const categoryModel = require('../models/categoryModel')
 const seller = require('../models/sellerModel')
 const fs = require('fs');
-const { findById } = require('../models/sellerModel');
 exports.getProducts=async(req,res)=>{
     var aseller =await seller.find().populate({
         path:'users',
@@ -12,11 +11,11 @@ exports.getProducts=async(req,res)=>{
     });
     aseller = aseller.filter(element=>element.users!==null);
     const products = await product.find({sellers:aseller[0].id}).populate('categories')
-    // console.log('got from db', products);
     res.json(products);
 }
 exports.postProduct = async (req,res)=>{
     const{productname,price,instock,qty,sellerid,category,detail} = req.body;
+    console.log(req.body)
     const file = req.files.file
     if(file){
         var filename='/assets/img/'+file.name;
@@ -38,10 +37,14 @@ exports.postProduct = async (req,res)=>{
             }
         })
         aseller = aseller.filter(element=>element.users!==null);
-        console.log(aseller)
+        // console.log(aseller)
         newProduct.sellers = aseller[0]._id;
         newProduct.categories = cate[0]._id;
-        await newProduct.save()
+        console.log('newproduct',newProduct)
+        await newProduct.save().then(result =>{console.log('result',result)})
+        .catch(err =>{
+            console.log('err',err)
+        })
         res.json({'message':'New prodcut is created'})
     }else{
         res.json({'message':"Can't create product"})
@@ -66,9 +69,14 @@ exports.updateProduct = async(req,res)=>{
         var file = req.files.img;
         var filename='/assets/img/'+file.name;
         var pathSave='./public'+filename;
-        fs.unlinkSync('./public'+aproduct.img[0]);
+        try{
+            fs.unlinkSync('./public'+aproduct.img[0]);
+        }catch(err){
+            console.log(err);
+        }
         await file.mv(pathSave)
-        aproduct.img[0]=filename;
+        aproduct.img=filename;
+        console.log(aproduct.img)
     }
     aproduct.name = name;
     aproduct.detail=detail;
@@ -80,9 +88,26 @@ exports.updateProduct = async(req,res)=>{
     aproduct.categories =cate._id;
     try{
         await aproduct.save()
+        console.log(aproduct);
         res.json({save:true});
     }
     catch(err){
         res.json({save:false})
     }
 }
+exports.listProduct = async(req,res) =>{
+    const result = await product.find().populate("categories");
+    res.json(result);
+}
+
+exports.getProByID = async(req,res)=>{
+    const result = await product.findById(req.params.id).populate("sellers");
+    res.json(result);
+}
+
+exports.getProInCart = async(req,res)=>{
+    const result = await product.findById(req.params.id).populate('sellers');
+    res.json(result);
+}
+
+//http://localhost:3000/assets/pic.png

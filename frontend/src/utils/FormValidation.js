@@ -80,6 +80,7 @@ async function loginForm(email,password,store,err,success,newModal){
                 localStorage.userid=result.data.userId;
                 localStorage.userrole=result.data.userRole;
                 localStorage.useremail = result.data.email;
+                localStorage.img = result.data.img;
                 email.value=""
                 password.value=""
                 success.value = "Login successful!";

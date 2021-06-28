@@ -26,6 +26,7 @@ const customerRouter = {
             name:'customerlistproduct',
             path:'homepage',
             component:Customer,
+            props:true,
         },
         {
             path:'edituser',
@@ -60,7 +61,7 @@ const customerRouter = {
             }
         },
         {
-            path:'shoppingcart',
+            path:'shoppingcart/',
             name:'shoppingcart',
             component:shopping_cart,
             beforeEnter: (to, from, next) => {
@@ -68,12 +69,13 @@ const customerRouter = {
                 const isAuthenticate=role=='customer'||role=='admin'||role=='seller';
                 if(to.name=='shoppingcart'&&isAuthenticate )next()
                 else next({name:'customerlistproduct'});
-            }
+            },
         },
         {
-            path:'productdetail',
+            path:'productdetail/:id',
             name:'productdetail',
             component:ProductDetail,
+            props:true
         },
         {
             path:'profile',
@@ -87,9 +89,10 @@ const customerRouter = {
             }
         },
         {
-            path:'receipt',
+            path:'receipt/:id',
             name:'receipt',
             component:receipt,
+            props:true
         },
 
     ],

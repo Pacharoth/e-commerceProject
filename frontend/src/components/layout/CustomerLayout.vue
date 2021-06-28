@@ -10,10 +10,8 @@
                         </button>
                     </div>
                     <div class="p-2 bd-highlight d-flex justify-content-between">
-
-                         <input type="text" ref="search"  class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
+                        <input type="text" ref="search" v-model="searchname"  class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
                         <button class="btn search p-0" @click="showSearch" ><em class="fas fa-search" ></em></button>
-
                     </div>
                     
                     <div class="p-2 bd-highlight">
@@ -29,7 +27,7 @@
                             v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'"
                             aria-labelledby="dropdownMenuButton1">
                             <li><router-link to="/pastorder" class="dropdown-item" >My Ordered</router-link></li>
-                            <li><router-link to="/edituser" class="dropdown-item">Profile</router-link></li>
+                            <li><router-link to="/edituser" v-if="user.role=='customer'" class="dropdown-item">Profile</router-link></li>
                             <li><router-link to="/" @click="logout" class="dropdown-item" href="#">Log Out</router-link></li>
                             <li v-if="user.role=='admin'"><router-link to="/admin" class="dropdown-item">Admin</router-link></li>
                             <li v-if="user.role=='seller'||user.role=='admin'"><router-link to="/seller" class="dropdown-item">Seller</router-link></li>
@@ -40,7 +38,7 @@
                     <div class="p-2 bd-highlight">
                         <router-link v-if="user.role =='customer'||user.role=='admin'||user.role=='seller'" 
                         to="/shoppingcart" class=" cart">
-                            <em class="fas fa-shopping-cart"></em>
+                            <em class="fas fa-shopping-cart"></em>      
                         </router-link>
                     </div>
                 </div>
@@ -56,11 +54,45 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { showChatLists, showNotifications } from '../../hook/effect'
+import { logouts } from '../../utils/FormValidation'
+import {ref} from '@vue/reactivity'
 
 import ChatList from '../Chat/ChatList.vue'
 import LoginSignup from '../customer/LoginSignup.vue'
+import { watch} from '@vue/runtime-core'
+import {searchProduct} from '../../utils/search';
+import {  useRouter } from 'vue-router'
 export default {
     name:"CustomerLayout",
+    setup() {
+        const route = useRouter();
+        const searchname = ref("");
+        const store = useStore();
+        function showChatList(){
+            showChatLists(store);
+        }
+        function showNotification(){
+            showNotifications(store);
+        }
+        function logout(){
+            logouts(store);
+            store.dispatch('chat/changeList','');
+            store.dispatch('notification/changeContent','');
+        }
+        watch(searchname,async()=>{
+            await searchProduct({store,value:searchname.value,route});
+        })
+      
+        return{
+            showChatList,
+            showNotification,
+            logout,
+            searchname,
+
+        }
+    },
     data() {
         return {
             modal:null,
@@ -81,38 +113,16 @@ export default {
             const slidedown = this.$refs.dropdown.classList
             slidedown.contains("show")?slidedown.remove('show'):slidedown.add('show');
         },
-        showChatList(){
-            const store = this.$store
-            if(!store.getters['chat/getChatList']){
-                store.dispatch('chat/changeList','active');
-            }else{
-                store.dispatch('chat/changeList','');
-            }
-        },
         setStatus(status){
             const store = this.$store
             store.dispatch('auth/setStatus',status);
-        },
-        showNotification(){
-            const store = this.$store;
-            if(!store.getters['notification/getContent']){
-                store.dispatch('notification/changeContent','active');
-            }else{
-                store.dispatch('notification/changeContent','')
-            }
         },
         showSearch(){
             const search = this.$refs.search.classList
             search.contains('active')?search.remove('active'):search.add('active')
         },
-        logout(){
-            localStorage.clear();
-            this.$store.dispatch('auth/setSession',null)
-        }
     },
-    mounted() {
-        // this.carousel = new Carousel(this.$refs.Carousel);
-    },
+   
     
 }
 </script>
@@ -122,6 +132,7 @@ export default {
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css';
     @import 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css';
+    
     .name{
         color: #D60265;
     }

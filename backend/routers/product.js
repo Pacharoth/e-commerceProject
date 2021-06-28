@@ -5,4 +5,6 @@ productRouter.post('/postProduct',productController.postProduct);
 productRouter.get('/getProduct/:id',productController.getProducts);
 productRouter.delete('/product/:id',productController.deleteProduct);
 productRouter.put('/product/:id',productController.updateProduct);
+productRouter.get('/listProduct',productController.listProduct);
+productRouter.get('/productdetail/:id',productController.getProByID);
 module.exports = productRouter

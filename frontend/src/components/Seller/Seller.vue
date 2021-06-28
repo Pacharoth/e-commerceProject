@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard-container">
-            <nav class="navbar shadow p-3 mb-5 bg-body rounded ">
+      <nav class="navbar shadow p-3 mb-5 bg-body rounded ">
         <router-link to="/seller" class="navbar-brand"><h4 class="header">AmazingShop</h4></router-link>
         <form class="form-inline">
           <input class="form-control mr-sm-2 rounded-pill search" type="search" placeholder="&#xF002; Search"/>
@@ -70,13 +70,17 @@
             </a>          
           </li>
           <li class="nav-item dropdown" @click="showProfile">
+            
             <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
-              <em class="fas fa-user-circle user" style="margin-right: 8%;
-              font-size: 1.5vw;"></em>{{user.username}}
+              <!-- <em class="fas fa-user-circle user" style="margin-right: 8%;
+              font-size: 1.5vw;"></em> -->
+              <img class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+
+              {{user.user}}
             </a>
             <div class="dropdown-menu profile" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
-                <a class="dropdown-item header" href="#">Setting</a>
+                <router-link to="/" class="dropdown-item header" >Homepage</router-link>
                 <router-link class="dropdown-item header" @click="logout" to="/">Log out</router-link>
             </div>
             </li>
@@ -89,23 +93,50 @@
 
 </template>
 <script>
+import { useStore } from 'vuex';
+import { showChatLists, showNotifications } from '../../hook/effect';
+import { logouts } from '../../utils/FormValidation';
 import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
 export default {
     name:'Seller',
-    
+    setup() {
+      const store = useStore();
+      function showChatList(){
+        showChatLists(store);
+      }
+      function showNotification(){
+        showNotifications(store);
+      }
+      function logout(){
+        logouts(store);
+        store.dispatch('chat/changeList','');
+        store.dispatch('notification/changeContent','');
+      }
+      return{
+        showChatList,
+        showNotification,
+        logout,
+      }
+    },
     data() {
       return {
-        user:{},
+        // user:{},
       }
     },
     components:{
         ChatList,
         Notification
     },
+    computed:{
+      user(){
+        return this.$store.getters['auth/getSession'];
+      }
+    },
     mounted() {
-      this.user.username= localStorage.getItem("username");
-      this.user.userid = localStorage.getItem("userid");
+      // this.user.username= localStorage.getItem("username");
+      
+      // this.user.userid = localStorage.getItem("userid");
     },
     methods: {
       showDropdown(){
@@ -116,26 +147,9 @@ export default {
         const dropdownProfile = this.$refs.profile.classList;
         dropdownProfile.contains('show')?dropdownProfile.remove('show'):dropdownProfile.add('show');
       },
-      showNotification(){
-            const store = this.$store;
-            if(!store.getters['notification/getContent']){
-                store.dispatch('notification/changeContent','active');
-            }else{
-                store.dispatch('notification/changeContent','')
-            }
-        },
-      logout(){
-        localStorage.clear()
-        this.$store.dispatch('auth/setSession',null);
-      },
-      showChatList(){
-        const store = this.$store
-            if(!store.getters['chat/getChatList']){
-                store.dispatch('chat/changeList','active');
-            }else{
-                store.dispatch('chat/changeList','');
-            }
-        },
+    
+     
+    
     },
 }
 </script>
@@ -144,11 +158,18 @@ export default {
     @import '../../assets/sass/maxin';
     @import'../../../node_modules/bootstrap/scss/bootstrap.scss';
     @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
-    .header {
+.header {
   color: #d60265;
 }
+.profile-img{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: $shadow_1;
+  
+}
 .nav-link:active {
-  background-color: #f165a7;
+  background-color: #c9adba;
 }
 .nav-link:focus {
   background-color: #f165a7;

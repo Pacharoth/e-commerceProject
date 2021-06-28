@@ -9,6 +9,8 @@ const customerStore={
             adminCustomer: [],
             modal:"",
             anAdminCustomer:{},
+            customerProduct:[],
+            productSearch:[],
         }
     },
     mutations:{
@@ -38,6 +40,12 @@ const customerStore={
                 return element;
             });
             state.adminCustomer[index]={...state.adminCustomer[index],datas};
+        },
+        LOAD_PRODUCT(state,data){
+            state.customerProduct = data;
+        },
+        LOAD_SEARCH(state,data){
+            state.productSearch=data
         }
         
     },
@@ -56,6 +64,12 @@ const customerStore={
         },
         updateAdminCustomer({commit},data){
             commit('UPDATE_ADMIN_CUSTOMER',data);
+        },
+        loadProduct({commit},data){
+            commit("LOAD_PRODUCT",data);
+        },
+        searchProduct({commit},data){
+            commit("LOAD_SEARCH",data);
         }
     },
     getters:{
@@ -70,6 +84,12 @@ const customerStore={
         },
         getAnAdminCustomer(state){
             return state.anAdminCustomer;
+        },
+        getAllProducts(state){
+            return state.customerProduct;
+        },
+        getProductSearch(state){
+            return state.productSearch;
         }
     }
 }

@@ -5,7 +5,8 @@
         <thead>
           <tr>
             <th scope="">ID</th>
-            <th scope="">Product</th>
+            <th>Product</th>
+            <th scope="">Product's Name</th>
             <th scope="">Category</th>
             <th scope="">Quantity</th>
             <th scope="">Price</th>
@@ -13,21 +14,22 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in products" :key="item">
-            <td class="productInfo">{{item._id}}</td>
-            <td class="productInfo">{{item.name}}</td>
-            <td class="productInfo">{{item.categories.name}}</td>
-            <td class="productInfo">{{item.qty}}</td>
-            <td class="productInfo">{{item.price}}</td>
+          <tr v-for="item in products.length" :key="item">
+            <td class="productInfo">{{item}}</td>
+            <td class="productInfo"><img :src="localhost+products[item-1].img" width="50" height="50" alt="" class="improduct"></td>
+            <td class="productInfo">{{products[item-1].name}}</td>
+            <td class="productInfo">{{products[item-1].categories.name}}</td>
+            <td class="productInfo">{{products[item-1].qty}}</td>
+            <td class="productInfo">{{products[item-1].price}}</td>
 
             <td>
-                <button class="btn btn-light" @click="editStatus(item)" 
+                <button class="btn btn-light" @click="editStatus(products[item-1])" 
                 data-bs-toggle="modal" data-bs-target="#productModal">
                 <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
                 </button>
                 <button class="btn btn-light" @click="deleteStatus({
-                  id:item._id,
-                  name:item.name,
+                  id:products[item-1]._id,
+                  name:products[item-1].name,
                 })"
                  data-bs-toggle="modal" data-bs-target="#productModal">
                  <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
@@ -47,6 +49,7 @@
 <script>
 import axios from 'axios'
 import EditDeleteProduct from './EditDeleteProduct.vue'
+import { localhost } from '../../utils/FormValidation'
 export default {
   components: { EditDeleteProduct },
     title:'Product List',
@@ -56,6 +59,7 @@ export default {
         products:[],
         status:"",
         datas:{},
+        localhost:localhost,
       }
     }, 
     async mounted(){
@@ -107,8 +111,12 @@ export default {
         color: red;
         }
         .productInfo {
-        color: black;
+          color: black;
+        
         }
+    }
+    td{
+      vertical-align: middle;
     }
 
 </style>    

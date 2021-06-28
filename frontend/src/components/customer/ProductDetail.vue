@@ -3,21 +3,20 @@
         <div class="row mt-2">
             <div class="col-md-6">
                 <div class="row">
-                    <img class="img" src="../../assets/img/pants.jpg" alt="">
+                    <img class="img" :src="'http://localhost:3000/'+product.img" alt="">
                 </div>
                 <div class="flex mt-3 mb-3">
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
-                    <div><img class="small-product" src="../../assets/img/pants.jpg" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
+                    <div><img class="small-product" :src="'http://localhost:3000/'+product.img" alt=""></div>
                 </div>
 
             </div>
             <div class="col-md-6 ">
-                <p class="decription">HYBSKR Men's Casual Oversize Pants 2021
-                    Fashion Harajuku Streetwear Trousers Male 
-                    Solid Color Classic Ankle-length Pants</p>
-                <p class="price">$10</p>
+                <h3>{{product.name}}</h3>
+                <p class="decription">{{product.detail}}</p>
+                <p class="price">{{product.price-(product.price*product.discount/100)}}$</p>
                 <p>Size:</p>
                 <div class="size mb-3" ref="color">
                     <button class="border shadow " @click="changeColor(0)">M</button>
@@ -27,104 +26,99 @@
                 </div>
                 <p>Color:</p>
                 <div class="color mb-3"> 
-                    <img class="color-img" src="../../assets/img/pants.jpg" alt="">
-                    <img class="color-img" src="../../assets/img/pants.jpg" alt="">
+                    <img class="color-img" :src="'http://localhost:3000/'+product.img" alt="">
+                    <img class="color-img" :src="'http://localhost:3000/'+product.img" alt="">
                 </div>
                 <p>Quantity:</p>
                 
-                <button class="btn qty shadow "><i class="fas fa-minus"></i></button>
-                <span> 1 </span>
-                <button class="btn qty shadow "><i class="fas fa-plus"></i></button>
-                <span> 6297 pieces available</span>
+                <button class="btn qty shadow " @click="decre()"><i class="fas fa-minus"></i></button>
+                <span> {{qty}} </span>
+                <button class="btn qty shadow " @click="incr(product.qty)"><i class="fas fa-plus"></i></button>
+                <span> {{product.qty - qty}} pieces available</span>
                 <div>
-                    <button href="" class="buynow mt-3 ">Buy Now</button>
-                    <a href="http://localhost:8080/shoppingcart" class=" addtocart mt-3 ml-3">Add to Cart</a>
+                    <!-- <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link> -->
+                    <button @click="postShoppingCart({
+                       qty:qty,
+                       product,
+
+                    })" class=" addtocart mt-3 ml-3">Add to Cart</button>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">
-                  <!--  <span class="profile d-flex align-items-center justify-content-center">M</span>
-                   <input class="cmt" name="" id="" placeholder="Add a public comment......." >-->
-
-                    
-                      <textarea 
-                        v-model="form.content" 
-                        class="form-control" 
-                        id="message" rows="3" 
-                        @input="validateContent"
-                        placeholder="Write you feedback here...">
-                      </textarea>
-                      <span v-if="hasError" class="form-error-message">{{error.message}}</span>
-               
-
-                    <div class="text-right">
-                        <button @click="submitPost" type="button" class="btn btn-primary">share</button>
-                    </div>
+                    <span class="profile d-flex align-items-center justify-content-center">M</span>
+                    <input class="cmt" name="" id="" placeholder="Add a public comment......." >
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { ref } from '@vue/reactivity'
-import { onMounted, watchEffect } from '@vue/runtime-core';
+import { ref, toRefs } from '@vue/reactivity'
+import { computed, onMounted, watchEffect } from '@vue/runtime-core';
 import axios from 'axios';
+import { localhost } from '../../utils/FormValidation';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 export default {
-    data(){
-        return{
-            form: {
-                content: '',
-                user: 'kong',
-            },
-            error: {}
-        }
-    },
-    methods: {
-        validateContent(){
-            if(this.form.content != ""){
-                this.error.message = null
-            }
-        },
-        submitPost(){
-            //validation content
-            if(this.form.content==""){
-                this.error.message = "feedback cannot be empty"
-            }
-            axios.post('http://localhost:3000/feedbacks', this.form)
-            .the(function(response){
-                console.log(response)
-            }).catch(function (err){
-                console.log(err)
-            });
-        }
-    },
-    computed: {
-        hasError(){
-            if(this.error.message)
-                return true
-            return false    
-        }
-    },
     title:'Product Detail',
     name:'ProductDetail',
-    setup() {
+    props:["id"],
+    data(){
+        return{
+            qty:1,
+        }
+    },
+    setup(props) {
         const color = ref(null);
+        const {id}= toRefs(props);
+        const product = ref({});
+        const error = ref("");
+        const store = useStore();
+        const router = useRouter()
+        const user = computed(()=>store.getters['auth/getSession'])
         onMounted(()=>{
             console.log(color.value.children[0]);
         })
         //watch change  
-        watchEffect(()=>{
-            console.log(color.value);
+        watchEffect(async()=>{
+            const response =await axios.get("http://localhost:3000/productdetail/"+id.value);
+            console.log(response.data);
+            product.value=response.data;
         })
         //method
         function changeColor(number){
             let colors = color.value.children[number].classList;
             colors.contains('active')?colors.remove('active'):colors.add('active');
         }
+        async function postShoppingCart(data){
+            const response = await axios.post(localhost+"/shoppingcart",{data,customers:user.value.userid});
+            if(response.data.save){
+                router.push({name:"shoppingcart"});
+            }else{
+                error.value ="Can not be purchased";
+            }
+        }
         return{
             color,
-            changeColor
+            changeColor,
+            product,
+            postShoppingCart,
+        }
+    },
+    async mounted(){
+
+    },
+    methods:{
+        incr(product){
+            if(this.qty<product)this.qty++;
+        },
+        decre(){
+            if(this.qty>1){
+                this.qty--;
+            }
         }
     }
+
 }
 </script>
 <style lang="scss" scoped>
@@ -143,10 +137,14 @@ export default {
      .img{
         width: 80%;
         margin: auto;
+        height: 500px;
+        object-fit: cover;
     }
     .small-product{
         width: 60%;
         margin-left: 20%;
+        height: 100px;
+        object-fit: cover;
     }
     .flex{
         display: flex;
@@ -212,10 +210,6 @@ export default {
         background-color: #D60265;
         font-weight: bold;
         border-radius: 50%;
-        // padding-left: 3%;
-        // padding-right: 3%;
-        // padding-top: 2%;
-        // padding-bottom: 2%;
     }
     .cmt{
         @extend .form-control;
@@ -231,8 +225,10 @@ export default {
             box-shadow: $shadow_2;
         }
     }
+
     .color{
         display: flex;
+
     }
     .color-img{
         width: 10%;

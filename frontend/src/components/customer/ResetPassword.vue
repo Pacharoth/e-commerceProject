@@ -6,8 +6,8 @@
             <div v-if="result.err==true" class="alert alert-success" role="alert">
                 {{result.result}}
             </div>
-            <div v-else class="alert alert-warning" role="alert">
-                {{result}}
+            <div v-else-if="result.err==false" class="alert alert-warning" role="alert">
+                {{result.result}}
             </div>
             <div class="mb-2">
                 <label for="exampleInputPassword1" class="form-label">Account:{{user.email}}</label>
@@ -28,6 +28,7 @@
 import { onMounted, ref, toRefs } from '@vue/runtime-core';
 import axios from 'axios';
 import { FormValidation, localhost } from '../../utils/FormValidation';
+import router from '../../routers/route'
 export default {
     name:"ResetPassword",
     title:"Reset Password",
@@ -49,22 +50,30 @@ export default {
             const form = new FormValidation();
             form._setPassword(password.value);
             form._setConfirmPassword(confirmPassword.value);
-            if(form.checkValidatePassword()){
+            console.log(form.checkPassword(),form.checkValidatePassword());
+            if(form.checkValidatePassword()==false){
                 result.value.err=true;
-                result.value.result ="Password is not Matched"; 
+                result.value.result ="Password Invalid!8 characters 1 upper 1 lower and 1 number"; 
+                setTimeout(()=>result.value="",3000);
+            
             }else if(form.checkPassword()==false){
                 result.value.err = false;
-                
+                result.value.result= "Password Not Match";
+                setTimeout(()=>result.value="",3000);
             }
             
             if((form.checkPassword()&&form.checkValidatePassword())==true){
-                const response =await axios.post(localhost+'/resetpassword/'+id.value,password.value);
+                const response =await axios.put(localhost+'/resetpassword/'+id.value,{password:password.value});
                 if(response.data.err){
                     result.value.result= response.data.result
                     setTimeout(()=>result.value="",3000);
                 }else{
                     result.value.result=response.data.result;
+                    alert("Password has been resetted");
                     setTimeout(()=>result.value="",3000);
+                    user.value={}
+                    password.value=""
+                    router.push({path:'/'});
                 }
             }
         }

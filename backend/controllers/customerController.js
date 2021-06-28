@@ -52,35 +52,17 @@ exports.listProfileCustomer = async(req,res)=>{
     res.json(acustomer);
 }
 exports.postProfile = async(req,res)=>{
-  //  var user =await user.find({_id:req.body.user});
-    //user.email = req.body.email;
-  //  user.passwords = req.body.passwords;
-    //user.username =req.body.username;
-    //try{
-      //  await user.save();      
-    //}catch(err){
-      //  res.json({err:true,error:err});
-    //}
-    //var acustomer = await customer.find().populate({
-      //  path:"users",
-        //match:{
-          //  "_id":req.body.user
-        //}
-    //});
-    //acustomer = acustomer.filter(element=>element.users!==null);
-    //acustomer[0].phoneNumber = req.body.phoneNumber;
-    //res.json(acustomer);
-    var auser = await user.findOne({_id:req.params.id});
+    var auser =await user.findOne({_id:req.params.id});
     auser.email = req.body.email;
-    auser.username = req.body.username;
+    auser.username =req.body.username;
     try{
-        await auser.save();
+        await auser.save();      
     }catch(err){
-        res.json({err:true, result:"Can't save to database"});
+        res.json({err:true,result:"Can't save to database"});
     }
     var acustomer = await customer.find().populate({
-        path: "users",
-        match: {
+        path:"users",
+        match:{
             _id:req.params.id
         }
     });
@@ -90,23 +72,25 @@ exports.postProfile = async(req,res)=>{
 }
 
 exports.setNewPassword=async(req,res)=>{
-    const salt = bcrypt.genSalt(10);
+    const salt = bcrypt.genSaltSync(10);
+    console.log(req.params.id)
     const response =await user.findOne({_id:req.params.id})
+    console.log(response);
     if(response._id){
-        var passwords = await bcrypt.compare(req.body.current, response.password);
-        console.log(passwords);
-        if(passwords){
-            response.password = bcrypt.hashSync(req.body.newpassword, salt);
+       var passwords= await bcrypt.compare(req.body.current,response.password);
+       console.log(passwords);
+       if(passwords){
+            response.password =  bcrypt.hashSync(req.body.newpassword,salt);
             try{
                 await response.save();
-                res.json({result: "Password has been reset", err:false});
-            }catch (err){
-                res.json({result: "Cannot reset password", err:true});
+                res.json({result:"Password has been reset",err:false});
+            }catch(err){
+                res.json({result:"cannot reset password",err:true});
             }
-        }else{
-            res.json({result: "Current password is not matched", err:false});
-        }
+       }else{
+           res.json({result:"Current Password is not matched",err:false});
+       }
     }else{
-        res.json({result:"Account doesn't have so please try again later", err:true})
+        res.json({result:"Account doesn't have so please try again later",err:true});
     }
 }
