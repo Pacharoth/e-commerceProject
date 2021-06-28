@@ -55,6 +55,28 @@ exports.getPastOrder = async(req,res)=>{
     pastorder = pastorder.filter(element=>element.users!=null);
     res.json(pastorder);
 }
+exports.getOrder = async(req,res)=>{
+    var customerOrder = await orderModel.find().populate('user').populate(
+        {
+            path:"product",
+            populate:[
+                {
+                    path:'sellers',
+                    match:{
+                        _id:req.params.id,
+                    }
+                },
+                {
+                    path:'products'
+                }
+            ]
+        }
+    )
+    customerOrder = customerOrder.filter(element=>{
+        element=element.product.filter(e=>e.sellers!=null);
+    })
+    res.json(customerOrder);
+}
 exports.getReceipt = async(req,res)=>{
     const receipt = await orderModel.findOne({_id:req.params.id}).populate('users').populate({
         path:'product',

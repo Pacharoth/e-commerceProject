@@ -49,4 +49,7 @@ const insertPayPalSeller = async(paypal)=>{
   console.log(paypal.value)
   
 }
-export{insertPayPalCustomer,insertPayPalSeller}
+export{
+  insertPayPalCustomer,
+  insertPayPalSeller,
+}
