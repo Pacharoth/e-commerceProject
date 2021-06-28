@@ -35,13 +35,14 @@
                 <span> {{qty}} </span>
                 <button class="btn qty shadow " @click="incr(product.qty)"><i class="fas fa-plus"></i></button>
                 <span> {{product.qty - qty}} pieces available</span>
-                <div>
+                <div class="paypalclass">
                     <!-- <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link> -->
+                    <span ref="paypal" class="paypal mt-3" ></span>
                     <button @click="postShoppingCart({
                        qty:qty,
                        product,
 
-                    })" class=" addtocart mt-3 ">Add to Cart</button>
+                    })" class=" addtocart mt-2 ">Add to Cart</button>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">
@@ -54,36 +55,55 @@
 </template>
 <script>
 import { ref, toRefs } from '@vue/reactivity'
-import { computed, onMounted, watchEffect } from '@vue/runtime-core';
+import { computed, onMounted, watch, watchEffect } from '@vue/runtime-core';
 import axios from 'axios';
 import { localhost } from '../../utils/FormValidation';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { insertPayPalCustomer } from '../../utils/paypal';
 export default {
     title:'Product Detail',
     name:'ProductDetail',
     props:["id"],
     data(){
         return{
-            qty:1,
         }
     },
     setup(props) {
+        const qty =ref(1);
         const color = ref(null);
+        const paypal= ref(null);
         const {id}= toRefs(props);
         const product = ref({});
         const error = ref("");
         const store = useStore();
         const router = useRouter()
+        const total = ref(0);
         const user = computed(()=>store.getters['auth/getSession'])
-        onMounted(()=>{
+        onMounted(async()=>{
             console.log(color.value.children[0]);
+            await fetchPaypal();
+                     
         })
+        async function fetchPaypal(){
+             total.value=product.value.price*qty.value-(product.value.price*product.value.discount/100); 
+            insertPayPalCustomer({
+                total:total,
+                product:product,
+                router:router,
+                paypal:paypal,
+                type:"buynow"
+            }) 
+        }
         //watch change  
         watchEffect(async()=>{
             const response =await axios.get("http://localhost:3000/productdetail/"+id.value);
             console.log(response.data);
             product.value=response.data;
+        })
+        watch(qty,async()=>{
+            console.log(total.value)
+            await fetchPaypal();
         })
         //method
         function changeColor(number){
@@ -98,26 +118,25 @@ export default {
                 error.value ="Can not be purchased";
             }
         }
+        function incr(product){
+            if(qty.value<product)qty.value++;
+        }
+        function decre(){
+            if(qty.value>1){
+                qty.value--;
+            }
+        }
         return{
             color,
             changeColor,
             product,
+            paypal,
+            incr,
+            decre,
+            qty,
             postShoppingCart,
         }
     },
-    async mounted(){
-
-    },
-    methods:{
-        incr(product){
-            if(this.qty<product)this.qty++;
-        },
-        decre(){
-            if(this.qty>1){
-                this.qty--;
-            }
-        }
-    }
 
 }
 </script>
@@ -133,6 +152,14 @@ export default {
         border-radius: 5px;
         box-shadow: $shadow_1;
         width: 90%; 
+    }
+    .paypalclass{
+        display: flex;
+        align-items: center;
+        
+    }
+    .paypal{
+        margin-right: 2%;
     }
      .img{
         width: 80%;

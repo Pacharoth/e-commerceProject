@@ -100,13 +100,6 @@ export default {
     
         onMounted(async()=>{
             await  loadData();
-            await insertPayPalCustomer({
-                total:total,
-                product:product,
-                paypal:paypal,
-                router:router,
-                type:"checkout",
-            });
             
         })
         async function deleteProduct(id){
@@ -138,6 +131,13 @@ export default {
                     total.value = total.value+(quantity*(aProduct.price-discount))
                 }
             }
+            await insertPayPalCustomer({
+                total:total,
+                product:product,
+                paypal:paypal,
+                router:router,
+                type:"checkout",
+            });
            
         }
         async function updateProduct(value,index,id){

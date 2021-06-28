@@ -12,6 +12,11 @@ const insertPayPalCustomer = async(datas)=>{
             color:"gold",
             label:datas.type,
             shape:"rect",
+            layout:"horizontal",
+            fundingicons: 'true',
+          },
+          funding:{
+            disallowed: [ window.paypal.FUNDING.CREDIT ]
           },
           createOrder:(data,actions)=>{
             console.log(data);
@@ -29,13 +34,17 @@ const insertPayPalCustomer = async(datas)=>{
           },
           onApprove:async(data,actions)=>{
             const order = await actions.order.capture();
-            console.log(datas.product.value,order);
+            console.log(order,data);
 
-            const response=await axios.post(localhost+'/receipt',datas.product.value);
-            if(response.data.err){
-              console.log(response.data.err);
+            if(datas.product.value.length>0){
+              const response=await axios.post(localhost+'/receipt',datas.product.value);
+              if(response.data.err){
+                console.log(response.data.err);
+              }else{
+                datas.router.push({name:'receipt',params:{id:response.data._id}})
+              }
             }else{
-              datas.router.push({name:'receipt',params:{id:response.data._id}})
+              console.log("hello")
             }
           },
           onError:err=>{
