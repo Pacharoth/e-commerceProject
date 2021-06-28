@@ -58,7 +58,8 @@ const customerRouter = {
                 const isAuthenticate=role=='customer'||role=='admin'||role=='seller';
                 if(to.name=='PastOrder'&&isAuthenticate)next()
                 else next({name:'customerlistproduct'})
-            }
+            },
+            props:true
         },
         {
             path:'shoppingcart/',

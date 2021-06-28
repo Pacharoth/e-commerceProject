@@ -10,7 +10,7 @@ const insertPayPalCustomer = async(datas)=>{
           style:{
             size:"responsive",
             color:"gold",
-            label:"checkout",
+            label:datas.type,
             shape:"rect",
           },
           createOrder:(data,actions)=>{

@@ -41,7 +41,7 @@
                        qty:qty,
                        product,
 
-                    })" class=" addtocart mt-3 ml-3">Add to Cart</button>
+                    })" class=" addtocart mt-3 ">Add to Cart</button>
                 </div>
                 <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <div class=" comment mt-4 d-flex align-items-center">

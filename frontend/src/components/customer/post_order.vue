@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <h4 class="header">Past Order</h4>
-        <slot v-for="products in data.length" :key="products">
+        <slot >
         <div class="line"></div>
         
-        <div class="row1">
+        <!-- <div class="row1">
             <div class="column1">
                 <h5 class="title">Clothy Store</h5>
                 <p>Mar 2, 2021</p>
@@ -15,7 +15,7 @@
                 <h5>10$</h5>
                 <button class="btn2">Reorder</button>
             </div>
-        </div>
+        </div> -->
         </slot>
         <div class="line"></div>
         <button class="btn1">see more</button>
@@ -35,6 +35,7 @@ export default {
         data = ref([]),
         user = computed(()=>store.getters['auth/getSession'])
         onMounted(async()=>{
+            console.log(user.value.userid)
             const response=await axios.get(localhost+'/pastorder/'+user.value.userid)
             data.value = response.data;
         })
@@ -49,7 +50,6 @@ export default {
     * {
         box-sizing: border-box;
     }
-
     .row1 {
         display: flex;
     }

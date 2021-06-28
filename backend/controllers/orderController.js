@@ -53,6 +53,7 @@ exports.getPastOrder = async(req,res)=>{
         ],
     })
     pastorder = pastorder.filter(element=>element.users!=null);
+    console.log(pastorder);     
     res.json(pastorder);
 }
 exports.getReceipt = async(req,res)=>{
@@ -60,9 +61,8 @@ exports.getReceipt = async(req,res)=>{
         path:'product',
         populate:[
             {path:'sellers'},
-            {path:'products'}
+            {path:'products'},
         ],
     })
-    console.log(receipt)
     res.json(receipt);
 }
