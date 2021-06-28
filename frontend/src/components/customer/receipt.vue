@@ -27,7 +27,7 @@
                     <td class="detail">{{receipt.product[products-1].products.detail}}</td>
                     <td>{{receipt.product[products-1].sellers.company}}</td>
                     <td>{{receipt.product[products-1].quantity}}</td>
-                    <td>{{receipt.product[products-1].products.discount}}</td>
+                    <td>{{receipt.ptoduct[products-1].products.price-(receipt.product[products-1].products.price*receipt.product[products-1].products.discount/100)}}</td>
                     <td>
                         {{(receipt.product[products-1].quantity*receipt.product[products-1].products.price)-(receipt.product[products-1].products.discount*receipt.product[products-1].products.price)}}
                     </td>
