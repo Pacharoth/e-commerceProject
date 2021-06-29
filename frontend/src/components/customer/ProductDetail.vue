@@ -44,11 +44,11 @@
 
                     })" class=" addtocart mt-2 ">Add to Cart</button>
                 </div>
-                <h5 class="mt-3"><router-link to="/feedback" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
-                <div class=" comment mt-4 d-flex align-items-center">
+                <h5 class="mt-3"><router-link :to="'/feedback/'+product._id" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
+                <form method="POST" @submit.prevent="postFeedback" class=" comment mt-4 d-flex align-items-center">
                     <span class="profile d-flex align-items-center justify-content-center">M</span>
-                    <input class="cmt" name="" id="" placeholder="Add a public comment......." >
-                </div>
+                    <input class="cmt" v-model="content" name="" id="" placeholder="Add a public comment......." >
+                </form>
             </div>
         </div>
     </div>
@@ -65,10 +65,7 @@ export default {
     title:'Product Detail',
     name:'ProductDetail',
     props:["id"],
-    data(){
-        return{
-        }
-    },
+    
     setup(props) {
         const qty =ref(1);
         const color = ref(null);
@@ -80,6 +77,7 @@ export default {
         const router = useRouter()
         const total = ref(0);
         const user = computed(()=>store.getters['auth/getSession'])
+        const content= ref("");
         onMounted(async()=>{
             const response =await axios.get("http://localhost:3000/productdetail/"+id.value);
             console.log(response.data);
@@ -131,6 +129,24 @@ export default {
                 qty.value--;
             }
         }
+        async function postFeedback(){
+            if(content.value!=""&&user.value.userid){
+                var {data}= await axios.post(localhost+"/feedbacks",{
+                    content:content.value,
+                    userid:user.value.userid,
+                    productid:product.value._id,
+                    date:new Date,
+                })
+                if(data.result){
+                    alert("Message sent success");
+                    content.value=""
+                }else{
+                    alert("Message sent not success");
+                }
+            }else{
+                router.push({path:'/'})
+            }
+        }
         return{
             color,
             changeColor,
@@ -140,6 +156,8 @@ export default {
             decre,
             qty,
             postShoppingCart,
+            postFeedback,
+            content,
         }
     },
 

@@ -98,9 +98,9 @@ exports.getOrder = async(req,res)=>{
             ]
         }
     )
-    customerOrder = customerOrder.filter(element=>{
-        element=element.product.filter(e=>e.sellers!=null);
-    })
+    // customerOrder = customerOrder.filter(element=>{
+    //     element=element.product.filter(e=>e.sellers!=null);
+    // })
     res.json(customerOrder);
 }
 exports.getReceipt = async(req,res)=>{

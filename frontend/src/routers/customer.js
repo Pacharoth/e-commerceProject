@@ -40,14 +40,10 @@ const customerRouter = {
             }
         },
         {
-            path:'feedback',
+            path:'feedback/:id',
             name:'FeedBack',
+            props:true,
             component:feedback,
-            beforeEnter: (to, from, next) => {
-                var role = store.getters['auth/getSession'].role
-                if(to.name=='FeedBack'&&role=='customer'|role=='admin')next()
-                else next({name:'customerlistproduct'})
-            }
         },
         {
             path:'pastorder',

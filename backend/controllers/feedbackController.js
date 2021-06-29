@@ -1,14 +1,19 @@
 const Feedback = require('../models/feedbackCustomer');
 
 exports.getFeedbacks = async(req, res) => {
-  var result = await Feedback.find().populate({
-    path:"products",
-    match:{
-      _id:req.body.productid,
-    }
-  }).populate("users");
-  result = result.filter(element=>element.products!==null);
-  res.json(result);
+  if(req.params.id){
+    var result = await Feedback.find().populate({
+      path:"products",
+      match:{
+        _id:req.params.id,
+      }
+    }).populate("users");
+    console.log(result)
+    result = result.filter(element=>element.products!==null);
+    res.json(result);
+  }else{
+    res.json([]);
+  }
 }
 
 exports.createFeedback = async(req, res) => {
@@ -24,6 +29,7 @@ exports.createFeedback = async(req, res) => {
       res.json({result:true});
     }catch(err){
       console.log(err);
+      res.json({result:false});
     }
   }catch(err){
     console.log(err);
