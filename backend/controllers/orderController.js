@@ -39,6 +39,31 @@ exports.getReceiptCustomer = async(req,res)=>{
         }
     }
 }
+exports.postBuyNow = async(req,res)=>{
+    const data  =req.body
+    var {user,quantity,sellers,_id}  =data;
+    const order = new orderModel({
+        users:user,
+        orderDate:new Date,
+    })
+    var product = await productModel.findById(_id);
+    product.qty=product.qty-quantity;
+   
+    order.product.push({
+        sellers:sellers._id,
+        products:_id,
+        quantity:quantity,
+    })
+    try {
+        await product.save();
+        await order.save();
+        console.log("success");
+        res.json(order);
+    } catch (error) {
+        console.log(error);
+        res.json({err:true})
+    }
+}
 exports.getPastOrder = async(req,res)=>{
     var pastorder = await orderModel.find().populate({
         path:'users',

@@ -36,7 +36,7 @@ const insertPayPalCustomer = async(datas)=>{
             const order = await actions.order.capture();
             console.log(order,data);
 
-            if(datas.product.value.length>0){
+            if(Array.isArray(datas.product.value)){
               const response=await axios.post(localhost+'/receipt',datas.product.value);
               if(response.data.err){
                 console.log(response.data.err);
@@ -44,7 +44,12 @@ const insertPayPalCustomer = async(datas)=>{
                 datas.router.push({name:'receipt',params:{id:response.data._id}})
               }
             }else{
-              console.log("hello")
+              const response = await axios.post(localhost+"/buynow",datas.product.value);
+              if(response.data.err){
+                console.log(response.data.err)
+              }else{
+                datas.router.push({name:'receipt',params:{id:response.data._id}});
+              }
             }
           },
           onError:err=>{

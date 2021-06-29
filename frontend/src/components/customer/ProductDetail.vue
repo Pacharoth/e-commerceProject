@@ -81,12 +81,19 @@ export default {
         const total = ref(0);
         const user = computed(()=>store.getters['auth/getSession'])
         onMounted(async()=>{
+            const response =await axios.get("http://localhost:3000/productdetail/"+id.value);
+            console.log(response.data);
+            product.value=response.data;
             console.log(color.value.children[0]);
             await fetchPaypal();
                      
         })
         async function fetchPaypal(){
-             total.value=product.value.price*qty.value-(product.value.price*product.value.discount/100); 
+
+            total.value=product.value.price*qty.value-(product.value.price*product.value.discount/100); 
+            product.value.total = total.value;
+            product.value.user = user.value.userid;
+            product.value.quantity = qty.value;
             insertPayPalCustomer({
                 total:total,
                 product:product,
@@ -97,9 +104,7 @@ export default {
         }
         //watch change  
         watchEffect(async()=>{
-            const response =await axios.get("http://localhost:3000/productdetail/"+id.value);
-            console.log(response.data);
-            product.value=response.data;
+            
         })
         watch(qty,async()=>{
             console.log(total.value)
