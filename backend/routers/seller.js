@@ -8,4 +8,5 @@ router.get('/admin/seller',pagination(seller),sellerController.getSellers);
 router.get('/getSeller/:id', sellerController.getSellerByID)
 router.put('/changePwd/:id',sellerController.changePwd)
 router.put('/addProImg/:id',sellerController.addProImg)
+router.get('/getSaleInfo/:id',sellerController.getSaleInfo)
 module.exports = router

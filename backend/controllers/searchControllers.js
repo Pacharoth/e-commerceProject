@@ -3,6 +3,7 @@ const product = require('../models/productModel');
 
 exports.searchCategory = async(req,res)=>{
 	const query = req.query.q.toUpperCase();
+	console.log("filter req",req.query)
 	if(query){
 		var response = await product.find().populate('categories');
 		response= response.filter(element=>findElement(element.name,query)||
