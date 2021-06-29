@@ -47,7 +47,7 @@
                 <h5 class="mt-3"><router-link :to="'/feedback/'+product._id" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <form method="POST" @submit.prevent="postFeedback" class=" comment mt-4 d-flex align-items-center">
                     <span class="profile d-flex align-items-center justify-content-center">M</span>
-                    <input class="cmt" v-model="content" name="" id="" placeholder="Add a public comment......." >
+                    <input class="cmt" v-model="content" name="" id="" placeholder="Add your feedback here......." >
                 </form>
             </div>
         </div>
