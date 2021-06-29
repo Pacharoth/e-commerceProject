@@ -1,23 +1,22 @@
 <template>
     <div class="container">
         <h4 class="header">Past Order</h4>
-        <slot >
+        <slot v-for="order in data" :key="order">
         <div class="line"></div>
-        
-        <!-- <div class="row1">
+        <div class="row1" v-for="products in order.product.length" :key="products">
             <div class="column1">
-                <h5 class="title">Clothy Store</h5>
-                <p>Mar 2, 2021</p>
-                <p>Men Pants /L / Black x1</p>
+                <h5 class="title">{{order.product[products-1].sellers.company}}</h5>
+                <p>{{new Date(order.orderDate).toLocaleDateString()}}</p>
+                <span><p class="text">{{order.product[products-1].products.name}}  {{order.product[products-1].products.detail}}</p></span><span>x{{order.product[products-1].quantity}}</span>
             </div>
 
             <div class="column2">
-                <h5>10$</h5>
-                <button class="btn2">Reorder</button>
+                <h5>{{order.product[products-1].products.price}}$</h5>
+                <button v-if="order.product.length-1==products-1" class="btn2 ">Reorder</button>
             </div>
-        </div> -->
-        </slot>
+        </div>
         <div class="line"></div>
+        </slot>
         <button class="btn1">see more</button>
     </div>
 </template>
@@ -47,6 +46,11 @@ export default {
 </script>
 
 <style scoped>
+    .text{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     * {
         box-sizing: border-box;
     }
@@ -78,6 +82,7 @@ export default {
         background-color: white;
         color: #D60265;
         border: 2px solid #D60265;
+        margin-top: 3%;
     }
     .btn1{
         border: none;

@@ -21,22 +21,31 @@ exports.getReceiptCustomer = async(req,res)=>{
             console.log(error)
             res.json({err:true})
         }
-        order.product.push(
-            {
-                sellers:data[i].sellers._id,
-                products:data[i].products._id,
-                quantity:data[i].quantity,
-            }
-        )
+        if(data[i].status=="checked"){
+            order.product.push(
+                {
+                    sellers:data[i].sellers._id,
+                    products:data[i].products._id,
+                    quantity:data[i].quantity,
+                }
+            )
+        }
         try{
-            await order.save();
             shoppingOrproduct = await shoppingModel.deleteMany({users:users._id,status:"checked"})
             console.log("success");
-            res.json(order);
-        }catch(error){
-            console.log(error);
+        }catch(err){
+            console.log(err);
             res.json({err:true})
         }
+       
+    }
+    try{
+        await order.save();
+        console.log("success");
+        res.json(order);
+    }catch(error){
+        console.log(error);
+        res.json({err:true})
     }
 }
 exports.postBuyNow = async(req,res)=>{
@@ -98,9 +107,9 @@ exports.getOrder = async(req,res)=>{
             ]
         }
     )
-    // customerOrder = customerOrder.filter(element=>{
-    //     element=element.product.filter(e=>e.sellers!=null);
-    // })
+    customerOrder = customerOrder.filter(element=>{
+        element=element.product.filter(e=>e.sellers!=null);
+    })
     res.json(customerOrder);
 }
 exports.getReceipt = async(req,res)=>{
