@@ -79,7 +79,7 @@ app.use(roleRoutes);
 app.use(searchRouter);
 app.use(productRouter);
 app.use(router);
-mongoose.connect('mongodb://localhost:27017/e-commerceProject?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{
+mongoose.connect('mongodb://localhost:27017/AmazingShop?readPreference=primary&appname=MongoDB%20Compass&ssl=false',{
   
   useNewUrlParser: true,
   useUnifiedTopology: true,

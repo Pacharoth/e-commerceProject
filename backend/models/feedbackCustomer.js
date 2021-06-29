@@ -5,14 +5,20 @@ const Schema = mongoose.Schema;
 const feedbackSchema = new Schema({
   content: {
     type: String,
-    required: true
+    required: true,
   },
-  user: {
-    type: String,
-    required: true
+  products:{
+    type:Schema.Types.ObjectId,
+    ref:"products",
+    require:true,
+  },
+  users: {
+    type:Schema.Types.ObjectId,
+    ref:"users",
+    require:true,
   },
   postedAt: {
-    type: String,
+    type: Date,
     required: true
   },
   
