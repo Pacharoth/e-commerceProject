@@ -14,7 +14,7 @@ exports.getProducts=async(req,res)=>{
     res.json(products);
 }
 exports.postProduct = async (req,res)=>{
-    const{productname,price,instock,qty,sellerid,category,detail} = req.body;
+    const{productname,buyPrice,price,instock,qty,sellerid,category,detail} = req.body;
     console.log(req.body)
     const file = req.files.file
     if(file){
@@ -23,6 +23,7 @@ exports.postProduct = async (req,res)=>{
         await file.mv(pathSave)
         const newProduct = new product({
             name:productname,
+            buyPrice:buyPrice,
             price: price,
             instock:instock,
             qty:qty,

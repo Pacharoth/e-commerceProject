@@ -24,6 +24,10 @@ const productModel = new Schema({
             type:String,
         }
     ],
+    buyPrice:{
+        type:Number,
+        default:0
+    },
     price:{
         type:Number,
         default:0,

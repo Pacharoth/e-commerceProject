@@ -117,17 +117,6 @@ exports.addProImg = async (req,res)=>{
     // res.json({message:"proimg arrived server"})
 }
 exports.getSaleInfo = async (req,res)=>{
-    // const sell = await seller.findOne().populate({
-    //     path:'users',
-    //     match:{
-    //         _id:req.params.id
-    //     }
-    // }).populate({
-    //     path:'orders',
-    //     match:{sellers:seller._id}
-    // }).populate({
-    //     path:'products'
-    // })
     var orders = await order.find().populate('users').populate({
         path:'product',
         populate:[
@@ -143,23 +132,89 @@ exports.getSaleInfo = async (req,res)=>{
             {path:'products'}
         ]
     })
+    for(let i=0;i<orders.length;i++){
+        orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
+    }
     const current = new Date()
-    // orders = orders.filter(e => findElement(e.orderDate.getDate(), current.getDate()) &&
-    //                             findElement(e.orderDate.getMonth(), current.getMonth()) &&
-    //                             findElement(e.orderDate.getFullYear(), current.getFullYear()))
-
-    orders = orders.filter(e => (e.orderDate.getDate()== current.getDate() && e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
+    var todayOrders = orders.filter(e => (e.orderDate.getDate()== current.getDate() && e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
     console.log("got orders ",orders)
+    r = calIncome(todayOrders)
+    orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
+    y = calIncome(orders)
+  
+    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:y.totalProfit})
+    // res.json(orders)
+
+}
+function calIncome(orders){
     let numOrder = orders.length
     let saleUnit = 0
-    let income=0
+    let totalIncome=0
+    let totalProfit =0
     for(let i=0;i<numOrder;i++){
         saleUnit = saleUnit + orders[i].product.length
         for(let j=0;j<orders[i].product.length;j++){
-            income = income + (orders[i].product[j].products.price*orders[i].product[j].quantity)
+            let income=0
+            let profit=0
+            income = orders[i].product[j].products.price*orders[i].product[j].quantity
+            profit = income - orders[i].product[j].products.buyPrice*orders[i].product[j].quantity
+            totalIncome = totalIncome + income
+            totalProfit = totalProfit + profit
         }
     }
-    res.json({saleUnit:saleUnit,totalEarn:income})
-    // res.json(orders)
+    return {totalSale:saleUnit, totalEarn:totalIncome, totalProfit:totalProfit}
 
+}
+exports.getMonthlySale= async (req,res)=>{
+    var orders = await order.find().populate('users').populate({
+        path:'product',
+        populate:[
+            {
+                path:'sellers',
+                populate:{
+                    path:'users',
+                    match:{
+                        _id:req.params.id,
+                    }
+                }
+            },
+            {path:'products'}
+        ]
+    })
+    for(let i=0;i<orders.length;i++){
+        orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
+    }
+    const current = new Date()
+    var thisMonth = orders.filter(e => (e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
+    console.log("got orders ",orders)
+    r = calIncome(thisMonth)
+    orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
+    y = calIncome(orders)
+  
+    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:y.totalProfit})
+}
+exports.getYearlySale = async (req,res)=>{
+    var orders = await order.find().populate('users').populate({
+        path:'product',
+        populate:[
+            {
+                path:'sellers',
+                populate:{
+                    path:'users',
+                    match:{
+                        _id:req.params.id,
+                    }
+                }
+            },
+            {path:'products'}
+        ]
+    })
+    for(let i=0;i<orders.length;i++){
+        orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
+    }
+    var current = new Date()
+    orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
+    y = calIncome(orders)
+  
+    res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit})
 }
