@@ -152,7 +152,10 @@ function calIncome(orders){
     let totalIncome=0
     let totalProfit =0
     for(let i=0;i<numOrder;i++){
-        saleUnit = saleUnit + orders[i].product.length
+        for(let k =0;k<orders[i].product.length;k++){
+            saleUnit = saleUnit + orders[i].product[k].quantity
+        }
+        
         for(let j=0;j<orders[i].product.length;j++){
             let income=0
             let profit=0
