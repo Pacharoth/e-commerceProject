@@ -7,7 +7,7 @@
                 <div class="line-pp"></div>
                 <h4>Free</h4>
                 <ul>
-                    <li>valid 30 days</li>
+                    <li>valid 7 days</li>
                     <li>No support technical</li>
                     <li>CRUD Product</li>
                     <li>Sell Product</li>

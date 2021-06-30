@@ -6,4 +6,5 @@ router.get('/receipt/:id',orderController.getReceipt);
 router.get('/pastorder/:id',orderController.getPastOrder);
 router.get('/order/:id',orderController.getOrder);
 router.post('/buynow/',orderController.postBuyNow);
+router.post('/verifyuser/',orderController.verifyPhoneNumer);
 module.exports = router;

@@ -77,12 +77,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
+          <tr v-for="i in order.length" :key="i">
+            <th scope="row">{{i}}</th>
             <td>
-              <h5>CustomerName</h5>
-              <p  class="proDescrib" >name@gmail.com</p>
-              <p  class="proDescrib" >+855 12334455</p>
+              <h5>{{order[i-1].users.username}}</h5>
+              <p  class="proDescrib" >{{order[i-1].users.email}}</p>
+              <p  class="proDescrib" >{{phoneNumber[i-1]}}</p>
 
             </td>
             <td style="width: 30%;">
@@ -112,6 +112,7 @@
 import {Modal} from 'bootstrap';
 import CardDashboard from '../Admin/CardDashboard'
 import axios from 'axios';
+import { localhost } from '../../utils/FormValidation';
 
 export default {
     title:'Seller',
@@ -122,20 +123,36 @@ export default {
             categories:[{}],
             product:{},
             form:null,
-            log:''
+            log:'',
+            order:[],
+            id:[],
+            phoneNumber:[],
             
         }
     },
     components:{
         CardDashboard
     },
+    computed:{
+      user(){
+        return this.$store.getters['auth/getSession']
+      }
+    },
     async mounted(){
         this.modal=new Modal(this.$refs.modal);
          const categories = await axios.get("http://localhost:3000/category")
          this.categories = categories.data
-         this.form =new Modal(this.$refs.modal)
+         this.form =new Modal(this.$refs.modal);
+         var {data} = await axios.get(localhost+'/order/'+this.user.userid);
+         this.order=data;
+        for (const key in this.order) {
+          this.id.push(this.order[key].users._id)
+        }
+        var response=await axios.post(localhost+"/verifyuser",this.id);
+        this.phoneNumber=response.data;
     },
     methods:{
+
         async createProduct(){
           const dataform = new FormData(this.$refs.form)
           console.log("product created ", this.product)
