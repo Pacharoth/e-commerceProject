@@ -121,13 +121,13 @@ export default {
       }
     },
     async mounted(){
-     this.modal=new Modal(this.$refs.modal);
-     this.modalProfile=new Modal(this.$refs.modalProfile);
-     const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
-     this.seller = seller.data
-     this.user = seller.data.users
-     console.log(this.seller)
-     console.log(this.user)
+      this.modal=new Modal(this.$refs.modal);
+      this.modalProfile=new Modal(this.$refs.modalProfile);
+      const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
+      this.seller = seller.data
+      this.user = seller.data.users
+      console.log(this.seller)
+      console.log(this.user)
     //  console.log("seller profile",this.user)
     //  console.log('pwd',this.pwd)
 

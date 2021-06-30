@@ -80,6 +80,7 @@
                         <span>I accept Terms and Conditions</span>
                     </div>
                     <button  type="submit" class="button mt-2">Sign up</button>
+                    <router-link @click="registerSeller" to="/registerseller" class="button mt-2 sellers">Sign Up as Seller?</router-link>
              
                 </form>
             </div>
@@ -139,6 +140,9 @@ export default {
        })
         const status = computed(()=>store.getters['auth/getStatus']);
         //method
+        async function registerSeller(){
+            newModal.value.hide();
+        }
         async function forgetPasswords(){
             var checkmail={};
             checkmail = await axios.post(localhost+'/forgetpassword',{email:email.value});
@@ -173,6 +177,7 @@ export default {
             password,
             err,
             success,
+            registerSeller,
             //compute
             status,
 
@@ -244,6 +249,15 @@ export default {
             .form-search{
                 @extend .form-check;
                 display: flex;
+            }
+            .sellers{
+                background: #eeee;
+                color: black;
+                &:hover,&:focus{
+                    background-color: rgb(235, 228, 228);
+                    box-shadow: $shadow_1;
+                    color: black;
+                }
             }
         }
     }
