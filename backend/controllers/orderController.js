@@ -91,6 +91,10 @@ exports.getPastOrder = async(req,res)=>{
     res.json(pastorder);
 }
 exports.getOrder = async(req,res)=>{
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const startPoint = (page-1)*limit;
+    const endPoint =page * limit;
     var aseller = await seller.findOne({users:req.params.id})
     var customerOrder = await orderModel.find().populate({
         path:'users',
@@ -128,8 +132,24 @@ exports.getOrder = async(req,res)=>{
         }
         return element.product!==null;
     })
+    const results={};
+    if(endPoint < customerOrder.length){
+        results.next={
+            page:page+1,
+            limit:limit,
+        } 
+    }
+    if(startPoint>0){
+        results.previous={
+            page:page-1,
+            limit:limit,
+        }
+    }
+    customerOrder=customerOrder.slice(startPoint,endPoint);
+    // customerOrder.result = results;
+    console.log(customerOrder)
 
-    res.json(customerOrder);
+    res.json({customerOrder,results});
 }
 exports.getReceipt = async(req,res)=>{
     const receipt = await orderModel.findOne({_id:req.params.id}).populate('users').populate({
@@ -146,7 +166,6 @@ exports.verifyPhoneNumer = async(req,res)=>{
     for (i of req.body){
         console.log(i);
         var ausers = await userModel.findOne({_id:i}).populate('roles');
-        // auser.push(ausers)
         if(ausers.roles.name=="seller"){
            var aseller =await seller.find().populate({
                path:'users',
@@ -156,7 +175,6 @@ exports.verifyPhoneNumer = async(req,res)=>{
            });
            aseller=aseller.filter(element=>element.users!==null);
            auser.push(aseller[0].contact);
-        //    console.log(aseller)
         }else if(ausers.roles.name=="customer"){
             var acustomer = await customerModel.find().populate({
                 path:'users',
@@ -166,7 +184,6 @@ exports.verifyPhoneNumer = async(req,res)=>{
             });
             acustomer =acustomer.filter(element=>element.users!==null);
             auser.push(acustomer[0].phoneNumber)
-            // console.log(acustomer);
         }else{
             auser.push(null);
         }
