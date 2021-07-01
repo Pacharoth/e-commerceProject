@@ -9,4 +9,6 @@ router.get('/getSeller/:id', sellerController.getSellerByID)
 router.put('/changePwd/:id',sellerController.changePwd)
 router.put('/addProImg/:id',sellerController.addProImg)
 router.get('/getSaleInfo/:id',sellerController.getSaleInfo)
+router.get('/getMonthlySale/:id',sellerController.getMonthlySale)
+router.get('/getYearlySale/:id',sellerController.getYearlySale)
 module.exports = router

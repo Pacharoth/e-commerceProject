@@ -3,12 +3,18 @@ import ProductionList from '../components/Seller/ProductionList.vue';
 import MainSeller from '../components/Seller/MainSeller.vue';
 import SellerProfile from '../components/Seller/SellerProfile.vue'
 import store from '../stores/store';
+import report from '../components/Seller/report.vue';
 const sellerRouter = {
     name:'seller',
     path:'/seller',
     redirect:{name:'sellerpage'},
     component:Seller,
     children:[
+        {
+            name:"sellerreport",
+            path:"report",
+            component:report,
+        },
         {
             name:'sellerproductlist',
             path:'productlist',

@@ -7,13 +7,13 @@
         </form>
         <ul class="nav nav-pills">
           <li class="nav-item ">
-            <a class="nav-link header"  href="#">Daily</a>
+            <a @click="daily()" class="nav-link header"  href="#">Daily</a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link header" href="#">Monthly</a>
+            <a @click="monthly()" class="nav-link header" href="#">Monthly</a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link header" href="#">Yearly</a>
+            <a @click="yearly()" class="nav-link header" href="#">Yearly</a>
           </li>
         </ul>
 
@@ -93,6 +93,7 @@
 
 </template>
 <script>
+import axios from 'axios';
 import { useStore } from 'vuex';
 import { showChatLists, showNotifications } from '../../hook/effect';
 import { logouts } from '../../utils/FormValidation';
@@ -133,10 +134,10 @@ export default {
         return this.$store.getters['auth/getSession'];
       }
     },
-    mounted() {
-      // this.user.username= localStorage.getItem("username");
-      
-      // this.user.userid = localStorage.getItem("userid");
+    async mounted() {
+       const  res = await axios.get("http://localhost:3000/getSaleInfo/"+localStorage.getItem('userid'));
+        console.log("sale info", res)
+        this.$store.dispatch('seller/loadStatistic',res.data);
     },
     methods: {
       showDropdown(){
@@ -147,7 +148,21 @@ export default {
         const dropdownProfile = this.$refs.profile.classList;
         dropdownProfile.contains('show')?dropdownProfile.remove('show'):dropdownProfile.add('show');
       },
-    
+       async daily(){
+         const  res = await axios.get("http://localhost:3000/getSaleInfo/"+localStorage.getItem('userid'));
+         console.log("sale info", res)
+         this.$store.dispatch('seller/lloadStatistic',res.data);
+      },
+      async monthly(){
+          const  res = await axios.get("http://localhost:3000/getMonthlySale/"+localStorage.getItem('userid'));
+          console.log("sale info monthly ", res)
+          this.$store.dispatch('seller/loadStatistic',res.data);
+      },
+      async yearly(){
+        const  res = await axios.get("http://localhost:3000/getYearlySale/"+localStorage.getItem('userid'));
+        console.log("sale info yearly", res)
+        this.$store.dispatch('seller/loadStatistic',res.data);
+      }
      
     
     },

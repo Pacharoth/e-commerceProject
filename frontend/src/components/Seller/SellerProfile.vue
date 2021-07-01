@@ -2,7 +2,7 @@
         <div class="container">
       <div class=" row title">Seller Profile</div>
       <div class="row">
-        <div class="col-md-8 left data">
+        <div class="col-md-8 left">
           <div class="row">
             <div class="col-md-3">Company</div>
             <div class="col-md-8"><span class="colon">:</span>{{seller.company}}</div>
@@ -117,7 +117,7 @@ export default {
         pwd:{},
         notMatch:{},
         log:'',
-        proImg:''
+        proImg:'',
       }
     },
     async mounted(){

@@ -27,6 +27,10 @@
                       <input v-model="product.name" type="text" class="form-control" id="productName" name="productName" placeholder="Product name">
                     </div>
                     <div class="form-group">
+                      <label for="price">Buy Price per unit</label>
+                      <input v-model="product.buyPrice" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Buy Price per unit">             
+                    </div>
+                    <div class="form-group">
                       <label for="price">Price per unit</label>
                       <input v-model="product.price" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Price per unit">             
                     </div>
@@ -60,7 +64,7 @@
             </div>
           </div>
 
-          <button type="button" class="btn opt">Generate Report</button>
+          <router-link to="/seller/report" class="btn opt">Generate Report</router-link>
         
 
       </div>
@@ -185,6 +189,7 @@ export default {
           const form = new FormData()
           form.append("file",dataform.get("img"))
           form.append("productname",this.product.name);
+          form.append("buyPrice",this.product.buyPrice);
           form.append("price",this.product.price);
           form.append("instock",this.product.instock);
           form.append("qty",this.product.qty);
