@@ -31,7 +31,7 @@ const orderModel = new Schema({
     },
     status:{
         type:String,
-        default:"unread",
+        default:"ordering",
     }
 });
 const order= model('orders',orderModel);

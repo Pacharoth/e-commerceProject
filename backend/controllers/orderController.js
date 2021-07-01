@@ -1,9 +1,9 @@
 const orderModel = require('../models/orderModel');
 const shoppingModel = require('../models/shoppingCart');
 const productModel =require('../models/productModel');
-exports.postPastOrder = async(req,res)=>{
-
-}
+const seller = require('../models/sellerModel');
+const userModel = require('../models/userModel');
+const customerModel = require('../models/customerModel')
 exports.getReceiptCustomer = async(req,res)=>{
     const data = req.body;
     const users = data[0].users;
@@ -91,14 +91,22 @@ exports.getPastOrder = async(req,res)=>{
     res.json(pastorder);
 }
 exports.getOrder = async(req,res)=>{
-    var customerOrder = await orderModel.find().populate('user').populate(
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const startPoint = (page-1)*limit;
+    const endPoint =page * limit;
+    var aseller = await seller.findOne({users:req.params.id})
+    var customerOrder = await orderModel.find().populate({
+        path:'users',
+        select:'username email'
+    }).populate(
         {
             path:"product",
             populate:[
                 {
                     path:'sellers',
                     match:{
-                        _id:req.params.id,
+                        _id:aseller._id,
                     }
                 },
                 {
@@ -108,9 +116,40 @@ exports.getOrder = async(req,res)=>{
         }
     )
     customerOrder = customerOrder.filter(element=>{
-        element=element.product.filter(e=>e.sellers!=null);
+        var p = 0;
+        var count=0;
+        for(var i of element.product){
+
+            if(i.sellers==null){
+                element.product[p]=null;
+                count++;
+            }
+            p++;
+        // return element.product!==null;
+        }
+        if(count==element.product.length){
+            element.product=null;
+        }
+        return element.product!==null;
     })
-    res.json(customerOrder);
+    const results={};
+    if(endPoint < customerOrder.length){
+        results.next={
+            page:page+1,
+            limit:limit,
+        } 
+    }
+    if(startPoint>0){
+        results.previous={
+            page:page-1,
+            limit:limit,
+        }
+    }
+    customerOrder=customerOrder.slice(startPoint,endPoint);
+    // customerOrder.result = results;
+    console.log(customerOrder)
+
+    res.json({customerOrder,results});
 }
 exports.getReceipt = async(req,res)=>{
     const receipt = await orderModel.findOne({_id:req.params.id}).populate('users').populate({
@@ -121,4 +160,34 @@ exports.getReceipt = async(req,res)=>{
         ],
     })
     res.json(receipt);
+}
+exports.verifyPhoneNumer = async(req,res)=>{
+    var auser=[]
+    for (i of req.body){
+        console.log(i);
+        var ausers = await userModel.findOne({_id:i}).populate('roles');
+        if(ausers.roles.name=="seller"){
+           var aseller =await seller.find().populate({
+               path:'users',
+               match:{
+                   _id:i
+               }
+           });
+           aseller=aseller.filter(element=>element.users!==null);
+           auser.push(aseller[0].contact);
+        }else if(ausers.roles.name=="customer"){
+            var acustomer = await customerModel.find().populate({
+                path:'users',
+                match:{
+                    _id:i
+                }
+            });
+            acustomer =acustomer.filter(element=>element.users!==null);
+            auser.push(acustomer[0].phoneNumber)
+        }else{
+            auser.push(null);
+        }
+    }
+    console.log(auser)
+    res.json(auser)
 }
