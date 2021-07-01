@@ -100,12 +100,6 @@ export default {
     
         onMounted(async()=>{
             await  loadData();
-            await insertPayPalCustomer({
-                total:total,
-                product:product,
-                paypal:paypal,
-                router:router,
-            });
             
         })
         async function deleteProduct(id){
@@ -129,12 +123,22 @@ export default {
         async function calculateTotal(){
             total.value=0;
             for(var aproduct in product.value){
-                var aProduct=product.value[aproduct].products
-                var quantity = product.value[aproduct].quantity
-                var discount =aProduct.discount*aProduct.price/100
-                console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
-                total.value = total.value+(quantity*(aProduct.price-discount))
+                if(product.value[aproduct].status=='checked'){
+                    var aProduct=product.value[aproduct].products
+                    var quantity = product.value[aproduct].quantity
+                    var discount =aProduct.discount*aProduct.price/100
+                    console.log("discount",discount,"quantity",quantity,"price",aProduct.price)
+                    total.value = total.value+(quantity*(aProduct.price-discount))
+                }
             }
+            await insertPayPalCustomer({
+                total:total,
+                product:product,
+                paypal:paypal,
+                router:router,
+                type:"checkout",
+            });
+           
         }
         async function updateProduct(value,index,id){
             console.log(typeof(value))

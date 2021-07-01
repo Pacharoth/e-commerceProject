@@ -5,17 +5,17 @@
       <section v-for="feedback in getFeedbacks" :key="feedback.id">
       <div class="row1">
         <div class="column1">
-          <h6>{{feedback.user}}</h6>
+          <h6>{{feedback.users.username}}</h6>
         </div>
 
         <div class="column2">
-          <p style="font-size: 11px">{{feedback.postedAt}}</p>
+          <p style="font-size: 11px">{{new Date(feedback.postedAt).toLocaleDateString()}}</p>
           <p>{{feedback.content}}</p>
         </div>
 
-        <div class="column3">
+        <!-- <div class="column3">
           <button class="btn2">Reply</button>
-        </div>
+        </div> -->
       </div>
     </section>
     <button class="btn1">see more</button>
@@ -28,6 +28,7 @@ import axios from 'axios'
 // import { mapGetters } from 'vuex'
 export default {
     name: 'App',
+    props:['id'],
     data() {
         return {
             localFeedbacks: []
@@ -37,7 +38,7 @@ export default {
     },
     async mounted() {
         // Get data from server
-        const response = await axios.get('http://localhost:3000/feedbacks');
+        const response = await axios.get('http://localhost:3000/feedbacks/'+this.id);
         // Go with this if you think this data is not shared with other component: Store data from server in local
          this.localFeedbacks = response.data
          this.$store.dispatch('feedback/updateFeedbacks',response.data)

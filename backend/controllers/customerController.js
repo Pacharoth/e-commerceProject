@@ -66,10 +66,11 @@ exports.postProfile = async(req,res)=>{
             _id:req.params.id
         }
     });
-    acustomer = acustomer.filter(element=>element.users!==null);
+    acustomer = acustomer.filter(element=>element.users!==null);        //!==compare data type
     acustomer[0].phoneNumber = req.body.phoneNumber;
-    res.json(acustomer);
+    res.json(acustomer); 
 }
+
 exports.setNewPassword=async(req,res)=>{
     const salt = bcrypt.genSaltSync(10);
     console.log(req.params.id)

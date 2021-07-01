@@ -10,8 +10,13 @@ const insertPayPalCustomer = async(datas)=>{
           style:{
             size:"responsive",
             color:"gold",
-            label:"checkout",
+            label:datas.type,
             shape:"rect",
+            layout:"horizontal",
+            fundingicons: 'true',
+          },
+          funding:{
+            disallowed: [ window.paypal.FUNDING.CREDIT ]
           },
           createOrder:(data,actions)=>{
             console.log(data);
@@ -29,13 +34,22 @@ const insertPayPalCustomer = async(datas)=>{
           },
           onApprove:async(data,actions)=>{
             const order = await actions.order.capture();
-            console.log(datas.product.value,order);
+            console.log(order,data);
 
-            const response=await axios.post(localhost+'/receipt',datas.product.value);
-            if(response.data.err){
-              console.log(response.data.err);
+            if(Array.isArray(datas.product.value)){
+              const response=await axios.post(localhost+'/receipt',datas.product.value);
+              if(response.data.err){
+                console.log(response.data.err);
+              }else{
+                datas.router.push({name:'receipt',params:{id:response.data._id}})
+              }
             }else{
-              datas.router.push({name:'receipt',params:{id:response.data._id}})
+              const response = await axios.post(localhost+"/buynow",datas.product.value);
+              if(response.data.err){
+                console.log(response.data.err)
+              }else{
+                datas.router.push({name:'receipt',params:{id:response.data._id}});
+              }
             }
           },
           onError:err=>{
@@ -49,4 +63,7 @@ const insertPayPalSeller = async(paypal)=>{
   console.log(paypal.value)
   
 }
-export{insertPayPalCustomer,insertPayPalSeller}
+export{
+  insertPayPalCustomer,
+  insertPayPalSeller,
+}

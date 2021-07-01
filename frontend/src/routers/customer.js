@@ -9,6 +9,7 @@ import view_profile from '../components/customer/view_profile.vue';
 import store from '../stores/store';
 import receipt from '../components/customer/receipt.vue'
 import ResetPassword from '../components/customer/ResetPassword.vue'
+import SellerSubsribe from '../components/customer/SellerSubscribe.vue';
 
 const customerRouter = {
     name:'homepage',
@@ -16,6 +17,11 @@ const customerRouter = {
     redirect:{name:'customerlistproduct'},
     component:CustomerLayout,
     children:[
+        {
+            path:'registerseller',
+            name:'registerseller',
+            component:SellerSubsribe,
+        },
         {
             path:'resetpassword/:id',
             name:'resetpassword',
@@ -40,14 +46,10 @@ const customerRouter = {
             }
         },
         {
-            path:'feedback',
+            path:'feedback/:id',
             name:'FeedBack',
+            props:true,
             component:feedback,
-            beforeEnter: (to, from, next) => {
-                var role = store.getters['auth/getSession'].role
-                if(to.name=='FeedBack'&&role=='customer'|role=='admin')next()
-                else next({name:'customerlistproduct'})
-            }
         },
         {
             path:'pastorder',
@@ -58,7 +60,8 @@ const customerRouter = {
                 const isAuthenticate=role=='customer'||role=='admin'||role=='seller';
                 if(to.name=='PastOrder'&&isAuthenticate)next()
                 else next({name:'customerlistproduct'})
-            }
+            },
+            props:true
         },
         {
             path:'shoppingcart/',

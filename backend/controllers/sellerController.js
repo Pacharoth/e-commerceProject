@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const role = require('../models/roleModel');
 const seller = require('../models/sellerModel');
+const fs  = require('fs');
 const user = require('../models/userModel');
 const order = require('../models/orderModel');
 exports.registerSeller = async(req,res)=>{
