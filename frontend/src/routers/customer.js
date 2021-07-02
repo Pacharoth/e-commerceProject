@@ -10,13 +10,13 @@ import store from '../stores/store';
 import receipt from '../components/customer/receipt.vue'
 import ResetPassword from '../components/customer/ResetPassword.vue'
 import SellerSubsribe from '../components/customer/SellerSubscribe.vue';
-
 const customerRouter = {
     name:'homepage',
     path:'/',
     redirect:{name:'customerlistproduct'},
     component:CustomerLayout,
     children:[
+        
         {
             path:'registerseller',
             name:'registerseller',
