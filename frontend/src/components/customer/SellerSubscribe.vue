@@ -2,7 +2,7 @@
     <div class="container-subscription">
         <h3>Choose Your Plan to subscribe as Seller</h3>
         <div class="plan-container">
-            <div class="payment-container">
+            <div v-if="!user.userid" class="payment-container">
                 <h5>Free trial</h5>
                 <div class="line-pp"></div>
                 <h4>Free</h4>
@@ -12,7 +12,10 @@
                     <li>CRUD Product</li>
                     <li>Sell Product</li>
                 </ul>
-                <button class="register-seller">Get Start</button>
+                <button class="register-seller" @click="registerSeller(
+                    0,
+                    'free'
+                )" data-bs-toggle="modal" data-bs-target="#sellerModal">Get Start</button>
             </div>
             <div class="payment-container">
                 <h5>Monthly</h5>
@@ -24,7 +27,10 @@
                     <li>Include Free Function</li>
                     <li>Boost Product</li>
                 </ul>
-                <button class="register-seller">Get Start</button>
+                <button class="register-seller" @click="registerSeller(
+                    month,
+                    'month'
+                )"  data-bs-toggle="modal" data-bs-target="#sellerModal">Get Start</button>
 
             </div>
             <div class="payment-container">
@@ -37,24 +43,46 @@
                     <li>Include Free Function</li>
                     <li>Boost Product</li>
                 </ul>
-                <button class="register-seller">Get Start</button>
+                <button class="register-seller" @click="registerSeller(
+                    year,
+                    'year'
+                    )" data-bs-toggle="modal" data-bs-target="#sellerModal">Get Start</button>
             </div>
         </div>
+        <form-register-payment :value="value" :type="type"/>
     </div>
 </template>
 <script>
 import { ref } from '@vue/reactivity'
+import FormRegisterPayment from './FormRegisterPayment.vue';
+import { useStore } from 'vuex';
+import { computed } from '@vue/runtime-core';
 export default {
+  components: { FormRegisterPayment },
     name:"SellerSubscribe",
     title:"Seller Plan",
     setup() {
-        const year = ref(162);
-        const month=ref(15);
+        const year = ref(162),
+        month=ref(15),
+        type=ref(""),
+        store = useStore(),
+        user = computed(()=>store.getters['auth/getSession']),
+        value = ref(0);
+        function registerSeller(values,types){
+        
+            value.value=values;
+            type.value= types;
+        }
         return{
             year,
-            month
+            month,
+            registerSeller,
+            value,
+            type,
+            user,
         }
-    }
+    },
+    
 }
 </script>
 <style lang="scss" scope>
@@ -70,14 +98,17 @@ export default {
             margin: auto;
         }
         .plan-container{
-            margin-top: 2%;
             display: flex;
             width: 100%;
-            justify-content: space-evenly;
+            justify-content:center;
+            padding: 5%;
             flex-wrap: wrap;
             .payment-container{
+                margin:auto;
+                margin-left:2% ;
+                margin-right:2% ;
                 display: block;
-                width: 20%;
+                width: 25%;
                 border-radius: 5px;
                 background-color: white;
                 box-shadow: $shadow_1;
