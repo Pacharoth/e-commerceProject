@@ -4,6 +4,7 @@ const seller = require('../models/sellerModel');
 const fs  = require('fs');
 const user = require('../models/userModel');
 const order = require('../models/orderModel');
+const { registerUser } = require('../utils/registerUser');
 exports.registerSeller = async(req,res)=>{
     console.log(req.body)   
     const {company,contact,address,email,_id}= req.body;
@@ -220,4 +221,12 @@ exports.getYearlySale = async (req,res)=>{
     y = calIncome(orders)
   
     res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit})
+}
+exports.registerSellerPayment=async(req,res)=>{
+    var response =await registerUser(req,res,"seller");
+    res.json(response);
+}
+exports.checkCompany=async(req,res)=>{
+    var response= await seller.find({company:req.body.company});
+    res.json(response);
 }
