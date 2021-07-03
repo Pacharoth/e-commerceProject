@@ -8,13 +8,16 @@
                 </div>
                 <div class="modal-body seller-register">
                     <div class="row ">
+                         <div v-if="err.error" class="alert alert-warning p-1 m-0 mt-2 mb-0" role="alert">
+                                {{err.error}}
+                            </div>
                         <div class="col mb-1">
                             <label>Username</label>
-                            <input type="text" name="username" placeholder="username" class="form-control">
+                            <input type="text" required name="username" placeholder="username" class="form-control">
                         </div>
                         <div class="col mb-1">
                             <label>Company's Name</label>
-                            <input type="text" name="company" placeholder="compnay's name" class="form-control">
+                            <input type="text" required name="company" placeholder="compnay's name" class="form-control">
                             <div v-if="err.company" class="alert alert-warning p-1 m-0 mt-2 mb-0" role="alert">
                                 {{err.company}}
                             </div>
@@ -23,19 +26,23 @@
                     <div class="row">
                         <div class="col mb-1">
                             <label for="Contact">Contact</label>
-                            <input type="text" class="form-control" placeholder="phone number" name="contact">
+                            <input required type="text" class="form-control" placeholder="phone number" name="contact">
+                            <div class="form-text mt-1">To input phone number : +855963005528</div>
+                             <div v-if="err.phonenumber" class="alert alert-warning p-1 m-0 mt-2 mb-0" role="alert">
+                                {{err.phonenumber}}
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-1">
                             <label for="Contact">Address</label>
-                            <input type="text" class="form-control" placeholder="address" name="address">
+                            <input required type="text" class="form-control" placeholder="address" name="address">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-1">
                             <label for="" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="" placeholder="yoursite@email.com" aria-describedby="emailHelp" name="email">
+                            <input required type="email" class="form-control" placeholder="yoursite@email.com" aria-describedby="emailHelp" name="email">
                             <div v-if="err.email" class="alert alert-warning p-1 m-0 mt-2 mb-0" role="alert">
                                 {{err.email}}
                             </div>
@@ -45,19 +52,26 @@
                     <div class="row">
                         <div class="col mb-1">
                             <label for="" class="form-label">Password</label>
-                            <input type="password" class="form-control"  placeholder="******"  id="" aria-describedby="emailHelp" name="password">
+                            <input required type="password" class="form-control"  placeholder="******" aria-describedby="emailHelp" name="password">
+                            <div v-if="err.password" class="alert alert-warning p-1 m-0 mt-2 mb-0" role="alert">
+                                {{err.password}}
+                            </div>
                         </div>
                     </div>
                      <div class="row mb-3">
                         <div class="col">
                             <label for="" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" placeholder="******" id="" aria-describedby="emailHelp" name="confirmpassword">
+                            <input type="password" class="form-control" placeholder="******"  aria-describedby="emailHelp" name="confirmpassword">
+                            <div aria-required="true" v-if="err.confirmpassword" class="alert alert-warning p-1 m-0 mt-2 mb-0" role="alert">
+                                {{err.confirmpassword}}
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <button type="submit" class="form-control btn fw-bold">Sign up</button>
                         </div>
+                        
                     </div>
                 </div>
             </form>
@@ -109,28 +123,42 @@ import { computed, onMounted, ref, toRefs, watch } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import { insertPayPalSeller } from '../../utils/paypal';
 import { useRouter } from 'vue-router';
-import { FormValidation } from '../../utils/FormValidation';
+import { FormValidation, localhost, validatePhoneNumber } from '../../utils/FormValidation';
+import {Modal} from 'bootstrap';
+import axios from 'axios';
 export default {
     name:"FormRegisterPayment",
     props:['value','type'],
     setup(props) {
         const store = useStore(),
+        modal = ref(null),
+        newModal=ref(null),
         {type,value} = toRefs(props),
         form=ref(null),
         err = ref({}),
+        sellerid=ref({}),
         router = useRouter(),
         monthly=ref(null),
         yearly=ref(null),
         user = computed(()=>store.getters['auth/getSession']);
         watch(type,async()=>{
             if(user.value.userid){
+                sellerid.value=await getSeller().data;
+                await loadData();
+            }
+        })
+        watch(user,async()=>{
+            if(user.value.userid){
+                sellerid.value=await getSeller().data;
                 await loadData();
             }
         })
         onMounted(async()=>{
             if(user.value.userid){
+                sellerid.value=await getSeller().data;
                 await loadData();
             }
+            newModal.value = new Modal(modal.value);
         })
         async function registerSellerPayment(){
             var aForm = new FormData(form.value);
@@ -143,30 +171,68 @@ export default {
             ]
             validation._setSignUpForm(username,email,password,confirmpassword);
             validation._setCompany(aForm.get('company'));
-            var checkEmail =await validation.checkEmail();
-            console.log(checkEmail);
-            var checkCompany = await validation.checkCompany();
-            var checkPassword = validation.checkPassword();
-            console.log(checkPassword);
-            if(checkCompany){
-                err.value.company = validation._getCompany()+" already exists";
+            
+            var [checkEmail,checkCompany,checkPassword,checkValidate,checkPhoneNumber]=[
+                await validation.checkEmail(),
+                await validation.checkCompany(),
+                validation.checkPassword(),
+                validation.checkValidatePassword(),
+                validatePhoneNumber.test(String(aForm.get('contact')))
+            ]
+            console.log(checkPhoneNumber);
+            console.log(aForm.get('contact'))
+            var checkAllValidate = checkEmail!==true&&checkCompany!==true&&checkPassword&&checkValidate&&checkPhoneNumber
+            if(checkAllValidate){
+                let {data} = await axios.post(localhost+"/registerseller",aForm);
+                if(data.save){
+                    sellerid.value=data.aSeller;
+                    console.log(data);
+                    if(type.value=="free"){
+                        let response=await axios.post(localhost+'/paymentseller',{
+                            sellers:data.aSeller._id,
+                            type:type.value,
+                            payment:0,
+                        })
+                        if(response.data.save){
+                            alert( aForm.get("username") +" has been registered");
+                            newModal.value.hide();
+                            router.push({path:'/'})
+                        }else{
+                            err.value.error="Cannot save payment";
+                        }
+                        
+                    }
+                    else{
+
+                        user.value.userid=sellerid.value.users;
+                        await loadData();
+                    }
+                }else{
+                    err.value.error=aForm.get('username')+" cannot registered.";
+                }
+                setTimeout(()=>err.value={},3000);
+            }else{
+                if(checkPhoneNumber!==true) err.value.phonenumber ="Invalid phone number!Please try again";
+                if(checkCompany)err.value.company = validation._getCompany()+" already exists";
+                if(checkEmail)err.value.email = validation._getEmail()+" already exists";
+                if(checkPassword!==true)err.value.confirmpassword = "Password are not match"
+                if(checkValidate!==true)err.value.password= "Password should contain 8 characters one letter(upper and lower) one number "
+                setTimeout(()=>err.value={},3000);
             }
-            if(checkEmail){
-                err.value.email = validation._getEmail()+" already exists";
-            }
-            setTimeout(()=>err.value={},3000);
-            aForm.get('password').value="";
-            console.log(checkCompany);
 
             
 
+        }
+        async function getSeller(){
+            var response = await axios.post(localhost+'/getSeller/'+user.value.userid);
+            return response;
         }
         async function loadData(){
             if(type.value=='month'){
                 await insertPayPalSeller({
                     total:value,
                     paypal:monthly,
-                    user:user,
+                    seller:sellerid.value,
                     type:'pay',
                     router:router,
                 })
@@ -174,8 +240,9 @@ export default {
                  await insertPayPalSeller({
                     total:value,
                     paypal:yearly,
-                    user:user,
+                    seller:sellerid.value,
                     type:'pay',
+                    router:router,
                 })
             }
         }
@@ -187,6 +254,8 @@ export default {
             monthly,
             yearly,
             registerSellerPayment,
+            modal,
+            sellerid,
         }
     }
 }

@@ -5,6 +5,7 @@ const fs  = require('fs');
 const user = require('../models/userModel');
 const order = require('../models/orderModel');
 const { registerUser } = require('../utils/registerUser');
+const paymentModel = require('../models/paymentModel');
 exports.registerSeller = async(req,res)=>{
     console.log(req.body)   
     const {company,contact,address,email,_id}= req.body;
@@ -244,10 +245,26 @@ exports.getYearlySale = async (req,res)=>{
     res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit, seller: orders[0].product[0].sellers.company, reportDate:new Date(), type:"y"})
 }
 exports.registerSellerPayment=async(req,res)=>{
-    var response =await registerUser(req,res,"seller");
-    res.json(response);
+    await registerUser(req,res,"seller");
+
 }
 exports.checkCompany=async(req,res)=>{
     var response= await seller.find({company:req.body.company});
     res.json(response);
+}
+exports.payAsSeller= async(req,res)=>{
+    const {sellers,type,payment} = req.body;
+    const paySeller = new paymentModel({
+        sellers,
+        type,
+        payment,
+        paymentAt:new Date,
+    })
+    try {
+        await paySeller.save();
+        res.json({save:true})
+    } catch (error) {
+        console.log(error);
+        res.json({save:false});
+    }
 }

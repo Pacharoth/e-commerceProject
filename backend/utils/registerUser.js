@@ -33,10 +33,11 @@ exports.registerUser=async(req,res,names)=>{
                         })
                         try{
                             await aSeller.save()
-                            return {save:true};
+                            console.log("sucess")
+                            res.json({save:true,aSeller})
                         }catch(err){
                             console.log(err);
-                            return {company:false};
+                            return {save:false,company:false};
                         }
                     }else if(name=="admin"){
                         res.status(200).json(resultone);

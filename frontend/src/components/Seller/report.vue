@@ -51,7 +51,7 @@ export default {
            var pdf = new jsPDF('p','pt','A3');
            pdf.internal.pageSize.width=520;
             pdf.html(forms.value,{
-                filename:"Receipt_"+statistic.value.type
+                filename:"Report_"+statistic.value.type
             }).save()
         }
         return{

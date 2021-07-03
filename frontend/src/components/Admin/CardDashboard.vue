@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="text">
-                <span class="title" v-if="statistic">{{statistic.saleUnit}}</span>
+                <span class="title" v-if="statistic&&title=='Seller'">{{statistic.saleUnit}}</span>
                 <span v-if="title=='Admin'" class="content-text">Total Register</span>
                 <span v-if="title=='Seller'" class="content-text">Total sale unit</span>
             </div>
@@ -20,7 +20,7 @@
                 </button>
             </div>
             <div class="text">
-                <span class="title" v-if="statistic">${{statistic.totalEarn}}</span>
+                <span class="title" v-if="statistic&&title=='Seller'">${{statistic.totalEarn}}</span>
                 <span class="content-text">Total Earning</span>
             </div>
         </div>
@@ -31,7 +31,7 @@
                 </button>
             </div>
             <div class="text">
-                <span class="title" v-if="statistic">${{statistic.totalPro}}</span>
+                <span class="title" v-if="statistic&&title=='Seller'">${{statistic.totalPro}}</span>
                 <span class="content-text">Total Profit</span>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 </button>
             </div>
             <div class="text">
-                <span class="title" v-if="statistic">${{statistic.yearPro}}</span>
+                <span class="title" v-if="statistic&&title=='Seller'">${{statistic.yearPro}}</span>
                 <span class="content-text">This year profit</span>
             </div>
         </div>
