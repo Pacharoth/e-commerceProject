@@ -115,7 +115,7 @@ export default {
        async daily(){
          const  res = await axios.get("http://localhost:3000/getSaleInfo/"+localStorage.getItem('userid'));
          console.log("sale info", res)
-         this.$store.dispatch('seller/lloadStatistic',res.data);
+         this.$store.dispatch('seller/loadStatistic',res.data);
       },
       async monthly(){
           const  res = await axios.get("http://localhost:3000/getMonthlySale/"+localStorage.getItem('userid'));
