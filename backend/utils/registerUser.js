@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const customer = require('../models/customerModel');
 const role =require('../models/roleModel');
+const seller = require('../models/sellerModel');
 const user = require('../models/userModel');
 exports.registerUser=async(req,res,names)=>{
     const request = req.body
@@ -16,12 +17,32 @@ exports.registerUser=async(req,res,names)=>{
     })
     await userAccount.save().then(async(result)=>{
         await user.findById(result._id).populate('roles').exec().then(
-            resultone=>{
+            async resultone=>{
                 if(names=="customer"){
                     const aCustomer = new customer({
                         users:result._id,   
                     })
-                    aCustomer.save().then(result=>console.log(result)).catch(err=>console.log(err));
+                    await aCustomer.save().then(result=>console.log(result)).catch(err=>console.log(err));
+                }else {
+                    if(names=="seller"){
+                        const aSeller = new seller({
+                            users:result._id,
+                            company:request.company,
+                            contact:request.contact,
+                            address:request.address
+                        })
+                        try{
+                            await aSeller.save()
+                            return {save:true};
+                        }catch(err){
+                            console.log(err);
+                            return {company:false};
+                        }
+                    }else if(name=="admin"){
+                        res.status(200).json(resultone);
+                    }else{
+                        return {save:false};
+                    }
                 }       
                 res.status(200).json(resultone)
             }
