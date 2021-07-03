@@ -149,7 +149,8 @@ export default {
 }
 .icons{
   border-radius: 50px;
-  color: black;
+  color: rgb(83, 80, 80);
+  font-weight: 500;
   &:focus,&:hover{
     color: #f165a7;
     background-color: #f165a662;

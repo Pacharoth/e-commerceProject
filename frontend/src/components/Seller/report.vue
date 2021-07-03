@@ -1,18 +1,18 @@
 <template>
     <form action="" class="containers" @click="generatePDF()">
-        <div class="shadow" ref="form">
+        <div class="shadow" ref="forms">
             <div class="title-background">
                 <center v-if='statistic.type == "d"'><h2 class="title">Daily Report</h2></center>
                 <center v-if='statistic.type == "m"'><h2 class="title">Monthly Report</h2></center>
                 <center v-if='statistic.type == "y"'><h2 class="title">Yearly Report</h2></center>
             </div>
             <div class="container-fluid">
-              <p> <span>Seller:</span> 
+              <p> <span>Seller: </span> 
               <span >{{statistic.seller}}</span>
             </p>
-              <p><span>Date:</span> <span>{{new Date(statistic.reportDate).toLocaleDateString()}}</span></p>
+              <p><span>Date: </span> <span>{{new Date(statistic.reportDate).toLocaleDateString()}}</span></p>
               <hr class="p-0">
-              <table class="table">
+              <table class="table table-striped">
                 <thead>
                   <tr>
                     <th>Total Sold Units</th>
@@ -20,8 +20,8 @@
                     <!-- <th scope="col"></th> -->
                   </tr>
                   <tr>
-                      <th>Total Earn</th>
-                      <td>{{statistic.totalEarn}}</td>
+                      <th scope="col">Total Earn</th>
+                      <td scope="col"> {{statistic.totalEarn}}</td>
                   </tr>
                   <tr>
                       <th>Total Profit</th>
@@ -37,26 +37,27 @@
 <script>
 import {jsPDF} from 'jspdf';
 import { ref} from '@vue/reactivity';
+import { computed } from '@vue/runtime-core';
+import { useStore } from 'vuex';
 export default {
     props:['id'],
     name:"report",
     title:"Report",
-    computed:{
-        statistic(){
-            return this.$store.getters['seller/getStatistic'];
-        }
-    },
     setup(){
-        const form = ref(null);
+        const store = useStore();
+        const forms = ref(null);
+        const statistic = computed(()=>store.getters['seller/getStatistic'])
         function generatePDF(){
-           let pdf = new jsPDF('p','pt','A3');
-           pdf.internal.pageSize.width=640;
-            pdf.html(form.value,{
-                filename:"report"
+           var pdf = new jsPDF('p','pt','A3');
+           pdf.internal.pageSize.width=520;
+            pdf.html(forms.value,{
+                filename:"Receipt_"+statistic.value.type
             }).save()
         }
         return{
-            generatePDF
+            generatePDF,
+            forms,
+            statistic,
         }
     }
 
@@ -75,8 +76,9 @@ export default {
     }
     .containers{
         margin: auto;
-        width: 50%;
+        width: 40%;
         margin-top: 2%;
+        background-color: white;
     }
     hr{
         color: #D60265;
