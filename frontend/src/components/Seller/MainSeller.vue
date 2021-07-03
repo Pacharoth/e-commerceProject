@@ -64,7 +64,7 @@
             </div>
           </div>
 
-          <button type="button" class="btn opt">Generate Report</button>
+          <router-link to="/seller/report" class="btn opt">Generate Report</router-link>
         
 
       </div>

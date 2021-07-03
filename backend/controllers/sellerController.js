@@ -138,12 +138,12 @@ exports.getSaleInfo = async (req,res)=>{
     }
     const current = new Date()
     var todayOrders = orders.filter(e => (e.orderDate.getDate()== current.getDate() && e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
-    console.log("got orders ",orders)
+    
     r = calIncome(todayOrders)
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
     y = calIncome(orders)
-  
-    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:y.totalProfit})
+    
+    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:y.totalProfit, seller: orders[0].product[0].sellers.company, reportDate:new Date(), type:"d"})
     // res.json(orders)
 
 }
@@ -195,7 +195,7 @@ exports.getMonthlySale= async (req,res)=>{
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
     y = calIncome(orders)
   
-    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:y.totalProfit})
+    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:y.totalProfit, seller: orders[0].product[0].sellers.company, reportDate:new Date(), type:"m"} )
 }
 exports.getYearlySale = async (req,res)=>{
     var orders = await order.find().populate('users').populate({
@@ -220,5 +220,5 @@ exports.getYearlySale = async (req,res)=>{
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
     y = calIncome(orders)
   
-    res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit})
+    res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit, seller: orders[0].product[0].sellers.company, reportDate:new Date(), type:"y"})
 }

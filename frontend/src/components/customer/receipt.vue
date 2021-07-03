@@ -89,6 +89,9 @@ export default {
 }
 </script>
 <style scoped>
+    .containers{
+        background: white;
+    }
     .title{
         color: white;
         padding-top: 3%;

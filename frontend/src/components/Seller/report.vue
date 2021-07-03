@@ -2,90 +2,65 @@
     <form action="" class="containers" @click="generatePDF">
         <div class="shadow" ref="form">
             <div class="title-background">
-                <center><h2 class="title">Amazing Shop Receipt</h2></center>
+                <center v-if='statistic.type == "d"'><h2 class="title">Daily Report</h2></center>
+                <center v-if='statistic.type == "m"'><h2 class="title">Monthly Report</h2></center>
+                <center v-if='statistic.type == "y"'><h2 class="title">Yearly Report</h2></center>
             </div>
             <div class="container-fluid">
-              <p> <span>Customer Name:</span> <span v-if="receipt.users">{{receipt.users.username}}</span></p>
-              <p><span>Date:</span> <span v-if="receipt.orderDate">{{orderDate}}</span></p>
+              <p> <span>Seller:</span> 
+              <span >{{statistic.seller}}</span>
+            </p>
+              <p><span>Date:</span> <span>{{new Date(statistic.reportDate).toLocaleDateString()}}</span></p>
               <hr class="p-0">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th scope="col">Description</th>
-                    <th>Shop</th>
-                    <th scope="col">Qty</th>
-                    <th scope="col">Unit Cost</th>
-                    <th scope="col">Amount</th>
+                    <th>Total Sold Units</th>
+                    <td>{{statistic.saleUnit}}</td>
+                    <!-- <th scope="col"></th> -->
+                  </tr>
+                  <tr>
+                      <th>Total Earn</th>
+                      <td>{{statistic.totalEarn}}</td>
+                  </tr>
+                  <tr>
+                      <th>Total Profit</th>
+                      <td>{{statistic.totalPro}}</td>
                   </tr>
                 </thead>
-                <tbody>
-                <slot v-if="receipt.product">
-                  <slot v-for="products in receipt.product.length" :key="products">
-                  <tr>
-                    <th>{{receipt.product[products-1].products.name}}</th>
-                    <td class="detail">{{receipt.product[products-1].products.detail}}</td>
-                    <td>{{receipt.product[products-1].sellers.company}}</td>
-                    <td>{{receipt.product[products-1].quantity}}</td>
-                    <td>{{receipt.product[products-1].products.discount}}</td>
-                    <td>
-                        {{(receipt.product[products-1].quantity*receipt.product[products-1].products.price)-(receipt.product[products-1].products.discount*receipt.product[products-1].products.price)}}
-                    </td>
-                  </tr>
-                  </slot>
-                </slot>
-                </tbody>
               </table>
               <hr class="p-0">
-
-              <div class="d-flex bd-highlight mb-3 total align-items-center">
-                <div class="me-auto p-2 bd-highlight"></div>
-                <div class="p-2 bd-highlight">Total</div>
-                <div class="p-2 bd-highlight">{{total}}$</div>
-              </div>
             </div>
         </div>
     </form>
 </template>
 <script>
-import { ref, toRefs } from '@vue/reactivity'
-import { onMounted } from '@vue/runtime-core';
-import axios from 'axios';
-import { localhost } from '../../utils/FormValidation';
 import {jsPDF} from 'jspdf';
+import { ref} from '@vue/reactivity';
 export default {
     props:['id'],
-    title:"Receipt",
-    setup(props) {
-        const form = ref(null),
-        {id} = toRefs(props),
-        receipt = ref({}),
-        orderDate =ref(""),
-        total = ref (0);
-        onMounted(async()=>{
-            const response = await axios.get(localhost+"/receipt/"+id.value);
-            receipt.value = response.data;
-            orderDate.value=new Date(receipt.value.orderDate).toLocaleDateString()
-            for(const i in receipt.value.product){
-                var data =receipt.value.product[i]
-                total.value += (data.quantity*data.products.price)-(data.products.discount*data.products.price/100)
-            }
-        });
+    name:"report",
+    title:"Report",
+    computed:{
+        statistic(){
+            return this.$store.getters['seller/getStatistic'];
+        }
+    },
+    setup(){
+        const form = ref(null);
         function generatePDF(){
-           var pdf = new jsPDF('p','pt','A3');
+           let pdf = new jsPDF('p','pt','A3');
            pdf.internal.pageSize.width=640;
             pdf.html(form.value,{
-                filename:"Receipt_"+orderDate.value
+                filename:this.statistic.type+"report"
             }).save()
         }
         return{
-            receipt,
-            total,
-            form,
-            generatePDF,
-            orderDate
+            generatePDF
         }
     }
+
+
 }
 </script>
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-        <div class="container">
+    <div class="container">
       <div class=" row title">Seller Profile</div>
       <div class="row">
         <div class="col-md-8 left">
@@ -117,17 +117,17 @@ export default {
         pwd:{},
         notMatch:{},
         log:'',
-        proImg:''
+        proImg:'',
       }
     },
     async mounted(){
-     this.modal=new Modal(this.$refs.modal);
-     this.modalProfile=new Modal(this.$refs.modalProfile);
-     const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
-     this.seller = seller.data[0]
-     this.user = seller.data[0].users
-     console.log(" res seller",this.seller)
-    //  console.log(this.user)
+      this.modal=new Modal(this.$refs.modal);
+      this.modalProfile=new Modal(this.$refs.modalProfile);
+      const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
+      this.seller = seller.data[0]
+      this.user = seller.data[0].users
+      console.log(this.seller)
+      console.log(this.user)
     //  console.log("seller profile",this.user)
     //  console.log('pwd',this.pwd)
 

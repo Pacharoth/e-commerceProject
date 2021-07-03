@@ -64,7 +64,7 @@ exports.updateProduct = async(req,res)=>{
     console.log(req.params.id)
     console.log(req.body)
     console.log(req.files);
-    const {name,detail,qty,price,discount,instock,category}=req.body
+    const {name,detail,qty,price,buyPrice,discount,instock,category}=req.body
     const aproduct= await product.findById(req.params.id);
     if(req.files!==null){
         var file = req.files.img;
@@ -85,6 +85,7 @@ exports.updateProduct = async(req,res)=>{
     aproduct.price=price;
     aproduct.discount = discount;
     aproduct.instock=instock;
+    aproduct.buyPrice = buyPrice;
     const cate = await categoryModel.findOne({name:category});
     aproduct.categories =cate._id;
     try{
