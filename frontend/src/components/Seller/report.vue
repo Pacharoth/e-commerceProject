@@ -1,5 +1,5 @@
 <template>
-    <form action="" class="containers" @click="generatePDF">
+    <form action="" class="containers" @click="generatePDF()">
         <div class="shadow" ref="form">
             <div class="title-background">
                 <center v-if='statistic.type == "d"'><h2 class="title">Daily Report</h2></center>
@@ -52,7 +52,7 @@ export default {
            let pdf = new jsPDF('p','pt','A3');
            pdf.internal.pageSize.width=640;
             pdf.html(form.value,{
-                filename:this.statistic.type+"report"
+                filename:"report"
             }).save()
         }
         return{

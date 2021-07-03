@@ -129,7 +129,7 @@ export default {
         onMounted(()=>{
             if(socket.value==null) return socket.value;
             socket.value.on('listchats',async data=>{
-                console.log(data);
+                // console.log(data);
                 chatSocket.value=data;
             })
             return()=>{
