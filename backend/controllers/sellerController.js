@@ -159,6 +159,7 @@ exports.getSaleInfo = async (req,res)=>{
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
+    orders = orders.filter(o=> o.product.length!=0)
     const current = new Date()
     var todayOrders = orders.filter(e => (e.orderDate.getDate()== current.getDate() && e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
     console.log("order daily", todayOrders)
@@ -198,6 +199,7 @@ exports.getMonthlySale= async (req,res)=>{
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
+    orders = orders.filter(o=> o.product.length!=0)
     const current = new Date()
     var thisMonth = orders.filter(e => (e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
     console.log("got orders monthly",orders)
@@ -232,6 +234,7 @@ exports.getYearlySale = async (req,res)=>{
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
+    orders = orders.filter(o=> o.product.length!=0)
     var current = new Date()
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
     console.log("orders yearly", orders)
