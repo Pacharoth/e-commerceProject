@@ -38,7 +38,8 @@
             <a class="nav-link dropdown-toggle icons" data-toggle="dropdown" href="#" role="button" >
               <!-- <em class="fas fa-user-circle user" style="margin-right: 8%;
               font-size: 1.5vw;"></em> -->
-              <img class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+              <img v-if="user.img" class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+              <img v-else class=" profile-img" src="../../assets/logo.png" alt="">
 
               {{user.user}}
             </a>

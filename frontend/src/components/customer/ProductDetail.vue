@@ -37,7 +37,7 @@
                 <span> {{product.qty - qty}} pieces available</span>
                 <div class="paypalclass">
                     <!-- <router-link to="/receipt" class="buynow mt-3 ">Buy Now</router-link> -->
-                    <span ref="paypal" class="paypal mt-3" v-if="user"></span>
+                    <span ref="paypal" class="paypal mt-3" v-if="user.userid"></span>
                     <button @click="postShoppingCart({
                        qty:qty,
                        product,
@@ -158,6 +158,7 @@ export default {
             postShoppingCart,
             postFeedback,
             content,
+            user,
         }
     },
 
