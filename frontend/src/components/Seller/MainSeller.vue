@@ -28,11 +28,11 @@
                     </div>
                     <div class="form-group">
                       <label for="price">Buy Price per unit</label>
-                      <input v-model="product.buyPrice" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Buy Price per unit">             
+                      <input v-model="product.buyPrice" type="number" step="any" min="0" class="form-control" name="price" placeholder="Buy Price per unit">             
                     </div>
                     <div class="form-group">
                       <label for="price">Price per unit</label>
-                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Price per unit">             
+                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" name="price" placeholder="Price per unit">             
                     </div>
 
                     <div class="form-group">

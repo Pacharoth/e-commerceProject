@@ -6,7 +6,7 @@
                     <button @click="loadSideBar()" class="btn burger" ><em class="fas fa-bars"></em></button>
                     <input type="text" class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
                 </div>
-                <div class="date">
+                <div class="date" v-if="page=='admindashboard'||page=='sellerdetial'">
                     <button class="btn">Daily</button>
                     <button class="btn">Monthly</button>
                     <button class="btn">Weekly</button>
@@ -61,6 +61,11 @@ export default {
         ChatList,
         SellerRegister,
         Notification
+    },
+    computed:{
+        page(){
+            return this.$route.name
+        }
     },
     setup() {
         const store= useStore(); //this.$store

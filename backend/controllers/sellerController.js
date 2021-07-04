@@ -156,7 +156,8 @@ exports.getSaleInfo = async (req,res)=>{
             },
             {path:'products'}
         ]
-    })
+    });
+    console.log(orders);
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
@@ -276,4 +277,8 @@ exports.payAsSeller= async(req,res)=>{
         console.log(error);
         res.json({save:false});
     }
+}
+exports.getPaymentSeller=async(req,res)=>{
+    var payseller = await paymentModel.find({sellers:req.params.id}).slice('array',-1);
+    res.json(payseller);
 }

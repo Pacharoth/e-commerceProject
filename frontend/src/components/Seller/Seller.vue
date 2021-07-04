@@ -5,7 +5,7 @@
         <form class="form-inline">
           <input class="form-control  rounded-pill search" type="search" placeholder="&#xF002; Search"/>
         </form>
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills" v-if="sellerpage=='sellerreport'||sellerpage=='sellerpage'">
           <li class="nav-item ">
             <a @click="daily()" class="nav-link header report"  href="#">Daily</a>
           </li>
@@ -87,6 +87,7 @@ export default {
     data() {
       return {
         // user:{},
+        initialize:[],
       }
     },
     components:{
@@ -96,11 +97,15 @@ export default {
     computed:{
       user(){
         return this.$store.getters['auth/getSession'];
+      },
+      sellerpage(){
+        return this.$route.name;
       }
     },
     async mounted() {
        const  res = await axios.get("http://localhost:3000/getSaleInfo/"+localStorage.getItem('userid'));
         console.log("sale info", res)
+        this.initialize=res.data;
         this.$store.dispatch('seller/loadStatistic',res.data);
     },
     methods: {

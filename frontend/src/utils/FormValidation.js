@@ -180,6 +180,7 @@ async function registerAccount(data){
 function logouts(store){
     localStorage.clear();
     store.dispatch('auth/setSession',null);
+    store.dispatch('seller/loadStatistic',{})
 }
 export{
     FormValidation, 
