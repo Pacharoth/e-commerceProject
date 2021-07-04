@@ -206,7 +206,7 @@ exports.getMonthlySale= async (req,res)=>{
     const current = new Date()
     var thisMonth = orders.filter(e => (e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
     console.log("got orders monthly",orders)
-    var r={totalEarn:0,totalSale:0,totalPro:0, totalY:0, seller:""}
+    var r={totalEarn:0,totalSale:0,totalProfit:0, totalY:0, seller:""}
     if(thisMonth.length!=0){
         r = calIncome(thisMonth)
         r.seller = thisMonth[0].product[0].sellers.company
@@ -217,7 +217,7 @@ exports.getMonthlySale= async (req,res)=>{
         y = calIncome(orders)
         r.totalY= y.totalProfit
     }
-    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalPro, yearPro:r.totalY, seller: r.seller, reportDate:new Date(), type:"m"} )
+    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:r.totalY, seller: r.seller, reportDate:new Date(), type:"m"} )
 }
 exports.getYearlySale = async (req,res)=>{
     var orders = await order.find().populate('users').populate({
