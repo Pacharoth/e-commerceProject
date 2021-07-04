@@ -254,11 +254,20 @@ exports.checkCompany=async(req,res)=>{
 }
 exports.payAsSeller= async(req,res)=>{
     const {sellers,type,payment} = req.body;
+    var date = new Date();
+    if(type=="free"){
+        date.setDate(date.getDate()+7);
+    }else if(type=='month'){
+        date.setDate(date.getDate()+30);
+    }else if(type=='year'){
+        date.setDate(date.getDate()+365+30);
+    }
     const paySeller = new paymentModel({
         sellers,
         type,
         payment,
         paymentAt:new Date,
+        expiredPayment:date,
     })
     try {
         await paySeller.save();

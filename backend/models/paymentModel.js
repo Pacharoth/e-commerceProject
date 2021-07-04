@@ -16,6 +16,10 @@ const paymentModel = new Schema({
     paymentAt:{
         type:Date,
         require:true,
+    },
+    expiredPayment:{
+        type:Date,
+        require:true,
     }
 })
 const payment = model("payment",paymentModel);

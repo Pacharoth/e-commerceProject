@@ -205,7 +205,12 @@ export default {
                     else{
 
                         user.value.userid=sellerid.value.users;
-                        await loadData();
+                        var p=await loadData();
+                        if(p){
+                            newModal.value.hide();
+                            alert(sellerid.value.company +" has been purchased");
+                            router.push({path:'/'});
+                        }
                     }
                 }else{
                     err.value.error=aForm.get('username')+" cannot registered.";
@@ -234,15 +239,19 @@ export default {
                     paypal:monthly,
                     seller:sellerid.value,
                     type:'pay',
+                    modal:newModal,
                     router:router,
+                    typepayment:type.value,
                 })
             }else if(type.value=='year'){
                  await insertPayPalSeller({
                     total:value,
                     paypal:yearly,
+                    modal: newModal,
                     seller:sellerid.value,
                     type:'pay',
-                    router:router,
+                    router:router,  
+                    typepayment:type.value
                 })
             }
         }
