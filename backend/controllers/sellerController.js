@@ -303,7 +303,7 @@ exports.getPaymentSeller=async(req,res)=>{
             status="invalid";
         }
     }else{
-        payseller[0].status="special";
+        status="special";
     } 
     res.json([{data:payseller[0],status:status,dateValid:dateValid}]);
 }
