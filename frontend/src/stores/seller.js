@@ -4,6 +4,7 @@ const sellerStore= {
         return{
             data:[],
             dataavg:{},
+            payment:[],
         }
     },
     mutations:{
@@ -12,6 +13,9 @@ const sellerStore= {
         },
         LOAD_STATISTIC(state,data){
             state.dataavg= data
+        },
+        LOAD_PAYMENT(state,data){
+            state.payment = data;
         }
 
     },
@@ -21,6 +25,9 @@ const sellerStore= {
         },
         getStatistic(state){
             return state.dataavg;
+        },
+        getPayment(state){
+            return state.payment;
         }
     },
     actions:{
@@ -29,6 +36,9 @@ const sellerStore= {
         },
         loadStatistic({commit},data){
             commit('LOAD_STATISTIC',data);
+        },
+        loadPayment({commit},data){
+            commit('LOAD_PAYMENT',data);
         }
     }
     

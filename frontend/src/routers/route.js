@@ -36,7 +36,10 @@ router.beforeEach(async(to,from,next)=>{
         var {data} =await axios.get(localhost+'/getSeller/'+user.userid);
         console.log(data);
         var results=await axios.post(localhost+"/paymentseller/"+data[0]._id);
-        console.log(results.data);
+        if(results.data.length>0){
+            results.data[0].dateValid = parseInt(results.data[0].dateValid);
+            store.dispatch('seller/loadPayment',results.data); 
+        }
     }
     console.log(store.getters['auth/getSession'])
     console.log(to,next());

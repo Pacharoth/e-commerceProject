@@ -42,9 +42,13 @@
 
               {{user.user}}
             </a>
-            <div class="dropdown-menu profile" ref="profile">
+            <div class="dropdown-menu profile end-0" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
                 <router-link to="/" class="dropdown-item header" >Homepage</router-link>
+                <slot v-if="authPayment">
+                <router-link :to="{name:'registerseller'}" class="dropdown-item header" v-if="authPayment[0].dateValid<=10">{{authPayment[0].dateValid}} valid days </router-link>
+
+                </slot>
                 <router-link class="dropdown-item header" @click="logout" to="/">Log out</router-link>
             </div>
             </li>
@@ -63,10 +67,13 @@ import { showChatLists, showNotifications } from '../../hook/effect';
 import { logouts } from '../../utils/FormValidation';
 import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
+import { computed } from '@vue/runtime-core';
 export default {
     name:'Seller',
     setup() {
       const store = useStore();
+      var authPayment= computed(()=>store.getters['seller/getPayment'])
+
       function showChatList(){
         showChatLists(store);
       }
@@ -82,6 +89,7 @@ export default {
         showChatList,
         showNotification,
         logout,
+        authPayment,
       }
     },
     data() {
@@ -218,7 +226,7 @@ export default {
   color: #eee;
 }
 .profile{
-  left: 0;
+  left: auto;
 }
 .customerOrder {
   left: auto;

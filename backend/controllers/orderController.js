@@ -87,7 +87,7 @@ exports.getPastOrder = async(req,res)=>{
         ],
     })
     pastorder = pastorder.filter(element=>element.users!=null);
-    console.log(pastorder);     
+    // console.log(pastorder);     
     res.json(pastorder);
 }
 exports.getOrder = async(req,res)=>{
@@ -147,7 +147,7 @@ exports.getOrder = async(req,res)=>{
     }
     customerOrder=customerOrder.slice(startPoint,endPoint);
     // customerOrder.result = results;
-    console.log(customerOrder)
+    // console.log(customerOrder)
 
     res.json({customerOrder,results});
 }

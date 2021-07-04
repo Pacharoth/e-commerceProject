@@ -35,9 +35,12 @@ const sellerRouter = {
     beforeEnter: (to, from, next) => {
         var role = store.getters['auth/getSession'].role
         const isAuthenticate=/((admin)|(seller))/;
+        var status = store.getters['seller/getPayment'][0].status;
+        console.log(status)
         const regex = /((sellerprofile)|(sellerpage)|(sellerproductlist)|(seller))/
-        if(regex.test(to.name)&&isAuthenticate.test(role))next()
-        else next({name:'customerlistproduct'})
+        if(regex.test(to.name)&&isAuthenticate.test(role)&&(status=='valid'||status=='special'))next();
+        else if(regex.test(to.name)&&isAuthenticate.test(role)&&status=='invalid')next({name:'registerseller'});
+        else next({name:'customerlistproduct'});
     }
 }
 export default sellerRouter;

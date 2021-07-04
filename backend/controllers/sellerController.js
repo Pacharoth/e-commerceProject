@@ -7,7 +7,7 @@ const order = require('../models/orderModel');
 const { registerUser } = require('../utils/registerUser');
 const paymentModel = require('../models/paymentModel');
 exports.registerSeller = async(req,res)=>{
-    console.log(req.body)   
+    // console.log(req.body)   
     const {company,contact,address,email,_id}= req.body;
     const auser = await seller.find({users:_id});
     const newSeller =await user.find({email:email});
@@ -21,7 +21,7 @@ exports.registerSeller = async(req,res)=>{
         await aseller.save()
         const newRole =await role.findOne({name:"seller"})
         newSeller[0].roles=newRole._id;
-        console.log(newSeller);
+        // console.log(newSeller);
         await newSeller[0].save();
         res.json(await seller.find({_id:aseller._id}).populate('users'));
     }else{
@@ -39,15 +39,15 @@ exports.getSellerByID = async (req,res)=>{
             _id:req.params.id
         }
     })
-    console.log("sellers", sell)
+    // console.log("sellers", sell)
     sell = sell.filter(e=> e.users != null)
-    console.log("not null seller ",sell)
+    // console.log("not null seller ",sell)
     res.json(sell);
 }
 
 exports.changePwd = async (req,res)=>{
     var salt = bcrypt.genSaltSync(10);
-    console.log('change req', req.body)
+    // console.log('change req', req.body)
     var sell = await seller.find().populate({
         path:'users',
         match:{
@@ -55,7 +55,7 @@ exports.changePwd = async (req,res)=>{
         }
     })  
     sell = sell.filter(e=> e.users !== null)  
-    console.log('sell',sell)
+    // console.log('sell',sell)
     if(sell !=null){
         console.log('req current pwd',req.body.current)
         bcrypt.compare(req.body.current, sell[0].users.password).then(async matched=>{
@@ -157,14 +157,14 @@ exports.getSaleInfo = async (req,res)=>{
             {path:'products'}
         ]
     });
-    console.log(orders);
+    // console.log(orders);
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
     orders = orders.filter(o=> o.product.length!=0)
     const current = new Date()
     var todayOrders = orders.filter(e => (e.orderDate.getDate()== current.getDate() && e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
-    console.log("order daily", todayOrders)
+    // console.log("order daily", todayOrders)
     var r={totalEarn:0,totalSale:0,totalProfit:0,totalY:0,seller:""}
     if(todayOrders.length!=0){
         r = calIncome(todayOrders)
@@ -205,7 +205,7 @@ exports.getMonthlySale= async (req,res)=>{
     orders = orders.filter(o=> o.product.length!=0)
     const current = new Date()
     var thisMonth = orders.filter(e => (e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
-    console.log("got orders monthly",orders)
+    // console.log("got orders monthly",orders)
     var r={totalEarn:0,totalSale:0,totalProfit:0, totalY:0, seller:""}
     if(thisMonth.length!=0){
         r = calIncome(thisMonth)
@@ -241,7 +241,7 @@ exports.getYearlySale = async (req,res)=>{
     orders = orders.filter(o=> o.product.length!=0)
     var current = new Date()
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
-    console.log("orders yearly", orders)
+    // console.log("orders yearly", orders)
     var y ={totalSale:0,totalEarn:0,totalProfit:0,seller:""}
     if(orders.length!=0){
         y = calIncome(orders)
@@ -286,5 +286,24 @@ exports.payAsSeller= async(req,res)=>{
 }
 exports.getPaymentSeller=async(req,res)=>{
     var payseller = await paymentModel.find({sellers:req.params.id}).slice('array',-1);
-    res.json(payseller);
+    var status,dateValid;
+    if(payseller.length>0){
+        console.log("true")
+        var validateDate = new Date();
+        var expireDate = new Date(payseller[0].expiredPayment);
+        var oneDay = 1000 * 3600 * 24; 
+        var Difference_In_Time = expireDate.getTime()- validateDate.getTime();
+        var dayValid = Difference_In_Time/oneDay;
+        console.log(dayValid)
+        if(dayValid>=0){
+            console.log("true")
+            status="valid";
+            dateValid=dayValid;
+        }else{
+            status="invalid";
+        }
+    }else{
+        payseller[0].status="special";
+    } 
+    res.json([{data:payseller[0],status:status,dateValid:dateValid}]);
 }
