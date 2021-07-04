@@ -241,12 +241,12 @@ exports.getYearlySale = async (req,res)=>{
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
     console.log("orders yearly", orders)
     var y ={totalSale:0,totalEarn:0,totalProfit:0,seller:""}
-    if(orders.lenth!=0){
+    if(orders.length!=0){
         y = calIncome(orders)
         y.seller= orders[0].product[0].sellers.company
     }
     
-  
+    // res.json(orders)
     res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit, seller: y.seller, reportDate:new Date(), type:"y"})
 }
 exports.registerSellerPayment=async(req,res)=>{
