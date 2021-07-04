@@ -47,7 +47,7 @@
                                 <a :href="'http://localhost:3000'+dataSet.img[0]">Image</a>
                             </div>
                             <label for="productImg" class="form-label">Product's image</label>
-                            <input ref="img" class="form-control" type="file" id="productImg" name="img"/>
+                            <input ref="img" class="form-control" type="file" id="productImg" name="img" accept="image/*"/>
                   
                     </div>
 

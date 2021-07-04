@@ -53,7 +53,7 @@
                       <option  v-for="item in categories" :key = item.id :value="item.name">{{item.name}}</option>
                     </select>
                     <label for="productImg" class="form-label">Product's image</label>
-                    <input ref="img" class="form-control" type="file" id="productImg" name="img" />
+                    <input ref="img" class="form-control" type="file" id="productImg" name="img" accept="image/*" />
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
@@ -148,7 +148,7 @@ export default {
             id:[],
             phoneNumber:[],
             page:{},
-            
+            newModal:null,
         }
     },
     components:{
@@ -199,7 +199,8 @@ export default {
           const response=await axios.post('http://localhost:3000/postProduct', form)
           this.log = response.data.message
           if(response.data.message){
-            this.form.hide();
+            alert("New product has been added");
+            this.modal.hide();
           }          
       }
     }

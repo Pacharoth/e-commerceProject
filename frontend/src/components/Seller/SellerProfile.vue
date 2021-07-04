@@ -84,7 +84,7 @@
                   </div>
                   <form ref="form" @submit.prevent="addImg()" enctype="multipart/form-data">
                     <div class="modal-body">
-                      <input class="form-control" type="file" id="proImg" name="proImg" />
+                      <input class="form-control" type="file" id="proImg" name="proImg" accept="image/*"/>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
