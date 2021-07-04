@@ -285,7 +285,9 @@ exports.payAsSeller= async(req,res)=>{
     }
 }
 exports.getPaymentSeller=async(req,res)=>{
-    var payseller = await paymentModel.find({sellers:req.params.id}).slice('array',-1);
+    var payseller = await paymentModel.find({sellers:req.params.id});
+    payseller = payseller.pop()
+    console.log(payseller)
     var status,dateValid;
     if(payseller.length>0){
         console.log("true")

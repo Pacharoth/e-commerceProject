@@ -143,19 +143,22 @@ export default {
         user = computed(()=>store.getters['auth/getSession']);
         watch(type,async()=>{
             if(user.value.userid){
-                sellerid.value=await getSeller().data;
+                var {data} = await getSeller();
+                sellerid.value=data[0];
                 await loadData();
             }
         })
         watch(user,async()=>{
             if(user.value.userid){
-                sellerid.value=await getSeller().data;
+                 var {data} = await getSeller();
+                sellerid.value=data[0];
                 await loadData();
             }
         })
         onMounted(async()=>{
             if(user.value.userid){
-                sellerid.value=await getSeller().data;
+                var {data} = await getSeller();
+                sellerid.value=data[0];
                 await loadData();
             }
             newModal.value = new Modal(modal.value);
@@ -229,7 +232,8 @@ export default {
 
         }
         async function getSeller(){
-            var response = await axios.post(localhost+'/getSeller/'+user.value.userid);
+            var response = await axios.get(localhost+'/getSeller/'+user.value.userid);
+            console.log(response.data)
             return response;
         }
         async function loadData(){

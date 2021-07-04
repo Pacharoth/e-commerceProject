@@ -6,6 +6,7 @@ import authStore from './auth';
 import rolesStore from './roles';
 import sellerStore from './seller';
 import feedbackStore from './feedback';
+import adminStore from './admin';
 const store=createStore({
     plugins:[createLogger()],
     modules:{
@@ -16,6 +17,7 @@ const store=createStore({
         role:rolesStore,
         seller:sellerStore,
         feedback:feedbackStore,
+        admin:adminStore,
     }
 });
 export default store;

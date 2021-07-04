@@ -91,6 +91,7 @@ const insertPayPalSeller = async(datas)=>{
         onApprove:async(data,actions)=>{
           const order = await actions.order.capture();
           console.log(order,data);  
+          console.log(datas.seller);
           let response=await axios.post(localhost+'/paymentseller',{
             sellers:datas.seller._id,
             type:datas.typepayment,
@@ -102,7 +103,7 @@ const insertPayPalSeller = async(datas)=>{
           }
           )
           if(response.data.save){
-            alert(datas.seller.compan+" has been purchased as "+datas.typepayment);
+            alert(datas.seller.company+" has been purchased as "+datas.typepayment);
             datas.modal.value.hide();
             datas.router.push({path:'/'});
             return true;
