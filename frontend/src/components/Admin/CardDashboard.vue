@@ -55,7 +55,7 @@
     </div>
 </template>
 <script>
-import { computed, ref, watch } from '@vue/runtime-core';
+import { computed, onMounted, ref, watch } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 export default {
     name:'CardDashboard',
@@ -74,22 +74,18 @@ export default {
         admin = computed(()=>store.getters['admin/getData']);
         watch(admin,async()=>{
             resetToZero();
-            if(admin.value.result.length==0){
-                earning.value =0
-                profit.value =0
-                payment.value = 0
-            }   
-            else if(admin.value.result.length==1){
-                earning.value=admin.value.result[0].totalEarning
-                profit.value=admin.value.result[0].totalProfile
-                payment.value=admin.value.result[0].totalPayment
-                
-            }else if(admin.value.result.length>1){
-                for(var i in admin.value.result){
+              for(var i in admin.value.result){
                     earning.value+=admin.value.result[i].totalEarning
                     profit.value+=admin.value.result[i].totalProfile
                     payment.value+=admin.value.result[i].totalPayment
                 }
+        })
+        onMounted(()=>{
+            resetToZero();
+            for(var i in admin.value.result){
+                earning.value+=admin.value.result[i].totalEarning
+                profit.value+=admin.value.result[i].totalProfile
+                payment.value+=admin.value.result[i].totalPayment
             }
         })
         function resetToZero(){

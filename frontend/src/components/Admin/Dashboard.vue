@@ -94,15 +94,12 @@ export default {
         },
         options: {
             layout:{Padding:0},
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Statistic'
-                }
-            },
+            // plugins: {
+            //     legend: {
+            //         position: 'top',
+            //     },
+                
+            // },
             scales: {
         yAxes: [{
             ticks: {
