@@ -87,7 +87,7 @@ export default {
         canvas:{
             parentNode:{
                 style:{
-                    height:'30vh',
+                    height:'40vh',
                     width:'80vh'
                 }
             }
@@ -103,6 +103,13 @@ export default {
                     text: 'Statistic'
                 }
             },
+            scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true
+            }
+        }]
+    },
             responsive:true,
             maintainAspectRatio: false,  
         },
