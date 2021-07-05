@@ -29,7 +29,6 @@ exports.registerSeller = async(req,res)=>{
 }
 exports.getSellers = async(req,res)=>{    
     res.json(res.pagination);
-
 }
 exports.getSellerByID = async (req,res)=>{
     var sell = await seller.find().populate({
@@ -73,15 +72,11 @@ exports.changePwd = async (req,res)=>{
             }else{
                 console.log("pwd not match")
                 res.json({message:"Password is incorrect!",err:true});
-
             }
-
-        
         }).catch(notMatch =>{
                 console.log('unmatched',notMatch);
                 res.json({message:"Password is not match !",err:true});
         })
-        
     }
 }
 exports.addProImg = async (req,res)=>{
@@ -114,8 +109,6 @@ exports.addProImg = async (req,res)=>{
             console.log('err is catched found when saving',error)
         }
     }
-    
-    
     // res.json({message:"proimg arrived server"})
 }
 function calIncome(orders){
@@ -138,7 +131,6 @@ function calIncome(orders){
         }
     }
     return {totalSale:saleUnit, totalEarn:totalIncome, totalProfit:totalProfit}
-
 }
 exports.getSaleInfo = async (req,res)=>{
     var orders = await order.find().populate('users').populate({
@@ -173,12 +165,8 @@ exports.getSaleInfo = async (req,res)=>{
         r.totalY=y.totalProfit
         r.seller = orders[0].product[0].sellers.company
     }
-    
-    
-    
     res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:r.totalY, seller: r.seller, reportDate:new Date(), type:"d"})
     // res.json(orders)
-
 }
 
 exports.getMonthlySale= async (req,res)=>{
@@ -245,7 +233,6 @@ exports.getYearlySale = async (req,res)=>{
         y = calIncome(orders)
         y.seller= orders[0].product[0].sellers.company
     }
-    
     // res.json(orders)
     res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit, seller: y.seller, reportDate:new Date(), type:"y"})
 }

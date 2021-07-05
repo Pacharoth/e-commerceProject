@@ -9,26 +9,26 @@
             <div class="container-fluid">
               <p> <span>Seller:</span> 
               <span >{{statistic.seller}}</span>
-            </p>
+             </p>
               <p><span>Date:</span> <span>{{new Date(statistic.reportDate).toLocaleDateString()}}</span></p>
               <hr class="p-0">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Total Sold Units</th>
-                    <td>{{statistic.saleUnit}}</td>
-                    <!-- <th scope="col"></th> -->
-                  </tr>
-                  <tr>
-                      <th>Total Earn</th>
-                      <td>{{statistic.totalEarn}}</td>
-                  </tr>
-                  <tr>
-                      <th>Total Profit</th>
-                      <td>{{statistic.totalPro}}</td>
-                  </tr>
-                </thead>
-              </table>
+                <table class="table">
+                <tbody>
+                    <tr>
+                    <th class="report-title" >Total Sold Units</th>
+                    <th class="report-data">{{statistic.saleUnit}}</th>
+                    </tr>
+                    <tr>
+                    <th class="report-title">Total Earn</th>
+                    <td class="report-data">{{statistic.totalEarn}}</td>
+                    </tr>
+                    <tr>
+                    <th class="report-title">Total Profit</th>
+                    <td class="report-data">{{statistic.totalPro}}</td>
+                    </tr>
+                </tbody>
+                </table>
+              
               <!-- <hr class="p-0"> -->
             </div>
         </div>
@@ -44,22 +44,28 @@ export default {
     computed:{
         statistic(){
             return this.$store.getters['seller/getStatistic'];
+        },
+        seller(){
+            return this.$store.getters['/seller/getSellers']
         }
     },
+    // mounted(){
+    //     console.log("sellers from store", this.seller)
+    // },
     setup(){
         const form = ref(null);
         function generatePDF(){
-           let pdf = new jsPDF('p','pt','A3');
-           pdf.internal.pageSize.width=640;
+           let pdf = new jsPDF('p','pt','A4');
+           pdf.internal.pageSize.width=530;
             pdf.html(form.value,{
                 filename:"report"
             }).save()
         }
         return{
-            generatePDF
+            generatePDF,
+            form
         }
-    }
-
+    },
 
 }
 </script>
@@ -75,16 +81,24 @@ export default {
     }
     .containers{
         margin: auto;
-        width: 50%;
+        width: 35%;
         margin-top: 2%;
     }
     hr{
         color: #D60265;
-      
+    }
+    .report-title{
+        text-align: left;
+        padding-left: 5%;
+    }
+    .report-data{
+        text-align: left;
+    }
+    .container-fluid{
+        font-weight: bold;
+        color:black;
     }
  
-
-  
     @media (max-width:862px){
         .containers{
             width: 70%;
