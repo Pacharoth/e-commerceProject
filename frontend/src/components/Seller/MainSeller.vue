@@ -28,11 +28,11 @@
                     </div>
                     <div class="form-group">
                       <label for="price">Buy Price per unit</label>
-                      <input v-model="product.buyPrice" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Buy Price per unit">             
+                      <input v-model="product.buyPrice" type="number" step="any" min="0" class="form-control" name="price" placeholder="Buy Price per unit">             
                     </div>
                     <div class="form-group">
                       <label for="price">Price per unit</label>
-                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Price per unit">             
+                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" name="price" placeholder="Price per unit">             
                     </div>
 
                     <div class="form-group">
@@ -53,7 +53,7 @@
                       <option  v-for="item in categories" :key = item.id :value="item.name">{{item.name}}</option>
                     </select>
                     <label for="productImg" class="form-label">Product's image</label>
-                    <input ref="img" class="form-control" type="file" id="productImg" name="img" />
+                    <input ref="img" class="form-control" type="file" id="productImg" name="img" accept="image/*" />
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
@@ -148,7 +148,7 @@ export default {
             id:[],
             phoneNumber:[],
             page:{},
-            
+            newModal:null,
         }
     },
     components:{
@@ -199,7 +199,8 @@ export default {
           const response=await axios.post('http://localhost:3000/postProduct', form)
           this.log = response.data.message
           if(response.data.message){
-            this.form.hide();
+            alert("New product has been added");
+            this.modal.hide();
           }          
       }
     }

@@ -19,10 +19,11 @@
 </template>
 <script>
 import Chart from 'chart.js/auto';
-import linegraph from '../chart/chartline';
+// import linegraph from '../chart/chartline';
 import CardDashboard from './CardDashboard';
 import { ref, toRefs } from '@vue/reactivity';
-import { onMounted } from '@vue/runtime-core';
+import {  computed, onMounted, watch} from '@vue/runtime-core';
+import { useStore } from 'vuex';
 export default {
     name:"Dashboard",
     props:['title'],
@@ -31,18 +32,139 @@ export default {
     },
     setup(props) {
         const chart =ref(null)
-        const chartdata=ref(linegraph);
+        const chartdata=ref({});
         const {title} = toRefs(props);
+        const store= useStore();
+        var profit=[],payment=[],earning=[],label=[];
+        var status = computed(()=>store.getters['admin/getStatus']);
+        const realchart =ref(null);
+        const admin= computed(()=>store.getters['admin/getData']);
         const title_dashboard = title.value;
-        onMounted(()=>{
+        watch(admin,async()=>{
+            // console.log(admin.value)
+            await loadDataAdmin();
+             chartdata.value =getGraph()
+            realchart.value.data.labels=label;
+            realchart.value.data.datasets[0].data=profit.reverse()
+            realchart.value.data.datasets[1].data=earning.reverse()
+            realchart.value.data.datasets[2].data=payment.reverse();
+            console.log(realchart.value.data)
+        })
+        function getGraph(){
+            return {
+            type: 'line',
+            data: {
+            labels:label,
+            datasets: [{
+                label: 'Profit',
+                data:profit,
+                backgroundColor: '#e3eefe',
+                fill:true,
+                borderColor: '#4691FF',
+                borderWidth: 1,
+                tension: 0.5
+            },
+            {
+                label: 'Earning',
+                data: earning,
+                backgroundColor: '#e3eefe',
+                fill:true,
+                borderColor: '#4691FF',
+                borderWidth: 1,
+                tension: 0.5
+            },
+            {
+                label: 'Payment',
+                data: payment,
+                backgroundColor: '#e3eefe',
+                fill:true,
+                borderColor: '#4691FF',
+                borderWidth: 1,
+                tension: 0.5
+            },
+            ]
+        },
+        canvas:{
+            parentNode:{
+                style:{
+                    height:'40vh',
+                    width:'80vh'
+                }
+            }
+        },
+        options: {
+            layout:{Padding:0},
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Statistic'
+                }
+            },
+            scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true
+            }
+        }]
+    },
+            responsive:true,
+            maintainAspectRatio: false,  
+        },
+    
+    };
+        }
+        onMounted(async()=>{
             console.log(title.value)
-            new Chart(chart.value,chartdata.value);
+
+            chartdata.value= getGraph();
+            realchart.value=new Chart(chart.value,chartdata.value);
         })  
+        async function loadDataAdmin(){
+            if(admin.value.result){
+                profit=[]
+                payment=[]
+                earning=[]
+                label=[]
+                for(var i in admin.value.result){
+                profit.push(admin.value.result[i].totalProfile)
+                payment.push(admin.value.result[i].totalPayment)
+                earning.push(admin.value.result[i].totalEarning)
+                if(status.value=="daily"){
+                    let data = new Date()
+                    data.setUTCHours(admin.value.result[i]._id.hour)
+                    data.setUTCMinutes(admin.value.result[i]._id.minute);
+                    console.log(data.toLocaleString())
+                    label.push(`${data.getHours()}:${data.getMinutes()}`)
+                }else if(status.value=="monthly"){
+                    let data = new Date()
+                    let result = admin.value.result[i]._id
+                    data.setMonth(result.month-1);
+                    data.setFullYear(result.year);
+                    data.setDate(result.day)
+                    label.push(data.toLocaleString());
+                }else if(status.value=="yearly"){
+                    let data = new Date()
+                    let result = admin.value.result[i]._id
+                    data.setMonth(result.month-1);
+                    data.setFullYear(result.year);
+                    label.push(`${data.getMonth()}/${data.getFullYear()}`);
+                }
+            }
+            }
+        }
         return{
             //data
+            status,
             title_dashboard,
             chartdata,
             chart,
+            admin,
+            label,
+            loadDataAdmin,
+            realchart
         }
     },
 }

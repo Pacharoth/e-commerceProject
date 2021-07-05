@@ -5,8 +5,9 @@ const fs  = require('fs');
 const user = require('../models/userModel');
 const order = require('../models/orderModel');
 const { registerUser } = require('../utils/registerUser');
+const paymentModel = require('../models/paymentModel');
 exports.registerSeller = async(req,res)=>{
-    console.log(req.body)   
+    // console.log(req.body)   
     const {company,contact,address,email,_id}= req.body;
     const auser = await seller.find({users:_id});
     const newSeller =await user.find({email:email});
@@ -20,7 +21,7 @@ exports.registerSeller = async(req,res)=>{
         await aseller.save()
         const newRole =await role.findOne({name:"seller"})
         newSeller[0].roles=newRole._id;
-        console.log(newSeller);
+        // console.log(newSeller);
         await newSeller[0].save();
         res.json(await seller.find({_id:aseller._id}).populate('users'));
     }else{
@@ -38,15 +39,15 @@ exports.getSellerByID = async (req,res)=>{
             _id:req.params.id
         }
     })
-    console.log("sellers", sell)
+    // console.log("sellers", sell)
     sell = sell.filter(e=> e.users != null)
-    console.log("not null seller ",sell)
+    // console.log("not null seller ",sell)
     res.json(sell);
 }
 
 exports.changePwd = async (req,res)=>{
     var salt = bcrypt.genSaltSync(10);
-    console.log('change req', req.body)
+    // console.log('change req', req.body)
     var sell = await seller.find().populate({
         path:'users',
         match:{
@@ -54,7 +55,7 @@ exports.changePwd = async (req,res)=>{
         }
     })  
     sell = sell.filter(e=> e.users !== null)  
-    console.log('sell',sell)
+    // console.log('sell',sell)
     if(sell !=null){
         console.log('req current pwd',req.body.current)
         bcrypt.compare(req.body.current, sell[0].users.password).then(async matched=>{
@@ -155,14 +156,16 @@ exports.getSaleInfo = async (req,res)=>{
             },
             {path:'products'}
         ]
-    })
+    });
+    // console.log(orders);
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
+    orders = orders.filter(o=> o.product.length!=0)
     const current = new Date()
     var todayOrders = orders.filter(e => (e.orderDate.getDate()== current.getDate() && e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
-    console.log("order daily", todayOrders)
-    var r={totalEarn:0,totalSale:0,totalProfit:0,totalY:0}
+    // console.log("order daily", todayOrders)
+    var r={totalEarn:0,totalSale:0,totalProfit:0,totalY:0,seller:""}
     if(todayOrders.length!=0){
         r = calIncome(todayOrders)
     }
@@ -170,11 +173,12 @@ exports.getSaleInfo = async (req,res)=>{
     if(orders.length !=0){
         let y = calIncome(orders)
         r.totalY=y.totalProfit
+        r.seller = orders[0].product[0].sellers.company
     }
     
     
     
-    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:r.totalY, seller: orders[0].product[0].sellers.company, reportDate:new Date(), type:"d"})
+    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:r.totalY, seller: r.seller, reportDate:new Date(), type:"d"})
     // res.json(orders)
 
 }
@@ -198,12 +202,14 @@ exports.getMonthlySale= async (req,res)=>{
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
+    orders = orders.filter(o=> o.product.length!=0)
     const current = new Date()
     var thisMonth = orders.filter(e => (e.orderDate.getMonth()==current.getMonth() && e.orderDate.getFullYear()==current.getFullYear()))
-    console.log("got orders monthly",orders)
-    var r={totalEarn:0,totalSale:0,totalPro:0, totalY:0}
+    // console.log("got orders monthly",orders)
+    var r={totalEarn:0,totalSale:0,totalProfit:0, totalY:0, seller:""}
     if(thisMonth.length!=0){
         r = calIncome(thisMonth)
+        r.seller = thisMonth[0].product[0].sellers.company
     }
     
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
@@ -211,7 +217,7 @@ exports.getMonthlySale= async (req,res)=>{
         y = calIncome(orders)
         r.totalY= y.totalProfit
     }
-    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:r.totalY, seller: orders[0].product[0].sellers.company, reportDate:new Date(), type:"m"} )
+    res.json({saleUnit:r.totalSale,totalEarn:r.totalEarn, totalPro:r.totalProfit, yearPro:r.totalY, seller: r.seller, reportDate:new Date(), type:"m"} )
 }
 exports.getYearlySale = async (req,res)=>{
     var orders = await order.find().populate('users').populate({
@@ -232,22 +238,74 @@ exports.getYearlySale = async (req,res)=>{
     for(let i=0;i<orders.length;i++){
         orders[i].product = orders[i].product.filter(p => p.sellers.users !==null)
     }
+    orders = orders.filter(o=> o.product.length!=0)
     var current = new Date()
     orders = orders.filter(e=> e.orderDate.getFullYear()==current.getFullYear())
-    console.log("orders yearly", orders)
-    var y ={totalSale:0,totalEarn:0,totalProfit:0}
-    if(orders.lenth!=0){
+    // console.log("orders yearly", orders)
+    var y ={totalSale:0,totalEarn:0,totalProfit:0,seller:""}
+    if(orders.length!=0){
         y = calIncome(orders)
+        y.seller= orders[0].product[0].sellers.company
     }
     
-  
-    res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit, seller: orders[0].product[0].sellers.company, reportDate:new Date(), type:"y"})
+    // res.json(orders)
+    res.json({saleUnit:y.totalSale,totalEarn:y.totalEarn, totalPro:y.totalProfit, yearPro:y.totalProfit, seller: y.seller, reportDate:new Date(), type:"y"})
 }
 exports.registerSellerPayment=async(req,res)=>{
-    var response =await registerUser(req,res,"seller");
-    res.json(response);
+    await registerUser(req,res,"seller");
+
 }
 exports.checkCompany=async(req,res)=>{
     var response= await seller.find({company:req.body.company});
     res.json(response);
+}
+exports.payAsSeller= async(req,res)=>{
+    const {sellers,type,payment} = req.body;
+    var date = new Date();
+    if(type=="free"){
+        date.setDate(date.getDate()+7);
+    }else if(type=='month'){
+        date.setDate(date.getDate()+30);
+    }else if(type=='year'){
+        date.setDate(date.getDate()+365+30);
+    }
+    const paySeller = new paymentModel({
+        sellers,
+        type,
+        payment,
+        paymentAt:new Date,
+        expiredPayment:date,
+    })
+    try {
+        await paySeller.save();
+        res.json({save:true})
+    } catch (error) {
+        console.log(error);
+        res.json({save:false});
+    }
+}
+exports.getPaymentSeller=async(req,res)=>{
+    var payseller = await paymentModel.find({sellers:req.params.id});
+    payseller = payseller.pop()
+    console.log(payseller)
+    var status,dateValid;
+    if(payseller.length>0){
+        console.log("true")
+        var validateDate = new Date();
+        var expireDate = new Date(payseller[0].expiredPayment);
+        var oneDay = 1000 * 3600 * 24; 
+        var Difference_In_Time = expireDate.getTime()- validateDate.getTime();
+        var dayValid = Difference_In_Time/oneDay;
+        console.log(dayValid)
+        if(dayValid>=0){
+            console.log("true")
+            status="valid";
+            dateValid=dayValid;
+        }else{
+            status="invalid";
+        }
+    }else{
+        status="special";
+    } 
+    res.json([{data:payseller[0],status:status,dateValid:dateValid}]);
 }

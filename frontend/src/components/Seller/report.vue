@@ -29,7 +29,7 @@
                   </tr>
                 </thead>
               </table>
-              <hr class="p-0">
+              <!-- <hr class="p-0"> -->
             </div>
         </div>
     </form>
@@ -51,7 +51,7 @@ export default {
            var pdf = new jsPDF('p','pt','A3');
            pdf.internal.pageSize.width=520;
             pdf.html(forms.value,{
-                filename:"Receipt_"+statistic.value.type
+                filename:"Report_"+statistic.value.type
             }).save()
         }
         return{
@@ -84,19 +84,9 @@ export default {
         color: #D60265;
       
     }
-    .description{
-        color: #D60265;
-    }
-    .detail{
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      max-width: 100px;
-    }
-    .total{
-        align-items: center;
-        padding-bottom: 5%;
-    }
+ 
+
+  
     @media (max-width:862px){
         .containers{
             width: 70%;

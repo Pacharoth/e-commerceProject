@@ -12,4 +12,7 @@ router.get('/getSaleInfo/:id',sellerController.getSaleInfo)
 router.get('/getMonthlySale/:id',sellerController.getMonthlySale)
 router.get('/getYearlySale/:id',sellerController.getYearlySale)
 router.post('/company',sellerController.checkCompany);
+router.post('/registerseller',sellerController.registerSellerPayment);
+router.post('/paymentseller',sellerController.payAsSeller);
+router.post('/paymentseller/:id',sellerController.getPaymentSeller);
 module.exports = router

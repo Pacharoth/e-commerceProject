@@ -5,7 +5,7 @@
         <form class="form-inline">
           <input class="form-control  rounded-pill search" type="search" placeholder="&#xF002; Search"/>
         </form>
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills" v-if="sellerpage=='sellerreport'||sellerpage=='sellerpage'">
           <li class="nav-item ">
             <a @click="daily()" class="nav-link header report"  href="#">Daily</a>
           </li>
@@ -38,13 +38,18 @@
             <a class="nav-link dropdown-toggle icons" data-toggle="dropdown" href="#" role="button" >
               <!-- <em class="fas fa-user-circle user" style="margin-right: 8%;
               font-size: 1.5vw;"></em> -->
-              <img class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+              <img v-if="user.img" class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+              <img v-else class=" profile-img" src="../../assets/logo.png" alt="">
 
               {{user.user}}
             </a>
-            <div class="dropdown-menu profile" ref="profile">
+            <div class="dropdown-menu profile end-0" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
                 <router-link to="/" class="dropdown-item header" >Homepage</router-link>
+                <slot v-if="authPayment">
+                <router-link :to="{name:'registerseller'}" class="dropdown-item header" v-if="authPayment[0].dateValid<=10">{{authPayment[0].dateValid}} valid days </router-link>
+
+                </slot>
                 <router-link class="dropdown-item header" @click="logout" to="/">Log out</router-link>
             </div>
             </li>
@@ -63,10 +68,13 @@ import { showChatLists, showNotifications } from '../../hook/effect';
 import { logouts } from '../../utils/FormValidation';
 import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
+import { computed } from '@vue/runtime-core';
 export default {
     name:'Seller',
     setup() {
       const store = useStore();
+      var authPayment= computed(()=>store.getters['seller/getPayment'])
+
       function showChatList(){
         showChatLists(store);
       }
@@ -82,11 +90,13 @@ export default {
         showChatList,
         showNotification,
         logout,
+        authPayment,
       }
     },
     data() {
       return {
         // user:{},
+        initialize:[],
       }
     },
     components:{
@@ -96,11 +106,15 @@ export default {
     computed:{
       user(){
         return this.$store.getters['auth/getSession'];
+      },
+      sellerpage(){
+        return this.$route.name;
       }
     },
     async mounted() {
        const  res = await axios.get("http://localhost:3000/getSaleInfo/"+localStorage.getItem('userid'));
         console.log("sale info", res)
+        this.initialize=res.data;
         this.$store.dispatch('seller/loadStatistic',res.data);
     },
     methods: {
@@ -213,7 +227,7 @@ export default {
   color: #eee;
 }
 .profile{
-  left: 0;
+  left: auto;
 }
 .customerOrder {
   left: auto;

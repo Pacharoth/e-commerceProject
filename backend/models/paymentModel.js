@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+const {Schema, model}=require('mongoose');
 const paymentModel = new Schema({
     sellers:{
         type:Schema.Types.ObjectId,
@@ -7,13 +7,17 @@ const paymentModel = new Schema({
     },
     type:{
         type:String,
-        default:"Free"
+        default:"free"
     },
     payment:{
         type:Number,
         require:true,
     },
     paymentAt:{
+        type:Date,
+        require:true,
+    },
+    expiredPayment:{
         type:Date,
         require:true,
     }
