@@ -62,7 +62,11 @@ exports.getYearlyReport = async(req,res)=>{
                     day:{$dayOfMonth:"$registerAt"},
                     month:{$month:"$registerAt"},
                     year:{$year:"$registerAt"},
+                    hour:{$hour:"$registerAt"},
+                    minute:{$minute:"$registerAt"},
+                    second:{$second:"$registerAt"},
                     roles:"$roles",
+                    
                 }
             }
         },
@@ -73,7 +77,7 @@ exports.getYearlyReport = async(req,res)=>{
             }
         }
     ])
-    res.json({result:result,sellers:sellers.length});
+    res.json({result:result,sellers:sellers.length,status:"yearly"});
 }
 exports.getMonthlyReport = async(req,res)=>{
     var result =await payment.aggregate([
@@ -91,6 +95,7 @@ exports.getMonthlyReport = async(req,res)=>{
                     month:{$month:"$paymentAt"},
                     year:{$year:"$paymentAt"},
                     day:{$dayOfMonth:"$paymentAt"},
+                    
                     // sellers:"$sellers",
                     // type:"$type",
                 },
@@ -137,6 +142,9 @@ exports.getMonthlyReport = async(req,res)=>{
                     day:{$dayOfMonth:"$registerAt"},
                     month:{$month:"$registerAt"},
                     year:{$year:"$registerAt"},
+                    hour:{$hour:"$registerAt"},
+                    minute:{$minute:"$registerAt"},
+                    second:{$second:"$registerAt"},
                     roles:"$roles",
                 }
             }
@@ -149,7 +157,7 @@ exports.getMonthlyReport = async(req,res)=>{
             }
         }
     ])
-    res.json({result:result,sellers:sellers.length});
+    res.json({result:result,sellers:sellers.length,status:"monthly"});
 }
 exports.getDialyReport = async(req,res)=>{
     var result =await payment.aggregate([
@@ -216,6 +224,9 @@ exports.getDialyReport = async(req,res)=>{
                     day:{$dayOfMonth:"$registerAt"},
                     month:{$month:"$registerAt"},
                     year:{$year:"$registerAt"},
+                    hour:{$hour:"$registerAt"},
+                    minute:{$minute:"$registerAt"},
+                    second:{$second:"$registerAt"},
                     roles:"$roles",
                 }
             }
@@ -229,5 +240,5 @@ exports.getDialyReport = async(req,res)=>{
             }
         }
     ])
-    res.json({result:result,sellers:sellers.length});
+    res.json({result:result,sellers:sellers.length,satus:"daily"});
 }

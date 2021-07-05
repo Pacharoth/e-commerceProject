@@ -22,7 +22,7 @@
             </div>
             <div class="text">
                 <span class="title" v-if="statistic.totalEarn&&title=='Seller'">${{statistic.totalEarn}}</span>
-                <span class="title" v-if="earning&&title=='Admin'">${{earning}}</span>
+                <span class="title" v-if="earning&&title=='Admin'">${{earning.toFixed(2)}}</span>
                 <span class="content-text">Total Earning</span>
             </div>
         </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="text">
                 <span class="title" v-if="statistic.totalPro&&title=='Seller'">${{statistic.totalPro}}</span>
-                <span class="title" v-if="profit&&title=='Admin'">${{profit}}</span>
+                <span class="title" v-if="profit&&title=='Admin'">${{profit.toFixed(2)}}</span>
                 <span class="content-text">Total Profit</span>
             </div>
         </div>
@@ -46,7 +46,7 @@
             </div>
             <div class="text">
                 <span class="title" v-if="statistic.yearPro&&title=='Seller'">${{statistic.yearPro}}</span>
-                <span class="title" v-if="payment&&title=='Admin'">${{payment}}</span>
+                <span class="title" v-if="payment&&title=='Admin'">${{payment.toFixed(2)}}</span>
                 <span class="content-text" v-if="title=='Seller'">This year profit</span>
                 <span class="content-text" v-else>Total Payment</span>
             </div>
@@ -73,6 +73,7 @@ export default {
         payment=ref(0),
         admin = computed(()=>store.getters['admin/getData']);
         watch(admin,async()=>{
+            resetToZero();
             if(admin.value.result.length==0){
                 earning.value =0
                 profit.value =0
@@ -81,14 +82,21 @@ export default {
             else if(admin.value.result.length==1){
                 earning.value=admin.value.result[0].totalEarning
                 profit.value=admin.value.result[0].totalProfile
-                payment.value=admin.value.result[0].totalPayment;
+                payment.value=admin.value.result[0].totalPayment
                 
             }else if(admin.value.result.length>1){
                 for(var i in admin.value.result){
-                    console.log(i)
+                    earning.value+=admin.value.result[i].totalEarning
+                    profit.value+=admin.value.result[i].totalProfile
+                    payment.value+=admin.value.result[i].totalPayment
                 }
             }
         })
+        function resetToZero(){
+            earning.value=0
+            profit.value=0
+            payment.value=0
+        }
         return{
             admin,
             earning,
@@ -105,7 +113,6 @@ export default {
     @import '../../assets/sass/carddasboard';
     .dashboard-container{
         .dashboard-card{
-            
             @include card_dashboard;
         }   
     }

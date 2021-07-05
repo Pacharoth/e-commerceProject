@@ -55,6 +55,7 @@ import {localhost, logouts} from '../../utils/FormValidation'
 import { computed, onMounted } from '@vue/runtime-core';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import { useRoute } from 'vue-router';
 export default {
     title:'Admin',
     name:"AdminLayout",
@@ -73,6 +74,7 @@ export default {
         const modal = ref(null); //this.$ref.modal
         const nav =ref(null); //this.$ref.nav
         const sidebar = ref(null),
+        route = useRoute(),
         month = ref(""),
         year=ref(""),
         daily=ref("active1"); 
@@ -106,21 +108,35 @@ export default {
         }
         async function viewDaily(){
             changeColorButton(daily,month,year);
-            var {data} = await axios.get(localhost+"/admin/avgdaily");
-            console.log(data);
-            store.dispatch("admin/setData",data);
+            var response 
+            if(checkPage)response= await axios.get(localhost+"/admin/avgdaily");
+            console.log(response.data);
+            store.dispatch("admin/setData",response.data);
+            store.dispatch("admin/setStatus","daily")
+
+        }
+        function checkPage(){
+            if(route.path=="admindashboard")return true;
+            else return false;
         }
         async function viewMonthly(){
             changeColorButton(month,daily,year);
-            var {data} = await axios.get(localhost+"/admin/avgmonth");
-            console.log(data);
-            store.dispatch("admin/setData",data);
+            var response;
+            if(checkPage){
+                response  = await axios.get(localhost+"/admin/avgmonth");
+            }
+            console.log(response.data);
+            store.dispatch("admin/setData",response.data);
+            store.dispatch("admin/setStatus","monthly")
         }
         async function viewAnnually(){
             changeColorButton(year,month,daily)
-            var {data} = await axios.get(localhost+"/admin/avgyear");
-            console.log(data);
-            store.dispatch("admin/setData",data);
+            var response;
+            if(checkPage)response =await axios.get(localhost+"/admin/avgyear");
+            console.log(response.data);
+            store.dispatch("admin/setData",response.data);
+            store.dispatch("admin/setStatus","yearly")
+
         }
         function changeColorButton(active,notactive1,notactive2){
             active.value="active1";
