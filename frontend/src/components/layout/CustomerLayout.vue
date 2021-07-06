@@ -30,7 +30,7 @@
                             <li><router-link to="/edituser" v-if="user.role=='customer'" class="dropdown-item">Profile</router-link></li>
                             <li><router-link to="/" @click="logout" class="dropdown-item" href="#">Log Out</router-link></li>
                             <li v-if="user.role=='admin'"><router-link to="/admin" class="dropdown-item">Admin</router-link></li>
-                            <li v-if="user.role=='seller'||user.role=='admin'"><router-link to="/seller" class="dropdown-item">Seller</router-link></li>
+                            <li v-if="user.role=='seller'"><router-link to="/seller" class="dropdown-item">Seller</router-link></li>
                             </ul>
                         </div>
                     </div>

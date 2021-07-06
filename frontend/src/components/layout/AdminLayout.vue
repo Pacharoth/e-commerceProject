@@ -29,7 +29,6 @@
             <ul class="link nav nav-pill flex-column mb-auto">
                 <li class=""><router-link to="/admin" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
                 <li class=""><router-link to="/" class="nav-link" ><em class="bi bi-house-door me-2"></em>Homepage</router-link></li>
-                <li class=""><router-link to="/seller" class="nav-link" ><em class="bi bi-house-door me-2"></em>Sellerpage</router-link></li>
                 <li ><router-link to="/admin/seller" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
                 <li><router-link to="/admin/category" class="nav-link"><em class="fas fa-list-alt me-2"></em>Category</router-link></li>
                 <li ><router-link to="/admin/customer" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>

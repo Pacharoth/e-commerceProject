@@ -30,8 +30,9 @@ const adminRouter =     {
         },
         {
             name:'sellerdetial',
-            path:'seller/sellerdetail',
+            path:'seller/sellerdetail/:id',
             component:SellerDashboard,
+            props:true,
         },
         {
             name:'customer',
