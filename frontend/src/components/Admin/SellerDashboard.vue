@@ -39,6 +39,7 @@ export default {
                 response= await axios.get(localhost+"/admin/seller/reportdaily/"+id.value);
             }
             store.dispatch("admin/setSeller",response.data);
+            console.log(response.data)
             await loadToStore(response.data);
         }
         async function resetZero(){

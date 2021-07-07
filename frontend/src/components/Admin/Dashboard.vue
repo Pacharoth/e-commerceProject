@@ -170,8 +170,8 @@ export default {
         }
         async function loadSeller(){
             console.log(seller.value)
-                if(seller.value.length){
-               resetArray();
+            resetArray();
+            if(seller.value.length){
                 for(var i in seller.value){
                 profit.push(seller.value[i].totalProfit)
                 payment.push(seller.value[i].totalPayment)
