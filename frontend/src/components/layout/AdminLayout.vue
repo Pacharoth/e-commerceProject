@@ -115,7 +115,11 @@ export default {
 
         }
         function checkPage(){
-            if(route.path=="admindashboard")return true;
+            if(route.name=="admindashboard")return true;
+            else return false;
+        }
+        function checkSellerPage(){
+            if(route.name=="sellerdetial")return true;
             else return false;
         }
         async function viewMonthly(){
@@ -132,6 +136,7 @@ export default {
             changeColorButton(year,month,daily)
             var response;
             if(checkPage)response =await axios.get(localhost+"/admin/avgyear");
+            else if (checkSellerPage) response.data="";
             console.log(response.data);
             store.dispatch("admin/setData",response.data);
             store.dispatch("admin/setStatus","yearly")

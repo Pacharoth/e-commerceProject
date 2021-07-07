@@ -47,7 +47,8 @@
             <div class="text">
                 <span class="title" v-if="statistic.yearPro&&title=='Seller'">${{statistic.yearPro}}</span>
                 <span class="title" v-if="payment&&title=='Admin'">${{payment.toFixed(2)}}</span>
-                <span class="content-text" v-if="title=='Seller'">This year profit</span>
+                <span class="content-text" v-if="title=='Seller'&&status==''">This year profit</span>
+                <span class="content-text" v-else-if="status!==''&&title=='Seller'">Total Payment</span>
                 <span class="content-text" v-else>Total Payment</span>
             </div>
         </div>
@@ -71,7 +72,8 @@ export default {
         earning=ref(0),
         profit=ref(0),
         payment=ref(0),
-        admin = computed(()=>store.getters['admin/getData']);
+        admin = computed(()=>store.getters['admin/getData']),
+        status=computed(()=>store.getters['admin/getStatus'])
         watch(admin,async()=>{
             resetToZero();
               for(var i in admin.value.result){
@@ -98,6 +100,7 @@ export default {
             earning,
             payment,
             profit,
+            status
         }
     }
 

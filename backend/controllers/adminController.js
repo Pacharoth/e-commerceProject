@@ -345,7 +345,6 @@ exports.getYearlySeller = async(req,res)=>{
         {
             $match:{
                 "_id.year":new Date().getFullYear(),
-                "_id.month": new Date().getMonth()+1
             }
         }
         // {$unwind:"$products"},
@@ -438,7 +437,7 @@ exports.getMonthlySeller = async(req,res)=>{
                     _id:{
                         year:"$_id.year",
                         month:"$_id.month",
-    
+                        day:"$_id.day"
                     },
                     totalEarning:{
                         $sum:"$totalEarning"
@@ -550,7 +549,9 @@ exports.getDailySeller = async(req,res)=>{
                     _id:{
                         year:"$_id.year",
                         month:"$_id.month",
-    
+                        day:"$_id.day",
+                        hour:"$_id.hour",
+                        minute:"$_id.minute"
                     },
                     totalEarning:{
                         $sum:"$totalEarning"

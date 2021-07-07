@@ -4,7 +4,7 @@
         <div class="dashtitle-gen">
             <h4 v-if="title=='Admin'">Dashboard</h4>
             <h4 v-if="title=='Seller'">Seller</h4>
-            <button class="btn btn-primary">Generate Report</button>
+            <!-- <button class="btn btn-primary">Generate Report</button> -->
         </div>
             <card-dashboard :title="title"/>
         <div class="dashboard-graph">
@@ -24,6 +24,7 @@ import CardDashboard from './CardDashboard';
 import { ref, toRefs } from '@vue/reactivity';
 import {  computed, onMounted, watch} from '@vue/runtime-core';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 export default {
     name:"Dashboard",
     props:['title'],
@@ -31,7 +32,8 @@ export default {
         CardDashboard,
     },
     setup(props) {
-        const chart =ref(null)
+        const chart =ref(null);
+        const route = useRoute()
         const chartdata=ref({});
         const {title} = toRefs(props);
         const store= useStore();
@@ -40,15 +42,26 @@ export default {
         const realchart =ref(null);
         const admin= computed(()=>store.getters['admin/getData']);
         const title_dashboard = title.value;
+        const seller = computed(()=>store.getters['admin/getSeller']);
         watch(admin,async()=>{
             // console.log(admin.value)
-            await loadDataAdmin();
-             chartdata.value =getGraph()
-            realchart.value.data.labels=label;
-            realchart.value.data.datasets[0].data=profit.reverse()
-            realchart.value.data.datasets[1].data=earning.reverse()
-            realchart.value.data.datasets[2].data=payment.reverse();
-            console.log(realchart.value.data)
+            if(route.name=="admindashboard"){
+                await loadDataAdmin();
+                chartdata.value =getGraph()
+                realchart.value.data.labels=label;
+                realchart.value.data.datasets[0].data=profit.reverse()
+                realchart.value.data.datasets[1].data=earning.reverse()
+                realchart.value.data.datasets[2].data=payment.reverse();
+                console.log(realchart.value.data)
+            }else if(route.name=="sellerdetial"){
+                await loadSeller();
+                chartdata.value =getGraph()
+                realchart.value.data.labels=label;
+                realchart.value.data.datasets[0].data=profit.reverse()
+                realchart.value.data.datasets[1].data=earning.reverse()
+                realchart.value.data.datasets[2].data=payment.reverse();
+                console.log(realchart.value.data)
+            }
         })
         function getGraph(){
             return {
@@ -119,12 +132,15 @@ export default {
             chartdata.value= getGraph();
             realchart.value=new Chart(chart.value,chartdata.value);
         })  
+        function resetArray(){
+            profit=[]
+            payment=[]
+            earning=[]
+            label=[]
+        }
         async function loadDataAdmin(){
             if(admin.value.result){
-                profit=[]
-                payment=[]
-                earning=[]
-                label=[]
+               resetArray();
                 for(var i in admin.value.result){
                 profit.push(admin.value.result[i].totalProfile)
                 payment.push(admin.value.result[i].totalPayment)
@@ -145,6 +161,37 @@ export default {
                 }else if(status.value=="yearly"){
                     let data = new Date()
                     let result = admin.value.result[i]._id
+                    data.setMonth(result.month-1);
+                    data.setFullYear(result.year);
+                    label.push(`${data.getMonth()}/${data.getFullYear()}`);
+                }
+            }
+            }
+        }
+        async function loadSeller(){
+            console.log(seller.value)
+                if(seller.value.length){
+               resetArray();
+                for(var i in seller.value){
+                profit.push(seller.value[i].totalProfile)
+                payment.push(seller.value[i].totalPayment)
+                earning.push(seller.value[i].totalEarning)
+                if(status.value=="daily"){
+                    let data = new Date()
+                    data.setUTCHours(seller.value[i]._id.hour)
+                    data.setUTCMinutes(seller.value[i]._id.minute);
+                    console.log(data.toLocaleString())
+                    label.push(`${data.getHours()}:${data.getMinutes()}`)
+                }else if(status.value=="monthly"){
+                    let data = new Date()
+                    let result = seller.value[i]._id
+                    data.setMonth(result.month-1);
+                    data.setFullYear(result.year);
+                    // data.setDate(result.day)
+                    label.push(data.toLocaleString());
+                }else if(status.value=="yearly"){
+                    let data = new Date()
+                    let result = seller.value[i]._id
                     data.setMonth(result.month-1);
                     data.setFullYear(result.year);
                     label.push(`${data.getMonth()}/${data.getFullYear()}`);
