@@ -68,7 +68,8 @@
         <div class="col-md-4 data picture-data">
           
             <div class="text-center w-100">Profile Image</div>
-            <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000'+user.img" alt="">
+            <img class="rounded mx-auto d-block profile-img" v-if="user.img" :src="'http://localhost:3000'+user.img" alt="">
+            <img class="rounded mx-auto d-block profile-img" v-else src="../../assets/logo.png" alt="">
             <div class="w-100 text-center">
               <button type="button" class="btn pink" @click="modal.show()" data-toggle="modal">Upload New</button>
             </div>

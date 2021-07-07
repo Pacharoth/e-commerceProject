@@ -12,7 +12,7 @@
 
             <div class="column2">
                 <h5>{{order.product[products-1].products.price}}$</h5>
-                <button v-if="order.product.length-1==products-1" class="btn2 ">Reorder</button>
+                <!-- <button v-if="order.product.length-1==products-1" class="btn2 ">Reorder</button> -->
             </div>
         </div>
         <div class="line"></div>

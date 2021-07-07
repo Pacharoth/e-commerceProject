@@ -59,7 +59,7 @@ export default {
         const form = ref(null);
         function generatePDF(){
            let pdf = new jsPDF('p','pt','A4');
-           pdf.internal.pageSize.width=520;
+           pdf.internal.pageSize.width=495;
             pdf.html(form.value,{
                 filename:"report"
             }).save()

@@ -4,7 +4,7 @@
             <nav class="nav-bar" ref="nav">
                 <div class="bar">
                     <button @click="loadSideBar()" class="btn burger" ><em class="fas fa-bars"></em></button>
-                    <input type="text" class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
+                    <!-- <input type="text" class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" /> -->
                 </div>
                 <div class="date" v-if="page=='admindashboard'||page=='sellerdetial'">
                     <button :class="'btn '+daily" @click="viewDaily">Daily</button>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="avatar-chat">
                     <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> </button>
-                    <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em></button>
+                    <!-- <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em></button> -->
                     <button class="btn avatar"> <span class="name">{{user.user}}</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
