@@ -246,7 +246,7 @@ exports.getDialyReport = async(req,res)=>{
 }
 exports.getYearlySeller = async(req,res)=>{
     // 60b8b86fc0df5344c1b028e7
-    console.log(req.params.id)
+    // console.log(req.params.id)
     var result= await order.aggregate([
         {
             $project:{
@@ -354,7 +354,7 @@ exports.getYearlySeller = async(req,res)=>{
 }
 exports.getMonthlySeller = async(req,res)=>{
     // 60b8b86fc0df5344c1b028e7
-    console.log(req.params.id)
+    // console.log(req.params.id)
     var result= await order.aggregate([
             {
                 $project:{
@@ -466,7 +466,7 @@ exports.getMonthlySeller = async(req,res)=>{
 }
 exports.getDailySeller = async(req,res)=>{
     // 60b8b86fc0df5344c1b028e7
-    console.log(req.params.id)
+    // console.log(req.params.id)
     var result= await order.aggregate([
             {
                 $project:{

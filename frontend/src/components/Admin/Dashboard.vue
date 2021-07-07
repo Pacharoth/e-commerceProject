@@ -52,6 +52,7 @@ export default {
                 realchart.value.data.datasets[0].data=profit.reverse()
                 realchart.value.data.datasets[1].data=earning.reverse()
                 realchart.value.data.datasets[2].data=payment.reverse();
+                
                 console.log(realchart.value.data)
             }else if(route.name=="sellerdetial"){
                 await loadSeller();
