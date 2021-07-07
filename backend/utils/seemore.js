@@ -1,21 +1,21 @@
 function seemore(model){
     return async(req,res,next)=>{
-        const page = parseInt(req.query.page);
+        const feedback = parseInt(req.query.feedback);
         const limit = parseInt(req.query.limit);
 
-        const startIndex = (page-1)*limit;
-        const endIndex =page*limit;
+        const startIndex = (feedback-1)*limit;
+        const endIndex =feedback*limit;
 
         const results={};
         if(endIndex<await model.countDocuments()){
             results.next={
-                page:page+1,
+                feedback:feedback+1,
                 limit:limit,
             } 
         }
         if(startIndex>0){
             results.previous={
-                page:page-1,
+                feedback:feedback-1,
                 limit:limit,
             }
         }
