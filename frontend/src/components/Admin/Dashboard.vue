@@ -173,7 +173,7 @@ export default {
                 if(seller.value.length){
                resetArray();
                 for(var i in seller.value){
-                profit.push(seller.value[i].totalProfile)
+                profit.push(seller.value[i].totalProfit)
                 payment.push(seller.value[i].totalPayment)
                 earning.push(seller.value[i].totalEarning)
                 if(status.value=="daily"){
