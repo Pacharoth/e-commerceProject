@@ -73,7 +73,7 @@ export default {
         });
         function generatePDF(){
            var pdf = new jsPDF('p','pt','A3');
-           pdf.internal.pageSize.width=640;
+           pdf.internal.pageSize.width=765;
             pdf.html(form.value,{
                 filename:"Receipt_"+orderDate.value
             }).save()
@@ -89,6 +89,9 @@ export default {
 }
 </script>
 <style scoped>
+    .containers{
+        background: white;
+    }
     .title{
         color: white;
         padding-top: 3%;

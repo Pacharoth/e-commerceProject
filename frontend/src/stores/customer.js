@@ -68,8 +68,8 @@ const customerStore={
         loadProduct({commit},data){
             commit("LOAD_PRODUCT",data);
         },
-        searchProduct({commit},data){
-            commit("LOAD_SEARCH",data);
+        searchProduct(context,data){
+            context.commit("LOAD_SEARCH",data);
         }
     },
     getters:{

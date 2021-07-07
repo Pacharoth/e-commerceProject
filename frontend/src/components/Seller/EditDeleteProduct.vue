@@ -26,6 +26,10 @@
                                 <input type="number" min="0" v-model="dataSet.price" name="price" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                             </div>
                             <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Default Price</label>
+                                <input type="number" min="0" v-model="dataSet.buyPrice" name="buyPrice" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            </div>
+                            <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">discount</label>
                                 <input type="number" min="0" v-model="dataSet.discount" name="discount" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                             </div>
@@ -43,7 +47,7 @@
                                 <a :href="'http://localhost:3000'+dataSet.img[0]">Image</a>
                             </div>
                             <label for="productImg" class="form-label">Product's image</label>
-                            <input ref="img" class="form-control" type="file" id="productImg" name="img"/>
+                            <input ref="img" class="form-control" type="file" id="productImg" name="img" accept="image/*"/>
                   
                     </div>
 
@@ -138,6 +142,7 @@ export default {
                 if(element._id===data._id){
                     element.name=data.name
                     element.category = data.category
+                    element.buyPrice = data.buyPrice
                     element.qty  =data.qty;
                     element.price =data.price
                     if(form.get('img').name){

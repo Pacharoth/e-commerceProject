@@ -1,86 +1,55 @@
 <template>
     <div class="dashboard-container">
-      <nav class="navbar shadow p-3 mb-5 bg-body rounded ">
+      <nav class="navbar shadow p-2 mb-4 bg-body rounded ">
         <router-link to="/seller" class="navbar-brand"><h4 class="header">AmazingShop</h4></router-link>
         <form class="form-inline">
-          <input class="form-control mr-sm-2 rounded-pill search" type="search" placeholder="&#xF002; Search"/>
+          <input class="form-control  rounded-pill search" type="search" placeholder="&#xF002; Search"/>
         </form>
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills" v-if="sellerpage=='sellerreport'||sellerpage=='sellerpage'">
           <li class="nav-item ">
-            <a class="nav-link header"  href="#">Daily</a>
+            <a @click="daily()" class="nav-link header report"  href="#">Daily</a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link header" href="#">Monthly</a>
+            <a @click="monthly()" class="nav-link header report" href="#">Monthly</a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link header" href="#">Yearly</a>
+            <a @click="yearly()" class="nav-link header report" href="#">Yearly</a>
           </li>
         </ul>
 
         <!-- notification -->
         
         <ul class="nav ">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle header" @click="showDropdown" ref="drop" data-toggle="dropdown" href="#" role="button" >
-              <em class="fa fa-shopping-bag header" ></em>
-              <span class="badge rounded-pill badge-notification bg-danger">1</span>
-            </a>
-            <div class="dropdown-menu customerOrder" ref="drop">
-                <h3 class="dropdown-header">Customers Orders</h3>
-                <a class="dropdown-item header" href="#">
-                    <div class="row">
-                      <div class="col-md-9">
-                        <span class="customer">CustomerName</span>
-                        <span class="productOrdered">productName</span>
-                        <span class="productOrdered">productSize</span>
-                        <p>+855 11223344</p>
-                      </div>
-                      <div class="col-md-1">
-                        <span><button class="btn btn-secondary">Reject</button></span>
-                        <span><button class="btn opt">Accept</button></span>
-                      </div>
-                    </div> 
-                </a>
-                <a class="dropdown-item header" href="#"> 
-                    <div class="row">
-                      <div class="col-md-9">
-                        <span class="customer">CustomerName</span>
-                        <span class="productOrdered">productName</span>
-                        <span class="productOrdered">productSize</span>
-                        <p>+855 11223344</p>
-                      </div>
-                      <div class="col-md-1">
-                        <span><button class="btn btn-secondary">Reject</button></span>
-                        <span><button class="btn opt">Accept</button></span>
-                      </div>
-                    </div> 
-                </a>
-            </div>
-            </li>
+
           <li class="nav-item"> 
-            <a href="#" class="nav-link" @click="showChatList">
-              <em class='fas fa-comment-dots header'></em>
-              <span class="badge rounded-pill badge-notification bg-danger">1</span>
+            <a href="#" class="nav-link icon" @click="showChatList">
+              <em class='fas fa-comment-dots'></em>
+              <!-- <span class="badge rounded-pill badge-notification bg-danger">1</span> -->
             </a>          
           </li>
           <li class="nav-item">  
-            <a href="#" class="nav-link" @click="showNotification">
-              <em class="fas fa-bell header"></em>
-              <span class="badge rounded-pill badge-notification bg-danger">1</span>
+            <a href="#" class="nav-link icon" @click="showNotification">
+              <em class="fas fa-bell"></em>
+              <!-- <span class="badge rounded-pill badge-notification bg-danger">1</span> -->
             </a>          
           </li>
           <li class="nav-item dropdown" @click="showProfile">
             
-            <a class="nav-link dropdown-toggle header" data-toggle="dropdown" href="#" role="button" >
+            <a class="nav-link dropdown-toggle icons" data-toggle="dropdown" href="#" role="button" >
               <!-- <em class="fas fa-user-circle user" style="margin-right: 8%;
               font-size: 1.5vw;"></em> -->
-              <img class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+              <img v-if="user.img" class=" profile-img" :src="'http://localhost:3000'+user.img" alt="">
+              <img v-else class=" profile-img" src="../../assets/logo.png" alt="">
 
               {{user.user}}
             </a>
-            <div class="dropdown-menu profile" ref="profile">
+            <div class="dropdown-menu profile end-0" ref="profile">
                 <router-link to="/seller/sellerprofile" class="dropdown-item header" href="#">My profile</router-link>
                 <router-link to="/" class="dropdown-item header" >Homepage</router-link>
+                <slot v-if="authPayment">
+                <router-link :to="{name:'registerseller'}" class="dropdown-item header" v-if="authPayment[0].dateValid<=10">{{authPayment[0].dateValid}} valid days </router-link>
+
+                </slot>
                 <router-link class="dropdown-item header" @click="logout" to="/">Log out</router-link>
             </div>
             </li>
@@ -93,15 +62,19 @@
 
 </template>
 <script>
+import axios from 'axios';
 import { useStore } from 'vuex';
 import { showChatLists, showNotifications } from '../../hook/effect';
 import { logouts } from '../../utils/FormValidation';
 import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
+import { computed } from '@vue/runtime-core';
 export default {
     name:'Seller',
     setup() {
       const store = useStore();
+      var authPayment= computed(()=>store.getters['seller/getPayment'])
+
       function showChatList(){
         showChatLists(store);
       }
@@ -117,11 +90,13 @@ export default {
         showChatList,
         showNotification,
         logout,
+        authPayment,
       }
     },
     data() {
       return {
         // user:{},
+        initialize:[],
       }
     },
     components:{
@@ -131,12 +106,16 @@ export default {
     computed:{
       user(){
         return this.$store.getters['auth/getSession'];
+      },
+      sellerpage(){
+        return this.$route.name;
       }
     },
-    mounted() {
-      // this.user.username= localStorage.getItem("username");
-      
-      // this.user.userid = localStorage.getItem("userid");
+    async mounted() {
+       const  res = await axios.get("http://localhost:3000/getSaleInfo/"+localStorage.getItem('userid'));
+        console.log("sale info", res)
+        this.initialize=res.data;
+        this.$store.dispatch('seller/loadStatistic',res.data);
     },
     methods: {
       showDropdown(){
@@ -147,7 +126,21 @@ export default {
         const dropdownProfile = this.$refs.profile.classList;
         dropdownProfile.contains('show')?dropdownProfile.remove('show'):dropdownProfile.add('show');
       },
-    
+       async daily(){
+         const  res = await axios.get("http://localhost:3000/getSaleInfo/"+localStorage.getItem('userid'));
+         console.log("sale info", res)
+         this.$store.dispatch('seller/loadStatistic',res.data);
+      },
+      async monthly(){
+          const  res = await axios.get("http://localhost:3000/getMonthlySale/"+localStorage.getItem('userid'));
+          console.log("sale info monthly ", res)
+          this.$store.dispatch('seller/loadStatistic',res.data);
+      },
+      async yearly(){
+        const  res = await axios.get("http://localhost:3000/getYearlySale/"+localStorage.getItem('userid'));
+        console.log("sale info yearly", res)
+        this.$store.dispatch('seller/loadStatistic',res.data);
+      }
      
     
     },
@@ -168,20 +161,58 @@ export default {
   box-shadow: $shadow_1;
   
 }
-.nav-link:active {
-  background-color: #c9adba;
+.icons{
+  border-radius: 50px;
+  color: rgb(83, 80, 80);
+  font-weight: 500;
+  &:focus,&:hover{
+    color: #f165a7;
+    background-color: #f165a662;
+  }
 }
-.nav-link:focus {
-  background-color: #f165a7;
+.icon{
+    color: #d60265;
+    border-radius: 50%;
+  &:focus,&:hover{
+    color: #f165a7;
+    background-color: #f165a662;
+  }
 }
+.report{
+  box-shadow: $shadow_1;
+  color: rgb(92, 91, 91);
+  margin-left: 5%;
+  background-color: #eee;
+  font-weight: bold;
+  &:hover,&:focus{
+    color: white;
+    background-color: #f165a7;
+  }
+  
+}
+// .nav-link:active {
+//   background-color: #c9adba;
+// }
+// .nav-link:focus {
+//   background-color: #f165a7;
+// }
 .form-control {
   border: 1px solid #d60265;
 }
 .search {
+  border:none;
+  box-shadow: $shadow_1;
+  background-color: #eee;
   font-family: Arial, FontAwesome;
+  &:hover,&:focus{
+    box-shadow: $shadow_2;
+  background-color: #eee;
+
+  }
 }
 .search::placeholder {
-  color: #d60265;
+  // color: #d60265;
+  color: gray;
 }
 .dropdown-toggle::after {
   content: none;
@@ -193,10 +224,10 @@ export default {
 }
 .btn.opt {
   background-color: #d60265;
-  color: white;
+  color: #eee;
 }
 .profile{
-  left: 0;
+  left: auto;
 }
 .customerOrder {
   left: auto;

@@ -1,8 +1,8 @@
 <template>
-        <div class="container">
+    <div class="container shadow p-3 mb-5 bg-body rounded p-5">
       <div class=" row title">Seller Profile</div>
       <div class="row">
-        <div class="col-md-8 left data">
+        <div class="col-md-8 left">
           <div class="row">
             <div class="col-md-3">Company</div>
             <div class="col-md-8"><span class="colon">:</span>{{seller.company}}</div>
@@ -65,11 +65,11 @@
           </div>
         </div>
        
-        <div class="col-md-4 data">
-          <center>
-            <div>Profile Image</div>
+        <div class="col-md-4 data picture-data">
+          
+            <div class="text-center w-100">Profile Image</div>
             <img class="rounded mx-auto d-block profile-img" :src="'http://localhost:3000'+user.img" alt="">
-            <div>
+            <div class="w-100 text-center">
               <button type="button" class="btn pink" @click="modal.show()" data-toggle="modal">Upload New</button>
             </div>
             <!-- add img model -->
@@ -84,7 +84,7 @@
                   </div>
                   <form ref="form" @submit.prevent="addImg()" enctype="multipart/form-data">
                     <div class="modal-body">
-                      <input class="form-control" type="file" id="proImg" name="proImg" />
+                      <input class="form-control" type="file" id="proImg" name="proImg" accept="image/*"/>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
@@ -94,9 +94,7 @@
                 </div>
               </div>
             </div>
-            
-          </center>
-          
+         
         </div>
       </div>
     </div>
@@ -117,17 +115,17 @@ export default {
         pwd:{},
         notMatch:{},
         log:'',
-        proImg:''
+        proImg:'',
       }
     },
     async mounted(){
-     this.modal=new Modal(this.$refs.modal);
-     this.modalProfile=new Modal(this.$refs.modalProfile);
-     const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
-     this.seller = seller.data
-     this.user = seller.data.users
-     console.log(this.seller)
-     console.log(this.user)
+      this.modal=new Modal(this.$refs.modal);
+      this.modalProfile=new Modal(this.$refs.modalProfile);
+      const seller = await axios.get("http://localhost:3000/getSeller/"+localStorage.getItem('userid')) 
+      this.seller = seller.data[0]
+      this.user = seller.data[0].users
+      console.log(this.seller)
+      console.log(this.user)
     //  console.log("seller profile",this.user)
     //  console.log('pwd',this.pwd)
 
@@ -178,6 +176,13 @@ export default {
 #profilepic{
   background-color: #d60265;
   color: #d60265;
+}
+.picture-data{
+  // display:block;
+  // margin: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+
 }
 .notMatch{
   color: red;

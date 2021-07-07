@@ -31,6 +31,16 @@ router.beforeEach(async(to,from,next)=>{
     }
     const response = await axios.post(localhost+"/role");
     store.dispatch('role/addRole',response.data)
+    var user = store.getters['auth/getSession'];
+    if(user.role=='seller'){
+        var {data} =await axios.get(localhost+'/getSeller/'+user.userid);
+        console.log(data);
+        var results=await axios.post(localhost+"/paymentseller/"+data[0]._id);
+        if(results.data.length>0){
+            results.data[0].dateValid = parseInt(results.data[0].dateValid);
+            store.dispatch('seller/loadPayment',results.data); 
+        }
+    }
     console.log(store.getters['auth/getSession'])
     console.log(to,next());
 })

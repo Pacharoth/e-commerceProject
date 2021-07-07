@@ -1,50 +1,54 @@
-const linegraph={
-    type: 'line',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-        label: 'My First Dataset',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: '#e3eefe',
-        fill:true,
-        borderColor: '#4691FF',
-        borderWidth: 1,
-        tension: 0.5
-        },
+const linegraph=async(data)=>{
+    console.log(data)
+    return{
+        type: 'line',
+        data: {
+            labels:data.label,
+            datasets: [{
+                label: 'Profit',
+                data:data.profit,
+                backgroundColor: '#e3eefe',
+                fill:true,
+                borderColor: '#4691FF',
+                borderWidth: 1,
+                tension: 0.5
+            },
+            {
+                label: 'Earning',
+                data: data.earning,
+                backgroundColor: '#e3eefe',
+                fill:true,
+                borderColor: '#4691FF',
+                borderWidth: 1,
+                tension: 0.5
+            },
+            {
+                label: 'Payment',
+                data: data.payment,
+                backgroundColor: '#e3eefe',
+                fill:true,
+                borderColor: '#4691FF',
+                borderWidth: 1,
+                tension: 0.5
+            },
             ]
-    },
-    canvas:{
-        parentNode:{
-            style:{
-                height:'30vh',
-                width:'80vh'
-            }
-        }
-    },
-    options: {
-        layout:{Padding:0},
-        elements:{
-            line:{
+        },
+        canvas:{
+            parentNode:{
+                style:{
+                    height:'30vh',
+                    width:'80vh'
+                }
             }
         },
-        // animations: {
-        //     tension: {
-        //         duration: 1000,
-        //         easing: 'linear',
-        //         from: 1,
-        //         to: 0,
-        //         loop: true
-        //     }
-        // },
-        scales: {
-            // y: { 
-            //     min: 0,
-            //     max: 100
-            // }
+        options: {
+            layout:{Padding:0},
+        
+            responsive:true,
+            maintainAspectRatio: false,  
         },
-        responsive:true,
-        maintainAspectRatio: false,  
-    },
+    
+    };
+}
 
-};
 export default linegraph;

@@ -27,8 +27,12 @@
                       <input v-model="product.name" type="text" class="form-control" id="productName" name="productName" placeholder="Product name">
                     </div>
                     <div class="form-group">
+                      <label for="price">Buy Price per unit</label>
+                      <input v-model="product.buyPrice" type="number" step="any" min="0" class="form-control" name="price" placeholder="Buy Price per unit">             
+                    </div>
+                    <div class="form-group">
                       <label for="price">Price per unit</label>
-                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" id="price" name="price" placeholder="Price per unit">             
+                      <input v-model="product.price" type="number" step="any" min="0" class="form-control" name="price" placeholder="Price per unit">             
                     </div>
 
                     <div class="form-group">
@@ -49,7 +53,7 @@
                       <option  v-for="item in categories" :key = item.id :value="item.name">{{item.name}}</option>
                     </select>
                     <label for="productImg" class="form-label">Product's image</label>
-                    <input ref="img" class="form-control" type="file" id="productImg" name="img" />
+                    <input ref="img" class="form-control" type="file" id="productImg" name="img" accept="image/*" />
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @click="modal.hide()" data-dismiss="modal">Cancel</button>
@@ -60,7 +64,7 @@
             </div>
           </div>
 
-          <button type="button" class="btn opt">Generate Report</button>
+          <router-link to="/seller/report" class="btn opt">Generate Report</router-link>
         
 
       </div>
@@ -77,34 +81,50 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
+          <tr v-for="i in order.length" :key="i">
+            <th scope="row">{{i}}</th>
             <td>
-              <h5>CustomerName</h5>
-              <p  class="proDescrib" >name@gmail.com</p>
-              <p  class="proDescrib" >+855 12334455</p>
+              <h5>{{order[i-1].users.username}}</h5>
+              <p  class="proDescrib" >{{order[i-1].users.email}}</p>
+              <p  class="proDescrib" >{{phoneNumber[i-1]}}</p>
 
             </td>
-            <td style="width: 30%;">
-              <div class="row">
-                <div class="col-md-4" style="text-align: center;">
-                  <img class="proImg" src="../../assets/img/menBlueShirt.jpg" alt=""/>
-                </div>
-                <div class="col-md-5">
-                  <p class="proDescrib">ProductName</p>
-                  <p class="proDescrib">productSize</p>
-                  <p class="proDescrib">productPrice</p>
-                </div>
+            <td  style="width: 30%;" v-if="order[i-1].product" >
+              <div v-for="product in order[i-1].product" :key="product" class="data">
+                <!-- <div class="col-md-4 m-2" style="text-align: center;"> -->
+                <slot v-if="product!==null">
+                <img class="proImg" :src="'http://localhost:3000'+product.products.img" alt=""/>
+                <!-- </div> -->
+                <!-- <div class="col-md-5"> -->
+                  <span>
+                    <p class="proDescrib p" >Name: {{product.products.name}}</p>
+                    <p class="proDescrib p" >Quantity: {{product.quantity}}</p>
+                    <p class="proDescrib p" >Price: ${{product.products.price}}</p>
+                  </span>
+                </slot>
+                  
+                <!-- </div> -->
               </div>
             </td>
 
             <td>
-              <span class="proDescrib">Pending</span> <i class="fa fa-check" aria-hidden="true"></i>
+              <span class="proDescrib">{{order[i-1].status}}</span> <i class="fa fa-check" aria-hidden="true"></i>
             </td>
           </tr>
           
         </tbody>
+
       </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <slot v-if="page.next">
+            <li class="page-item" v-for="pages in page.next.page" :key="pages"><button class="page-link" @click="paginationOrder(pages)">{{pages}}</button></li>
+          </slot>
+          <slot v-if="page.previous">
+            <li class="page-item" v-for="pages in page.previous.page" :key="pages"><button class="page-link"  @click="paginationOrder(pages)">{{pages}}</button></li>
+          </slot>
+        </ul>
+      </nav>
       </div>
     </div>
 </template>
@@ -112,6 +132,7 @@
 import {Modal} from 'bootstrap';
 import CardDashboard from '../Admin/CardDashboard'
 import axios from 'axios';
+import { localhost } from '../../utils/FormValidation';
 
 export default {
     title:'Seller',
@@ -122,20 +143,43 @@ export default {
             categories:[{}],
             product:{},
             form:null,
-            log:''
-            
+            log:'',
+            order:[],
+            id:[],
+            phoneNumber:[],
+            page:{},
+            newModal:null,
         }
     },
     components:{
         CardDashboard
     },
+    computed:{
+      user(){
+        return this.$store.getters['auth/getSession']
+      }
+    },
     async mounted(){
         this.modal=new Modal(this.$refs.modal);
          const categories = await axios.get("http://localhost:3000/category")
          this.categories = categories.data
-         this.form =new Modal(this.$refs.modal)
+         this.form =new Modal(this.$refs.modal);
+         var {data} = await axios.get(localhost+'/order/'+this.user.userid+"?page=1&limit=3");
+         this.order=data.customerOrder;
+         console.log(data)
+        for (const key in this.order) {
+          this.id.push(this.order[key].users._id)
+        }
+        this.page=data.results;
+        var response=await axios.post(localhost+"/verifyuser",this.id);
+        this.phoneNumber=response.data;
     },
     methods:{
+        async paginationOrder(number){
+          var {data}=await axios.get(localhost+"/order/"+this.user.userid+"?page="+number+"&limit=3");
+          this.order=data.customerOrder;
+          this.page=data.results
+        },
         async createProduct(){
           const dataform = new FormData(this.$refs.form)
           console.log("product created ", this.product)
@@ -145,6 +189,7 @@ export default {
           const form = new FormData()
           form.append("file",dataform.get("img"))
           form.append("productname",this.product.name);
+          form.append("buyPrice",this.product.buyPrice);
           form.append("price",this.product.price);
           form.append("instock",this.product.instock);
           form.append("qty",this.product.qty);
@@ -154,7 +199,8 @@ export default {
           const response=await axios.post('http://localhost:3000/postProduct', form)
           this.log = response.data.message
           if(response.data.message){
-            this.form.hide();
+            alert("New product has been added");
+            this.modal.hide();
           }          
       }
     }
@@ -190,16 +236,25 @@ export default {
     text-align: center;
     }
     .proDescrib {
-    color: black;
+      color: black;
     }
+     .p{
+        text-align: left;
+      }
     .proImg {
-    width: 150px;
+      width: 100px;
+      margin-right: 5%;
     }
 
     .customer {
     font-weight: 900;
     }
-
+    .data{
+      display: flex;
+      width: 100%;
+      align-items: center;
+      margin-bottom: 2%;
+    }
     .option {
     /* display: flex;
     flex-direction: row;

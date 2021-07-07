@@ -13,6 +13,12 @@ class FormValidation{
         this._password = password,
         this._confirmPassword=confirmpassword;
     }
+    _setCompany(company){
+        this._company = company;
+    }
+    _getCompany(){
+        return this._company;
+    }
     _setEmail(email){
         this._email = email;
     }
@@ -27,15 +33,19 @@ class FormValidation{
     }
     async checkEmail(){
         if(this._email){
-            await axios.post('http://localhost:3000/email',{email:this._email}).then(
-                result=>{
-                    if(result.data===null){
-                        console.log(result.data)
-                        return true;
-                        
-                    }
-                }
-            )
+            var {data}=await axios.post('http://localhost:3000/email',{email:this._email});
+            if(data.length>0){
+                return true;
+            }
+        }else{
+            return false;
+        }
+    }
+    async checkCompany(){
+        if(this._company){
+            var {data}=await axios.post(localhost+'/company',{company:this._company});
+            if(data.length>0)return true
+            else return false;
         }else{
             return false;
         }
@@ -170,6 +180,7 @@ async function registerAccount(data){
 function logouts(store){
     localStorage.clear();
     store.dispatch('auth/setSession',null);
+    store.dispatch('seller/loadStatistic',{})
 }
 export{
     FormValidation, 

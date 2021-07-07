@@ -18,7 +18,7 @@ const userSchema = new Schema({
         unique: true
     },
     registerAt: {
-        type: String,
+        type: Date,
         required: true
     }, 
     img:{

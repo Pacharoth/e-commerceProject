@@ -9,7 +9,8 @@
             <th scope="">Product's Name</th>
             <th scope="">Category</th>
             <th scope="">Quantity</th>
-            <th scope="">Price</th>
+            <th scope="">SellPrice</th>
+            <th scope="">BuyPrice</th>
             <th scope="">Action</th>
           </tr>
         </thead>
@@ -20,8 +21,8 @@
             <td class="productInfo">{{products[item-1].name}}</td>
             <td class="productInfo">{{products[item-1].categories.name}}</td>
             <td class="productInfo">{{products[item-1].qty}}</td>
-            <td class="productInfo">{{products[item-1].price}}</td>
-
+            <td class="productInfo">${{products[item-1].price}}</td>
+            <td class="productInfo">${{products[item-1].buyPrice}}</td>
             <td>
                 <button class="btn btn-light" @click="editStatus(products[item-1])" 
                 data-bs-toggle="modal" data-bs-target="#productModal">

@@ -6,15 +6,15 @@
                     <button @click="loadSideBar()" class="btn burger" ><em class="fas fa-bars"></em></button>
                     <input type="text" class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
                 </div>
-                <div class="date">
-                    <button class="btn">Daily</button>
-                    <button class="btn">Monthly</button>
-                    <button class="btn">Weekly</button>
+                <div class="date" v-if="page=='admindashboard'||page=='sellerdetial'">
+                    <button :class="'btn '+daily" @click="viewDaily">Daily</button>
+                    <button :class="'btn '+ month" @click="viewMonthly">Monthly</button>
+                    <button :class="'btn '+year" @click="viewAnnually">Yearly</button>
 
                 </div>
                 <div class="avatar-chat">
-                    <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> <span class="">1</span></button>
-                    <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em><span>1</span></button>
+                    <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> </button>
+                    <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em></button>
                     <button class="btn avatar"> <span class="name">{{user.user}}</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
@@ -29,7 +29,6 @@
             <ul class="link nav nav-pill flex-column mb-auto">
                 <li class=""><router-link to="/admin" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
                 <li class=""><router-link to="/" class="nav-link" ><em class="bi bi-house-door me-2"></em>Homepage</router-link></li>
-                <li class=""><router-link to="/seller" class="nav-link" ><em class="bi bi-house-door me-2"></em>Sellerpage</router-link></li>
                 <li ><router-link to="/admin/seller" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
                 <li><router-link to="/admin/category" class="nav-link"><em class="fas fa-list-alt me-2"></em>Category</router-link></li>
                 <li ><router-link to="/admin/customer" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
@@ -49,11 +48,13 @@ import SellerRegister from '../Admin/SellerRegister'
 import {Modal} from 'bootstrap';
 import Notification from '../Admin/Notification';
 import { ref } from '@vue/reactivity';
-import { computed, onMounted } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 import {showChatLists,showNotifications} from '../../hook/effect';
 import {localhost, logouts} from '../../utils/FormValidation'
+import { computed, onMounted } from '@vue/runtime-core';
 import { io } from 'socket.io-client';
+import axios from 'axios';
+import { useRoute } from 'vue-router';
 export default {
     title:'Admin',
     name:"AdminLayout",
@@ -62,15 +63,25 @@ export default {
         SellerRegister,
         Notification
     },
+    computed:{
+        page(){
+            return this.$route.name
+        }
+    },
     setup() {
         const store= useStore(); //this.$store
         const modal = ref(null); //this.$ref.modal
         const nav =ref(null); //this.$ref.nav
-        const sidebar = ref(null); 
+        const sidebar = ref(null),
+        route = useRoute(),
+        month = ref(""),
+        year=ref(""),
+        daily=ref("active1"); 
         const socket = ref(null);
         const user = computed(()=>store.getters['auth/getSession'])
-        onMounted(()=>{
+        onMounted(async()=>{
             var modal=new Modal(modal)
+            await viewDaily();
             const s = io(localhost);
             socket.value=s;
             return()=>{
@@ -94,11 +105,56 @@ export default {
             logouts(store);
             
         }
+        async function viewDaily(){
+            changeColorButton(daily,month,year);
+            var response 
+            if(checkPage)response= await axios.get(localhost+"/admin/avgdaily");
+            console.log(response.data);
+            store.dispatch("admin/setData",response.data);
+            store.dispatch("admin/setStatus","daily")
+
+        }
+        function checkPage(){
+            if(route.name=="admindashboard")return true;
+            else return false;
+        }
+        function checkSellerPage(){
+            if(route.name=="sellerdetial")return true;
+            else return false;
+        }
+        async function viewMonthly(){
+            changeColorButton(month,daily,year);
+            var response;
+            if(checkPage){
+                response  = await axios.get(localhost+"/admin/avgmonth");
+            }
+            console.log(response.data);
+            store.dispatch("admin/setData",response.data);
+            store.dispatch("admin/setStatus","monthly")
+        }
+        async function viewAnnually(){
+            changeColorButton(year,month,daily)
+            var response;
+            if(checkPage)response =await axios.get(localhost+"/admin/avgyear");
+            else if (checkSellerPage) response.data="";
+            console.log(response.data);
+            store.dispatch("admin/setData",response.data);
+            store.dispatch("admin/setStatus","yearly")
+
+        }
+        function changeColorButton(active,notactive1,notactive2){
+            active.value="active1";
+            notactive1.value="";
+            notactive2.value="";
+        }
         return{
             //data
             nav,
             sidebar,
             modal,
+            month,
+            daily,
+            year,
             //computed
             user,
             //method
@@ -106,6 +162,10 @@ export default {
             showChatList,
             loadSideBar,
             logout,
+            changeColorButton,
+            viewDaily,
+            viewMonthly,
+            viewAnnually
         }
     },
 }
@@ -304,13 +364,17 @@ export default {
         }
     }
         .avatar-chat{
-        button{
-            color: grey;
-            &:focus{
-                box-shadow: none;
-                color: $blue_color;
+            button{
+                color: grey;
+                .active{
+                    box-shadow: none;
+                    color: $blue;
+                }
+                &:focus{
+                    box-shadow: none;
+                    color: $blue_color;
+                }
             }
-        }
         }
         .name{
             &:focus{
@@ -324,6 +388,11 @@ export default {
         }
         .date{
             display: flex;
+            .active1{
+                background-color: $blue_color;
+                color: white;
+                box-shadow: $shadow_2;
+        }
             button{
                 font-weight: bold;
                 margin-right: 2%;
@@ -332,15 +401,15 @@ export default {
                 background-color: #F5F5F5;
                 box-shadow: $shadow_2;
                 border: none;
-                &:active{
-                    background-color: $blue_color;
-                    color: white;
-                }
-                &:focus{
-                    box-shadow: $shadow_2;
-                    background-color: $blue_color;
-                    color: white;
-                }
+                // &:active{
+                //     background-color: $blue_color;
+                //     color: white;
+                // }
+                // &:focus{
+                //     box-shadow: $shadow_2;
+                //     background-color: $blue_color;
+                //     color: white;
+                // }
             }
             @include breakpoint-down(small){
                 display: none;
