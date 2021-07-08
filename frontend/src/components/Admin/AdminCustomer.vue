@@ -20,7 +20,7 @@
           <!-- <li v-if="page>=2" class="page-item disabled">
             <span class="page-link">Previous</span>
           </li> -->
-          <li class="page-item" v-for="feedbacks in feedback" :key="feedbacks"><button class="page-link" @click="paginaton(feedbacks)">{{feedbacks}}</button></li>
+          <li class="page-item" v-for="pages in page" :key="pages"><button class="page-link" @click="paginaton(pages)">{{pages}}</button></li>
           <!-- <li class="page-item" v-if="page>2">
             <a class="page-link" href="#">Next</a>
           </li> -->
