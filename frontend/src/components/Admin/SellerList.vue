@@ -2,7 +2,7 @@
     <div class="seller-container" >
        <slot v-for="data in sellers.results" :key="data">
             <router-link :to="'/admin/seller/sellerdetail/'+data._id" class="seller" >
-                <img :src="localhosts+data.users.img" v-if="data.users.img" alt="">
+                <img :src="localhosts+data.users.img" v-if="data.users" alt="">
                 <img src="../../assets/logo.png" v-else alt="">
                 <span>{{data.company}}</span>
             </router-link>
