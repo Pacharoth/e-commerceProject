@@ -244,6 +244,8 @@ export default {
     .proImg {
       width: 100px;
       margin-right: 5%;
+      height: 100px;
+      object-fit: cover;
     }
 
     .customer {

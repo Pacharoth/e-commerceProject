@@ -187,7 +187,7 @@ export default {
      .img{
         width: 80%;
         margin: auto;
-        height: 300px;
+        height: 350px;
         object-fit: cover;
     }
     .small-product{
