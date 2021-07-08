@@ -1,7 +1,7 @@
 <template>
     <div class="container shadow p-3 mb-5 bg-body rounded p-5">
       <div class=" row title">Seller Profile</div>
-      <div class="row">
+      <div class="row content">
         <div class="col-md-8 left">
           <div class="row">
             <div class="col-md-3">Company</div>
@@ -16,7 +16,7 @@
             <div class="col-md-8"><span class="colon">:</span>{{seller.contact}}</div>
           </div>
           <div class="row">
-            <div class="col-md-3">Address</div>
+            <div class="col-md-3 address">Address</div>
             <div class="col-md-8"><span class="colon">:</span>{{seller.address}}</div>
           </div>
           <div class="row">
@@ -228,7 +228,7 @@ export default {
 }
 .container{
     // color: #d60265;
-    font-size: 28px;
+    font-size: 1.35rem;
 }
 .title{
     font-weight: 600;
@@ -252,5 +252,11 @@ export default {
   height: 200px;
   object-fit: cover;
 }
+// .address{
+//   overflow: hidden;
+//   white-space: nowrap;
+//   text-overflow: ellipsis;
+//   max-width: 100%;
+// }
 
 </style>

@@ -7,7 +7,9 @@
             <div class="column1">
                 <h5 class="title">{{order.product[products-1].sellers.company}}</h5>
                 <p>{{new Date(order.orderDate).toLocaleDateString()}}</p>
-                <span><p class="text">{{order.product[products-1].products.name}}  {{order.product[products-1].products.detail}}</p></span><span>x{{order.product[products-1].quantity}}</span>
+                <div class="proName">{{order.product[products-1].products.name}}</div>
+                <span><p class="text">  {{order.product[products-1].products.detail}}</p></span>
+                <span>x{{order.product[products-1].quantity}}</span>
             </div>
 
             <div class="column2">
@@ -17,7 +19,7 @@
         </div>
         <div class="line"></div>
         </slot>
-        <button class="btn1">see more</button>
+        <!-- <button class="btn1">see more</button> -->
     </div>
 </template>
 
@@ -53,6 +55,10 @@ export default {
     }
     * {
         box-sizing: border-box;
+    }
+    .proName{
+        color: #D60265;
+        font-weight: bold;
     }
     .row1 {
         display: flex;

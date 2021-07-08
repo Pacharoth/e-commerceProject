@@ -27,9 +27,9 @@
                     <td class="detail">{{receipt.product[products-1].products.detail}}</td>
                     <td>{{receipt.product[products-1].sellers.company}}</td>
                     <td>{{receipt.product[products-1].quantity}}</td>
-                    <td>${{(receipt.product[products-1].products.price)-(receipt.product[products-1].products.discount*receipt.product[products-1].products.price)}}</td>
+                    <td>${{(receipt.product[products-1].products.price * (100 -receipt.product[products-1].products.discount)/100.0)}}</td>
                     <td>
-                        ${{(receipt.product[products-1].quantity*receipt.product[products-1].products.price)-(receipt.product[products-1].products.discount*receipt.product[products-1].products.price)}}
+                        ${{(receipt.product[products-1].quantity*receipt.product[products-1].products.price *(100 - receipt.product[products-1].products.discount)/100.0)}}
                     </td>
                   </tr>
                   </slot>
@@ -73,7 +73,7 @@ export default {
         });
         function generatePDF(){
            var pdf = new jsPDF('p','pt','A3');
-           pdf.internal.pageSize.width=710;
+           pdf.internal.pageSize.width=640;
             pdf.html(form.value,{
                 filename:"Receipt_"+orderDate.value
             }).save()

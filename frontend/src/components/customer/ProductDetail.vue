@@ -42,7 +42,6 @@
                     <button @click="postShoppingCart({
                        qty:qty,
                        product,
-
                     })" class=" addtocart mt-2 ">Add to Cart</button>
                 </div>
                 <h5 class="mt-3"><router-link :to="'/feedback/'+product._id" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
@@ -188,7 +187,7 @@ export default {
      .img{
         width: 80%;
         margin: auto;
-        height: 300px;
+        height: 350px;
         object-fit: cover;
     }
     .small-product{

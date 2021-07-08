@@ -7,7 +7,6 @@
             <div class="row1-one" v-for="products in product.length" :key="products">
                 <p style="color: #D60265;">
                     <span class="round">
-                        <!-- <input v-if="" class="checkBox" type="checkbox" id="checkbox" /> -->
                     </span>    
                     {{product[products-1].sellers.company}}
                     <button @click="deleteProduct(
@@ -163,8 +162,8 @@ export default {
         }
         async function decreaseProduct(value,index,id){
             console.log("decrease")
-            if(value>0)value-=1;
-            else value=0
+            if(value>1)value-=1;
+            else value=1
             updateProduct(parseInt(value),index,id);
         }
         async function loadData(){
