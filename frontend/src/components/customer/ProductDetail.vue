@@ -17,6 +17,7 @@
                 <h3>{{product.name}}</h3>
                 <p class="decription">{{product.detail}}</p>
                 <p class="price">{{product.price-(product.price*product.discount/100)}}$</p>
+<!-- 
                 <p>Size:</p>
                 <div class="size mb-3" ref="color">
                     <button class="border shadow " @click="changeColor(0)">M</button>
@@ -28,7 +29,7 @@
                 <div class="color mb-3"> 
                     <img class="color-img" :src="'http://localhost:3000/'+product.img" alt="">
                     <img class="color-img" :src="'http://localhost:3000/'+product.img" alt="">
-                </div>
+                </div> -->
                 <p>Quantity:</p>
                 
                 <button class="btn qty shadow " @click="decre()"><i class="fas fa-minus"></i></button>
@@ -46,7 +47,7 @@
                 <h5 class="mt-3"><router-link :to="'/feedback/'+product._id" style="text-decoration: none; color: black;">View Feedback</router-link></h5>
                 <form method="POST" @submit.prevent="postFeedback" class=" comment mt-4 d-flex align-items-center">
                     <span class="profile d-flex align-items-center justify-content-center">M</span>
-                    <input class="cmt" v-model="content" name="" id="" placeholder="Add a public comment......." >
+                    <input class="cmt" v-model="content" name="" id="" placeholder="Add your feedback here......." >
                 </form>
             </div>
         </div>
@@ -81,7 +82,6 @@ export default {
             const response =await axios.get("http://localhost:3000/productdetail/"+id.value);
             console.log(response.data);
             product.value=response.data;
-            console.log(color.value.children[0]);
             await fetchPaypal();
                      
         })
@@ -108,10 +108,10 @@ export default {
             await fetchPaypal();
         })
         //method
-        function changeColor(number){
-            let colors = color.value.children[number].classList;
-            colors.contains('active')?colors.remove('active'):colors.add('active');
-        }
+        // function changeColor(number){
+        //     let colors = color.value.children[number].classList;
+        //     colors.contains('active')?colors.remove('active'):colors.add('active');
+        // }
         async function postShoppingCart(data){
             const response = await axios.post(localhost+"/shoppingcart",{data,customers:user.value.userid});
             if(response.data.save){
@@ -148,7 +148,7 @@ export default {
         }
         return{
             color,
-            changeColor,
+            // changeColor,
             product,
             paypal,
             incr,
@@ -187,13 +187,13 @@ export default {
      .img{
         width: 80%;
         margin: auto;
-        height: 500px;
+        height: 300px;
         object-fit: cover;
     }
     .small-product{
         width: 60%;
         margin-left: 20%;
-        height: 100px;
+        height: 75px;
         object-fit: cover;
     }
     .flex{

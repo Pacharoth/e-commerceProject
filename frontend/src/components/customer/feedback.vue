@@ -18,7 +18,11 @@
         </div> -->
       </div>
     </section>
-    <button class="btn1">see more</button>
+    <!--
+    <button class="btn1">see more</button>-->
+    <ul>
+    <li class="page-item" v-for="feedbacks in feedback" :key="feedbacks"><button class="page-link" @click="paginaton(feedbacks)">{{feedbacks}}</button></li>
+    </ul>
   </div>
 </template>
 
@@ -27,7 +31,8 @@
 import axios from 'axios'
 // import { mapGetters } from 'vuex'
 export default {
-    name: 'App',
+    title: 'Feedbacks',
+    name: 'feedback',
     props:['id'],
     data() {
         return {

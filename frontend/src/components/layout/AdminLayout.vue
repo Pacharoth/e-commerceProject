@@ -4,7 +4,7 @@
             <nav class="nav-bar" ref="nav">
                 <div class="bar">
                     <button @click="loadSideBar()" class="btn burger" ><em class="fas fa-bars"></em></button>
-                    <input type="text" class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" />
+                    <!-- <input type="text" class="form-control form-search" placeholder="&#xf002; search" style="font-family: Arial, 'Font Awesome 5 Free'" /> -->
                 </div>
                 <div class="date" v-if="page=='admindashboard'||page=='sellerdetial'">
                     <button :class="'btn '+daily" @click="viewDaily">Daily</button>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="avatar-chat">
                     <button class="btn bell" @click="showChatList"><em class="bi bi-chat-dots" ></em> </button>
-                    <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em></button>
+                    <!-- <button class="btn chat" @click="showNotification"><em class="bi bi-bell"></em></button> -->
                     <button class="btn avatar"> <span class="name">{{user.user}}</span> <em class="fas fa-user-circle user"></em></button>
                 </div>
             </nav>
@@ -29,7 +29,6 @@
             <ul class="link nav nav-pill flex-column mb-auto">
                 <li class=""><router-link to="/admin" class="nav-link" ><em class="bi bi-house-door me-2"></em>Dashboard</router-link></li>
                 <li class=""><router-link to="/" class="nav-link" ><em class="bi bi-house-door me-2"></em>Homepage</router-link></li>
-                <li class=""><router-link to="/seller" class="nav-link" ><em class="bi bi-house-door me-2"></em>Sellerpage</router-link></li>
                 <li ><router-link to="/admin/seller" class="nav-link"><em class="bi bi-person me-2"></em>Seller</router-link></li>
                 <li><router-link to="/admin/category" class="nav-link"><em class="fas fa-list-alt me-2"></em>Category</router-link></li>
                 <li ><router-link to="/admin/customer" class="nav-link"><em class="bi bi-people me-2"></em>Customer</router-link></li>
@@ -116,7 +115,11 @@ export default {
 
         }
         function checkPage(){
-            if(route.path=="admindashboard")return true;
+            if(route.name=="admindashboard")return true;
+            else return false;
+        }
+        function checkSellerPage(){
+            if(route.name=="sellerdetial")return true;
             else return false;
         }
         async function viewMonthly(){
@@ -133,6 +136,7 @@ export default {
             changeColorButton(year,month,daily)
             var response;
             if(checkPage)response =await axios.get(localhost+"/admin/avgyear");
+            else if (checkSellerPage) response.data="";
             console.log(response.data);
             store.dispatch("admin/setData",response.data);
             store.dispatch("admin/setStatus","yearly")

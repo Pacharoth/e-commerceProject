@@ -7,6 +7,7 @@ const feedbackStore={
         }
     },
     mutations: {
+
         UPDATE_FEEDBACKS(state, feedbacks) {
             console.log('mutations', feedbacks)
             state.feedbacks = feedbacks

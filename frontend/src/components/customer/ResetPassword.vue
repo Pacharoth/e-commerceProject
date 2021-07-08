@@ -68,7 +68,7 @@ export default {
                     result.value.result= response.data.result
                     setTimeout(()=>result.value="",3000);
                 }else{
-                    result.value.result=response.data.result;
+                    // result.value.result=response.data.result;
                     alert("Password has been resetted");
                     setTimeout(()=>result.value="",3000);
                     user.value={}

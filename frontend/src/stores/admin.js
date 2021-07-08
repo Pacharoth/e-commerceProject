@@ -4,9 +4,14 @@ const adminStore={
         return{
             data:{},
             status:"",
+            dataseller:[],
+
         }
     },
     mutations:{
+        LOAD_SELLER(state,data){
+            state.dataseller=data
+        },
         LOAD_DATA(state,data){
             state.data=data;
         },
@@ -20,6 +25,9 @@ const adminStore={
         },
         setStatus({commit},data){
             commit("LOAD_STATUS",data);
+        },
+        setSeller({commit},data){
+            commit("LOAD_SELLER",data);
         }
     },
     getters:{
@@ -28,6 +36,9 @@ const adminStore={
         },
         getStatus(state){
             return state.status;
+        },
+        getSeller(state){
+            return state.dataseller;
         }
     }
 }

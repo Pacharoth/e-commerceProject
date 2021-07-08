@@ -2,9 +2,9 @@
     <div class="dashboard-container">
       <nav class="navbar shadow p-2 mb-4 bg-body rounded ">
         <router-link to="/seller" class="navbar-brand"><h4 class="header">AmazingShop</h4></router-link>
-        <form class="form-inline">
+        <!-- <form class="form-inline">
           <input class="form-control  rounded-pill search" type="search" placeholder="&#xF002; Search"/>
-        </form>
+        </form> -->
         <ul class="nav nav-pills" v-if="sellerpage=='sellerreport'||sellerpage=='sellerpage'">
           <li class="nav-item ">
             <a @click="daily()" class="nav-link header report"  href="#">Daily</a>
@@ -27,12 +27,11 @@
               <!-- <span class="badge rounded-pill badge-notification bg-danger">1</span> -->
             </a>          
           </li>
-          <li class="nav-item">  
+          <!-- <li class="nav-item">  
             <a href="#" class="nav-link icon" @click="showNotification">
               <em class="fas fa-bell"></em>
-              <!-- <span class="badge rounded-pill badge-notification bg-danger">1</span> -->
             </a>          
-          </li>
+          </li> -->
           <li class="nav-item dropdown" @click="showProfile">
             
             <a class="nav-link dropdown-toggle icons" data-toggle="dropdown" href="#" role="button" >
@@ -68,13 +67,15 @@ import { showChatLists, showNotifications } from '../../hook/effect';
 import { logouts } from '../../utils/FormValidation';
 import Notification from '../Admin/Notification.vue';
 import ChatList from '../Chat/ChatList.vue';
-import { computed } from '@vue/runtime-core';
+import { computed, onMounted } from '@vue/runtime-core';
 export default {
     name:'Seller',
     setup() {
       const store = useStore();
       var authPayment= computed(()=>store.getters['seller/getPayment'])
-
+      onMounted(()=>{
+        store.dispatch("auth/setStatus","")
+      })
       function showChatList(){
         showChatLists(store);
       }

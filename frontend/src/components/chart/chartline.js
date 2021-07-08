@@ -43,13 +43,7 @@ const linegraph=async(data)=>{
         },
         options: {
             layout:{Padding:0},
-            elements:{
-                line:{
-                }
-            },
-            scales: {
-      
-            },
+        
             responsive:true,
             maintainAspectRatio: false,  
         },

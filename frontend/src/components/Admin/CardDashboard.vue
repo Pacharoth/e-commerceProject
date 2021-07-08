@@ -47,7 +47,8 @@
             <div class="text">
                 <span class="title" v-if="statistic.yearPro&&title=='Seller'">${{statistic.yearPro}}</span>
                 <span class="title" v-if="payment&&title=='Admin'">${{payment.toFixed(2)}}</span>
-                <span class="content-text" v-if="title=='Seller'">This year profit</span>
+                <span class="content-text" v-if="title=='Seller'&&status==''">This year profit</span>
+                <span class="content-text" v-else-if="status!==''&&title=='Seller'">Total Payment</span>
                 <span class="content-text" v-else>Total Payment</span>
             </div>
         </div>
@@ -55,7 +56,7 @@
     </div>
 </template>
 <script>
-import { computed, ref, watch } from '@vue/runtime-core';
+import { computed, onMounted, ref, watch } from '@vue/runtime-core';
 import { useStore } from 'vuex';
 export default {
     name:'CardDashboard',
@@ -71,25 +72,22 @@ export default {
         earning=ref(0),
         profit=ref(0),
         payment=ref(0),
-        admin = computed(()=>store.getters['admin/getData']);
+        admin = computed(()=>store.getters['admin/getData']),
+        status=computed(()=>store.getters['admin/getStatus'])
         watch(admin,async()=>{
             resetToZero();
-            if(admin.value.result.length==0){
-                earning.value =0
-                profit.value =0
-                payment.value = 0
-            }   
-            else if(admin.value.result.length==1){
-                earning.value=admin.value.result[0].totalEarning
-                profit.value=admin.value.result[0].totalProfile
-                payment.value=admin.value.result[0].totalPayment
-                
-            }else if(admin.value.result.length>1){
-                for(var i in admin.value.result){
+              for(var i in admin.value.result){
                     earning.value+=admin.value.result[i].totalEarning
                     profit.value+=admin.value.result[i].totalProfile
                     payment.value+=admin.value.result[i].totalPayment
                 }
+        })
+        onMounted(()=>{
+            resetToZero();
+            for(var i in admin.value.result){
+                earning.value+=admin.value.result[i].totalEarning
+                profit.value+=admin.value.result[i].totalProfile
+                payment.value+=admin.value.result[i].totalPayment
             }
         })
         function resetToZero(){
@@ -102,6 +100,7 @@ export default {
             earning,
             payment,
             profit,
+            status
         }
     }
 
