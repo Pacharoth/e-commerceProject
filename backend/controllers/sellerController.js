@@ -275,29 +275,35 @@ exports.getPaymentSeller=async(req,res)=>{
     var payseller = await paymentModel.find({sellers:req.params.id});
     payseller = payseller.pop()
     console.log(payseller)
+    var status="";
     if(payseller){
-        if(payseller.length>0){
+       
+        console.log("true")
+        var status="";
+
+        var validateDate = new Date();
+        var expireDate = new Date(payseller.expiredPayment);
+        var oneDay = 1000 * 3600 * 24; 
+        var Difference_In_Time = expireDate.getTime()- validateDate.getTime();
+        var dayValid = Difference_In_Time/oneDay;
+        console.log(dayValid)
+        
+        if(dayValid>=0){
             console.log("true")
-            var validateDate = new Date();
-            var expireDate = new Date(payseller[0].expiredPayment);
-            var oneDay = 1000 * 3600 * 24; 
-            var Difference_In_Time = expireDate.getTime()- validateDate.getTime();
-            var dayValid = Difference_In_Time/oneDay;
-            let status =""
-            console.log(dayValid)
-            if(dayValid>=0){
-                console.log("true")
-                status="valid";
-                dateValid=dayValid;
-            }else{
-                status="invalid";
-            }
+            var status="valid";
+            dateValid=dayValid;
+            res.json([{data:payseller,status:status,dateValid:dayValid}]);
+
+        }else{
+            var status="invalid";
+            res.json([{data:payseller,status:status,dateValid:dayValid}]);
+
         }
-        res.json([{data:payseller[0],status:status,dateValid:dateValid}]);
 
     }else{
         
-        let status="special";
+        var status="special";
         res.json([{status:status}])
     } 
+
 }

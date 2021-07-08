@@ -38,6 +38,7 @@ router.beforeEach(async(to,from,next)=>{
         var results=await axios.post(localhost+"/paymentseller/"+data[0]._id);
         if(results.data.length>0){
             results.data[0].dateValid = parseInt(results.data[0].dateValid);
+            console.log(results.data)
             store.dispatch('seller/loadPayment',results.data); 
         }
     }
