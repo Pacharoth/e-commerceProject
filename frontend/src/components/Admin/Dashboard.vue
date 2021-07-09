@@ -164,7 +164,7 @@ export default {
                     let result = admin.value.result[i]._id
                     data.setMonth(result.month-1);
                     data.setFullYear(result.year);
-                    label.push(`${data.getMonth()}/${data.getFullYear()}`);
+                    label.push(`${data.getMonth()+1}/${data.getFullYear()}`);
                 }
             }
             }

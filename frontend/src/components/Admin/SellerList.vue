@@ -76,6 +76,7 @@ export default {
                 border-radius: 5px;
                 width: 70px;
                 height: 70px;
+                object-fit: cover;
                 box-shadow: $shadow_1;
                 background: white;
                 @include breakpoint-down(medium){
