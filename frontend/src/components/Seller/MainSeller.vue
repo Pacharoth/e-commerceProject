@@ -84,9 +84,9 @@
           <tr v-for="i in order.length" :key="i">
             <th scope="row">{{i}}</th>
             <td>
-              <h5>{{order[i-1].users.username}}</h5>
-              <p  class="proDescrib" >{{order[i-1].users.email}}</p>
-              <p  class="proDescrib" >{{phoneNumber[i-1]}}</p>
+              <h5 v-if="order[i-1].users">{{order[i-1].users.username}}</h5>
+              <p  v-if="order[i-1].users" class="proDescrib" >{{order[i-1].users.email}}</p>
+              <p  v-if="order[i-1].users" class="proDescrib" >{{phoneNumber[i-1]}}</p>
 
             </td>
             <td  style="width: 30%;" v-if="order[i-1].product" >
@@ -178,6 +178,7 @@ export default {
         async paginationOrder(number){
           var {data}=await axios.get(localhost+"/order/"+this.user.userid+"?page="+number+"&limit=3");
           this.order=data.customerOrder;
+          console.log(data)
           this.page=data.results
         },
         async createProduct(){
